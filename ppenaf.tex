@@ -1,0 +1,129 @@
+% A5 Bible in 640 pages: 8 point
+% ppdefault.tex
+% ppenaf.tex
+% pplayout.tex
+%   parallel.tex
+\input{ppdefault.tex} % default settings
+\def\mysourcetext{parallel} % load this file as our Bible text
+\def\mycontentcolumns{2}
+\def\mymargins{left=8.0mm,top=10mm,right=7.0mm,bottom=7mm,bindingoffset=1mm,headheight=13mm}
+\def\mypapersize{135mm,195mm}% A5, less 6.5mm right facing/reverse, and 7.5mm top and bottom
+%\def\mymargins{left=5mm,top=5mm+9mm,right=13mm+5mm,bottom=7.5mm+5mm,bindingoffset=5mm,headheight=5mm}
+%\def\mypapersize{148mm,210mm}% A5, less 10mm right, and 7.5mm top and bottom
+\def\mycolumnsep{0.8em}
+%\def\mycolumnseprule{0.6pt}
+\def\mydocumentsettings{
+%  \spaceskip=\dimexpr\the\fontdimen2\font-\the\fontdimen4\font\relax plus 0.07em % plus \the\fontdimen4\font % space between words: keep it constant, with tiny changes, no up-side
+%  \rightskip=0pt plus 1.8em\relax% space on right hand margin: keep it small
+%  \parfillskip=0pt plus 10em\relax%   last line of paragraph space: use up all of the spare space here.
+  \spaceskip=\dimexpr\the\fontdimen2\font-\the\fontdimen4\font\relax plus 0.3em % plus \the\fontdimen4\font % space between words: keep it constant, with tiny changes, no up-side
+  \rightskip=0pt plus 1.0em\relax% space on right hand margin: keep it small
+  \parfillskip=0pt plus \linewidth\relax%   last line of paragraph space: use up all of the spare space here.
+}
+\def\myletterspace{LetterSpace=0 plus 65 minus 0}
+\def\myhypenpenalty{700}%   Lower penalty means more hypenation and fewer pages
+\input{hyph-en.tex}
+\def\showredgrid{%
+    \usepackage{tikz}
+    \usepackage{eso-pic}
+    \AddToShipoutPicture{%
+        \begin{tikzpicture}[overlay,remember picture]
+        \draw[thick,red]
+        (current page.north east)
+        rectangle (current page.south west);
+        \draw[red!30!white,thin]
+        (current page.south west) grid[step=\baselineskip]
+        (current page.north east);
+        \end{tikzpicture}%
+    }%
+}%
+\def\showcropmarksonpage{%
+    \usepackage[
+      % set width and height to a5 width and height + 6mm
+      width=148truemm, height=210truemm,
+      % use any combination of these options to add different cut markings
+      % cam, axes, frame, cross, % frame is good for checking margins visually
+      cam, 
+      % set the type of TeX renderer you use
+      pdftex,
+      % center the contents of the page
+      center
+    ]{crop}
+}%
+\def\mypageadjustments{%
+    %\showredgrid
+    %FINAL PRINTING:
+    %\showcropmarksonpage
+}% Any other page adjustments - crop package goes here
+\def\mydisplayfont{Graze Shorter}
+\def\myfontname{[GrazeShorter.otf]}
+\def\mysansfontii{Liberation Sans}
+\def\mysansfont{[GrazeShorter.otf]}
+\def\myfontsize{8.00pt}
+\def\mybaseline{8.00pt}
+\def\myfontopts{
+    BoldFont=[GrazeShorter-Bold.otf],
+    ItalicFont=[GrazeShorter-Italic.otf],
+}
+%8.57*59/56 = 9.02910714285714285714
+%0.968/59*56 = .91877966101694915240
+% This works, but it seems neater to squash the font, rather than reduce the inter-character spacing:
+\def\myfontstretch{0.929}
+%\def\myletterspace{LetterSpace=0 plus 0 minus 0}
+%\def\myfontstretch{0.875}
+%\def\myletterspace{}
+\def\myextradisplay{}
+\def\mytoccolumns{3}
+\def\mychapterscale{1.00}
+\def\myversescale{0.80}
+\def\myverseraise{2pt}% =~ (\baselineskip+\fontsize)/2 - \fontsize*\myversescale)
+% Improvements post-publishing 2023
+\def\mypredocument{%
+    %\pretolerance=200
+    %\renewcommand{\headruleskip}{-2pt}
+    \frenchspacing% Oh wow ... this saves two pages!
+}
+% /end 
+
+\renewcommand\myfrontmatter{%
+    %\mypagei%   blank
+    \mypageiii%  title page
+    \mypageii%   print info page
+    %\mypageiv%  blank again
+}
+%\def\biblbeforeoldtestament{\newpage\thispagestyle{noheadings}\null\vfill\begin{center}THE OLD TESTAMENT\end{center}\vfill\null\vfill}
+\def\biblbeforenewtestament{\newpage\thispagestyle{noheadings}\null\vfill\begin{center}THE NEW TESTAMENT\end{center}\vfill\null\vfill}
+\input{kjvtopics.tex}
+\def\myrearmatter{
+%    \mypagei% blank
+%    \mypageii%   print info page
+%    \kjvwordlist
+%    \kjvtopics
+}
+%To omit manuscript titles (and save a page!)
+%\renewcommand{\biblpsalmheading}[1]{}
+\renewcommand{\PPepistleattribution}[1]{}
+%\renewcommand{\biblsectionseparator}[1]{}% END OF THE PROPHETS and THE END at revelation
+\def\mylayoutblurb{No headings; verses share lines; ragged; psalm titles; no epistle postscripts;\par
+Words of Christ in black.\par
+}
+% To omit binding marks
+\renewcommand{\oddbindingmarks}{}
+\renewcommand{\evenbindingmarks}{}
+
+\def\biblbeforeoldtestament{\par\newpage
+%\gdef\mycurrentsection{THE OLD TESTAMENT}\thispagestyle{sectionheadings}%\begin{center}{\textbf{THE OLD TESTAMENT}}\end{center}\par
+}%
+\def\biblbeforenewtestament{\par\newpage
+%\gdef\mycurrentsection{THE NEW TESTAMENT}\thispagestyle{sectionheadings}%\begin{center}{\textbf{THE OLD TESTAMENT}}\end{center}\par
+}%
+\def\ENsubtitle{kjb1769 afr1953 A5-440}
+\def\ENmotto{The fruit of the righteous is a tree of life;\par and he that winneth souls is wise.}
+\def\ENmottoii{http://soulwinning.africa/}
+\def\biblISBN{Printed in South Africa by CTP Printers Cape Town\par
+ISBN: 978-0-XXXX-XXXX-5, \copyright Calvary Hope 2024, with this licence:}
+% Job end of book doesn't play nice - it's just the same length as the page
+%\def\PPendchapterjobxli{\null\par\null\par}% End of Job 41 - two blank lines
+\input{pplayout.tex}
+%\input{parallel.tex} % this is done by pplayout.tex
+
