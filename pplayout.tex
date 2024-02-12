@@ -49,7 +49,7 @@
 %\usepackage[absolute,overlay]{textpos}% Put things in absolute positions (for thumb marker)
 \usepackage[absolute]{textpos}% Put things in absolute positions (for thumb marker)
 \TPGrid[0mm,10mm]{30}{38}% defines tiny boxes down right hand margin for book name - see "textblock" below.  For 66 books, we have 61 markers
-\setlength{\headsep}{\myheadsep}% Seperation between text and body
+%FIXME \setlength{\headsep}{\myheadsep}% Seperation between text and body
 % 0.3528pt/mm ... 334pt,510pt
 %\usepackage[grid]{mymulticol}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -277,7 +277,6 @@
 }
 \mypredocument
 \begin{document}
-\addfontfeature{\myletterspace}% The 3em space is what a good font design uses ... and we trample it
 \hyphenpenalty=\myhypenpenalty
 \mainmatter%
 \addfontfeature{\myletterspace}% The 3em space is what a good font design uses ... and we trample it
