@@ -47,7 +47,7 @@ alltemplates={
         'end':        '\\PPend',
         'italics':    '{\\em %(italics)s}',
         'authorship': '{\\em %(authorship)s}\\PPpar',
-        'attribution': '\\par{\\em %(attribution)s}',
+        'attribution': '\\PPpostscript{%(attribution)s}',
     }
 }
     

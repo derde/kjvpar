@@ -16,14 +16,14 @@
 %\geometry{papersize={7.444in,9.681in},total={4.8in,6.8in}}%
 % 235mm x 165mm -
 %\usepackage[utf8]{inputenc}% XeLaTeX is utf-8 or nuts
-%\usepackage[T1]{fontenc}% Don't do this - it causes pdf fonts not to happen
+%\usepackage[T1]{fontenc}% Don't do this - it causes pdf fonts not to happen .. supposedly makes french hyphenation a thing
 \usepackage[maxfloats=512]{morefloats}
 \usepackage{paracol}
 \usepackage{lettrine}% Drop caps letters
 \usepackage[bf,sf,center]{titlesec}% Required for modifying section titles -   bold, sans-serif, centered
 \usepackage[nocheck]{fancyhdr}% Headers on the page, left and right
 \usepackage{needspace}% Don't start new books at the bottom of the page
-\usepackage[\mytexlanguage]{babel}% hypenation
+\usepackage[english,dutch]{babel}% hypenation
 % Grid sets rigid baseline and glue lengths to keep register-true - front and back pages aligned
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -59,7 +59,6 @@
 %\multicolsep = 12pt plus 4pt minus 3pt
 %
 %This complains about initex being required ... 
-%\begin{hyphenrules}{afrikaans}\include{hyph-af}\end{hyphenrules}
 %\usepackage{etoolbox}
 %\usepackage{xltxtra}
 %\usepackage{setspace}
@@ -148,7 +147,7 @@
 % \tolerance is used to indicate when there is too much space even after breaking words.
 % If we want to avoid breaking words, and avoid having too long lines, we have to use a very high value for 
 % \pretoletance. An “infinite” tolerance is represented by the value 10000.
-\pretolerance=2500
+\pretolerance=50
 \let\textquotedbl="
 \let\quotedblbase="
 %
@@ -180,18 +179,19 @@
 \newcommand{\PPnewchapter}{}
 \newcommand{\PPswlang}{}% Done with this language: fill up the column vertically
 \newcommand{\PPnewlang}{}
-\newcommand{\PPnewlangEN}{\begin{paracol}{2}\begin{leftcolumn}}
-\newcommand{\PPnewlangAF}{\begin{rightcolumn}}
+\newcommand{\PPnewlangEN}{\begin{paracol}{2}\begin{leftcolumn}\selectlanguage{english}}
+\newcommand{\PPnewlangAF}{\begin{rightcolumn}\selectlanguage{dutch}}
 \newcommand{\PPbook}[1]{\mybooktitlepreamble\mybooktitlebox{#1}}
 \newcommand{\PPchapter}[1]{\PPdropcapschapter{#1}}
-\newcommand{\PPversei}[2]{#2\PPsyntheticparii}% the space after the verse is a thing
-\newcommand{\PPverseii}[2]{\raisebox{\myverseraise}[0pt]{\myversefont\textbf{#1}}#2\par}% the space after the verse is a thing
-\newcommand{\PPverse}[2]{\raisebox{\myverseraise}[0pt]{\myversefont\textbf{#1}}#2\par}% the space after the verse is a thing
+\newcommand{\PPversei}[2]{#2}% the space after the verse is a thing
+\newcommand{\PPverseii}[2]{\PPsyntheticparii\raisebox{\myverseraise}[0pt]{\myversefont\textbf{#1}}\versehskip#2}% the space after the verse is a thing
+\newcommand{\PPverse}[2]{\par\raisebox{\myverseraise}[0pt]{\myversefont\textbf{#1}}\versehskip#2}% the space after the verse is a thing
+\newcommand{\PPpostscript}[1]{} % omit postscripts - ignore parameter, which is the text of the postscript
 \newcommand{\PPpar}{\par}
-\newcommand{\PPendlang}{\par}
+\newcommand{\PPendlang}{}
 \newcommand{\PPendlangEN}{\end{leftcolumn}}
 \newcommand{\PPendlangAF}{\end{rightcolumn}\end{paracol}}
-\newcommand{\PPendchapter}{\par}%
+\newcommand{\PPendchapter}{}%
 \newcommand{\PPendbook}{\par}
 \newcommand{\PPend}{\par}
 %\newcommand{\PPpagetitles}[2]{\lock{#1}{#2}}%
@@ -257,7 +257,7 @@
 % Don't warn for slightly overfull hboxen
 \hfuzz=2pt%
 % All our vertical stuff is bad for now
-\vbadness=1000%
+\vbadness=10000%
 \vfuzz=0pt%
 % Try to avoid stranded chapter header at the bottom of the page (this doesn't work)
 %\widowpenalty=0%
