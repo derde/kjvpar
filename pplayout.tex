@@ -126,7 +126,7 @@
 % \DeclareFontShape{EU1}{TimesNewRoman(0)}{m}{sc}{<->ssub * TimesNewRoman(1)/m/sc}{}
 
 \newfontfamily\myversefont[\myboldness FakeStretch=\myversefontstretch,Scale=\myversescale]{\myversefontname}
-\newfontfamily\mybooktitlefont[\myfontopts \myboldness FakeStretch=\myfontstretch,Scale=2.8]{\myfontname}
+\newfontfamily\mybooktitlefont[\myfontopts \myboldness FakeStretch=\myfontstretch,Scale=2.0]{\myfontname}
 \newfontfamily\mychapterfont[\myboldness FakeStretch=\mychapterfontstretch,Scale=\mychapterscale]{\mychapterfontname}
 \newfontfamily\myendnotesfont[\myboldness FakeStretch=\myfontstretch,Scale=\mychapterscale]{\mysansfontii}
 \usepackage{printlen}% provide \printlength command, and \rndprintlength - to print the page size nicely
@@ -187,7 +187,8 @@
 \newcommand{\PPverseii}[2]{\PPsyntheticparii\raisebox{\myverseraise}[0pt]{\myversefont\textbf{#1}}\versehskip#2}% the space after the verse is a thing
 \newcommand{\PPverse}[2]{\par\raisebox{\myverseraise}[0pt]{\myversefont\textbf{#1}}\versehskip#2}% the space after the verse is a thing
 \newcommand{\PPpostscript}[1]{} % omit postscripts - ignore parameter, which is the text of the postscript
-\newcommand{\PPpar}{\par}
+\newcommand{\PPpar}{\PPsyntheticparii}
+\newcommand{\PPpsalmauthor}[1]{{\em #1}\PPsyntheticparii}
 \newcommand{\PPendlang}{}
 \newcommand{\PPendlangEN}{\end{leftcolumn}}
 \newcommand{\PPendlangAF}{\end{rightcolumn}\end{paracol}}
@@ -247,7 +248,7 @@
 %\newcommand{\PPdropcapschapter}[1]{\null\needspace{0.5\baselineskip}%
 \newcommand{\PPdropcapschapter}[1]{\needspace{\mychapterspace}% big mystery here ... for needspace within 2 column environment, this is the number of lines /2 /2 (ie div 4)
 %\lettrine[lines=2, lraise=0.05, lhang=0.00, findent=3pt, nindent=0pt, loversize=0.0]{\hspace{2pt}\textbf{\mychapterfont \smash{#1}}}{}}% bug: if you raise by 0.05, it breaks grid alignment for register-true 
-\lettrine[lines=2, lraise=0.00, lhang=0.00, findent=\mylettrinefindent, nindent=0pt, loversize=0.0]{\raisebox{\mychapterraise}[0pt]{\textbf{\mychapterfont\mychapterfontextra #1}}}{}%
+\lettrine[lines=2, lraise=0.00, lhang=0.00, findent=\mylettrinefindent, nindent=0pt, loversize=0.0]{\raisebox{\mychapterraise}[0pt]{\textbf{\mychapterfont\mychapterfontextra\color{mygray} #1}}}{}%
 }%
 %debug: \textbf{#1}}%
 % Work around lettrine bug with "Fpar" definition from https://tex.stackexchange.com/questions/369868/using-lettrine-with-short-paragraphs :
