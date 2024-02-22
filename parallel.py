@@ -9,6 +9,7 @@ def index(dicty,i):
     return dicty[keys[i]]
 
 maxchunk=5
+minchunk=2
 
 alltemplates={
     'parallel.html': {
@@ -17,7 +18,7 @@ alltemplates={
         'newchapter': '<tr>',
         'swlang':     '',
         'newlang':    '<td>',
-        'book':       '<H1>%(newbook)s</H1>\n',
+        'book':       '<H1>%(book)s</H1>\n',
         'chapter':    '<h2>%(chapter)s</h2> ',
         'versei':     '<p><sup>%(v)s</sup> %(text)s</p>\n',
         'verseii':    '<p><sup>%(v)s</sup> %(text)s</p>\n',
@@ -36,7 +37,7 @@ alltemplates={
         'newchapter': '\\PPnewchapter', #  synchronise left/right
         'swlang':     '\\PPswlang',   # switch between languages
         'newlang':    '\\PPnewlang\\PPnewlang%(zz)s',   # column
-        'book':       '\\PPbook{%(newbook)s}',
+        'book':       '\\PPbook{%(book)s}',
         'chapter':    '\\PPchapter{%(chapter)s}',
         'versei':     '\\PPversei{%(v)s}{%(text)s}\n',
         'verseii':    '\\PPverseii{%(v)s}{%(text)s}\n',
@@ -51,141 +52,151 @@ alltemplates={
     }
 }
     
+class Verse:
+    def __init__(self,line,bibleparser):
+        bookname,ref,text =bibleparser.decodeline(line)
+        self.bookname=bookname
+        self.ref=ref
+        self.text=text
+        self.newbook=(ref[1]==1 and ref[2]==1)
+        self.newchapter=(ref[2]==1)
+        self.endchapter=False
+        self.endbook=False
+        self.newparagraph=self.newchapter  # this might fail for Job 34 or so
+        self.next=None # chained sequence of verses
+    def pairs(self):
+        return {
+            'text':self.text,
+            'book':self.bookname,
+            'chapter':self.ref[1],
+            'verse':self.ref[2],
+        }
+    def __str__(self):
+        return f'{self.bookname} {self.ref[1]}:{self.ref[2]}'
+
 class BibleParser:
     def __init__(self,settings):
         self.settings=settings
         self.booknames=[]
         self.books={}
-        self.nbooks={}
         self.counters={}
         self.canonref={} # this language reference->kjv canonical reference
-        self.readsourcefile()
-        self.chaptersequence=self.allchapters()
-        self.readerrata()
-    def readsourcefile(self):
+        self.allverses={}
+        self.checkrefs={}
+        self.snippets=[]
+        self.setup()
+    def setup(self):
         sourcefile=open(self.settings['source'],'r')
         textre=re.compile(r'^(.*?) (\d+):(\d+) (.*)')
         for line in sourcefile:
             m=textre.search(line)
-            if m: self.register(m)
-    def register(self,m):
-        mbook,mchapter,mverse,mtext = m.groups()
-        chapters=self.books.setdefault(mbook,{})
-        self.nbooks[len(self.books)-1]=chapters
-        if len(chapters)==0:
-            self.booknames.append(mbook)
-        verses=chapters.setdefault(int(mchapter),{})
-        verses[int(mverse)]=mtext
-        ref=(len(self.booknames),int(mchapter),int(mverse))
-        self.canonref[ref]=ref  # initially we are ourself, until we start moving things about
-    def readerrata(self):
-        self.extra={}
-        errata=self.settings.get('errata')
-        if not errata: return
-        fd=open(errata,'r')
-        for line in fd:
-            line=line.strip()
-            if line.find(' ')<0:
-                continue
-            if line.startswith('#'):
-                continue
-            cmd,param=line.split(None,1)
-            if cmd=='/extra':
-                m=re.search('(.*) (\d+):(\d+)\s*(.*)',param)
-                bookname,mchapter,mverse,mcomment = m.groups()
-                bookindex=self.bookindex(bookname)
-                chapter=int(mchapter)
-                verse=int(mverse)
-                ref=(bookindex,chapter,verse)
-                self.extra[ref]=mcomment
-                self.canonref[ref]=None
-                # Adjust the chapter:
-                bookname=self.booknames[bookindex]
-                verses=self.books[bookname][chapter]
-                for v in range(verse,len(verses)+1):
-                    after=(bookindex,chapter,v)
-                    prev=self.canonref.get(after)
-                    if prev:
-                        self.canonref[after]=(prev[0],prev[1],prev[2]-1) # point to the previous verse in canon
+            if m: self.register(line)
+        self.markchapterends()
 
+    def markchapterends(self):
+        "Go through the chapters, and mark the ends of the chapters and books"
+        lastverse=None
+        for ref,verse in self.allverses.items():
+            if lastverse and verse.newbook:
+                lastverse.endbook=True
+            if lastverse and verse.newchapter:
+                lastverse.endchapter=True
+            lastverse=verse
+        lastverse.endbook=True
+        lastverse.endchapter=True
 
-            else:
-                sys.stdout.write(f'Unknown errata command {cmd}\n')
-        fd.close()
+    def register(self,line):
+        verse = Verse(line,self)
+        self.allverses[verse.ref]=verse
+
+    def addsnippet(self,snippet):
+        lastverse=None
+        verse0=None
+        for ref in snippet:
+            verse=self.allverses[ref]
+            if not verse0: verse0=verse
+            if lastverse: lastverse.next=verse # chain it
+            lastverse=verse
+        self.snippets.append(verse0)
+        return len(snippet)
+
+    def checkreference(self,ref):
+        if ref in self.checkrefs:
+            self.checkrefs.pop(ref)
+        else:
+            lang=self.settings['lang']
+            sys.stderr.write(f"{lang}: Reference f{ref} used twice!")
+        return len(self.checkrefs)
+
+    def linetoref(self,line):
+        if not line:
+            return None
+        mbookname,ref,mtext=self.decodeline(line)
+        return ref
+
+    def decodeline(self,line):
+        m=re.search('(.*) (\d+):(\d+)\s*(.*)',line)
+        if not m: return
+        bookname,mchapter,mverse,mtext = m.groups()
+        bookindex=self.bookindex(bookname)
+        chapter=int(mchapter)
+        verse=int(mverse)
+        ref=(bookindex,chapter,verse)
+        return bookname,ref,mtext
+
     def registerparagraphbreaks(self,paragraphs):
-        self.settings['paragraphs']=paragraphs
-        self.allchunks()
-    def allchunks(self):
-        o=[]
-        paragraphverses=0
-        for chapter in self.chaptersequence:
-            chunk=copy.copy(chapter)
-            chunk['paragraph']={}
-            chunk['newchapter']=True
-            versecount=len(chapter['verses'])
-            versecounter=0 # count chunk verses, ignoring "extra" verses
-            for verse,text in chapter['verses'].items():
-                ref=(chapter['bookindex'], chapter['chapter'], verse)
-                nextref=(chapter['bookindex'], chapter['chapter'], verse+1)
-                nextisextra = (nextref in self.extra)
-                isextra = (ref in self.extra)
-                canonref=self.canonref.get(ref)
-                if (nextisextra==False) and ( verse==1 or canonref in self.settings['paragraphs'] or paragraphverses >= maxchunk):
-                    if len(chunk['paragraph']):
-                        o.append(chunk) # emit previous complete paragraph
-                    chunk=copy.copy(chapter)
-                    chunk['paragraph']={}
-                    paragraphverses=0 # counting verses that are not listed as 'extra'
-                    chunk['newchapter']= ( verse==1 )
-                    if verse!=1:
-                        chunk['newbook']=False
-                chunk['paragraph'][verse]=text
-                if not isextra:
-                    paragraphverses+=1
-                chunk['endchapter']= ( verse==versecount )
-            # Emit last paragraph
-            if len(chunk):
-                o.append(chunk)
-                chunk=[]
-        self.chunksequence=o
+        for ref in paragraphs:
+            verse=self.allverses[ref]
+            verse.newparagraph=True
 
-    def bookindex(self,bookname):
-        "Find position of book by name in this language"
-        # books=list(self.books.keys())
-        return self.booknames.index(bookname)
-                
-    def allchapters(self):
+    def moreparagraphbreaks(self):
+        # Have paragraph syncs every few verses
+        runlength=0
+        for i in range(len(self.snippets)):
+            verse=self.snippets[i]
+            if verse.newparagraph: runlength=0
+            runlength+=1
+            if runlength>maxchunk:
+                foundnew=False
+                for j in range(1+i,1+i+minchunk):
+                    if j>=len(self.snippets):
+                        break
+                    if self.snippets[j].newparagraph:
+                        foundnew=True
+                if not foundnew:
+                    verse.newparagraph=True
+                    runlength=0
+
+    def getparagraphranges(self):
+        # Return list of snippet ranges for paragraphs
         o=[]
-        lastd=None
-        #for book,chapters in self.books.items():
-        bookindex=0
-        for booknumber in self.settings['bookseq']:
-            self.counters['books']=self.counters.get('books',0)+1
-            book=self.booknames[booknumber-1]
-            chapters=self.books[book]
-            if lastd:
-                lastd['endbook']=1
-            newbook=book
-            bookindex=self.bookindex(book)
-            for chapter,verses in chapters.items():
-                self.counters['chapters']=self.counters.get('chapters',0)+1
-                self.counters['verses']=self.counters.get('verses',0)+1
-                if lastd: lastd['endchapter']=1
-                lastd={'adjust':0, 'newbook':newbook, 'bookindex':bookindex, 'book': book, 'chapter': chapter, 'verses': verses, 'self': self, 'endbook':0, }
-                o.append(lastd)
-                newbook=''
-        lastd['endbook']=1
+        last=0
+        for i in range(len(self.snippets)):
+            if self.snippets[i].newparagraph:
+                if i: o.append((last,i))
+                last=i
+        o.append((last,len(self.snippets)))
         return o
 
-    def setparajust(self,kjv):
-        self.adjust=[]
-        i=0
-        for chapter in self.chaptersequence:
-            en=kjv.chaptersequence[i]
-            i+=1
-            adjust = len(chapter['verses'])-len(en['verses'])
-            if adjust:
-                chapter['adjust']=adjust
+    def getsnippetverses(self,sniprange):
+        'A paragraph that we are going to emit'
+        i0,i1 = sniprange
+        verselist=[]
+        for i in range(i0,i1):
+            verse=self.snippets[i]
+            verselist.append(verse)
+            while verse.next:
+                verse=verse.next
+                verselist.append(verse)
+        return verselist
+
+    def bookindex(self,bookname,autoregister=True):
+        "Find position of book by name in this language, and if it's new, just add it to the list"
+        # books=list(self.books.keys())
+        if autoregister and not bookname in self.booknames:
+            self.booknames.append(bookname)
+        return self.booknames.index(bookname)
+                
 
 def italicise(m):
     global templates
@@ -202,8 +213,7 @@ def attribution(m):
 
 
 def readparagraphs(paragraphs,filename,language):
-    """language: look up paragraph book names in this language
-    """
+    "language: look up paragraph book names in this language"
     fd=open(filename,'r')
     for line in fd:
         m=re.search(' \d+:',line) 
@@ -223,88 +233,112 @@ def readparagraphs(paragraphs,filename,language):
             ref=(bookindex,chapter,verse)
             paragraphs[ref]=True
     fd.close()
+
+# Read from a parallel spec file
+def iterateparallel(csvfeed,en,af):
+    concurrent=None
+    for line in csvfeed:
+        if len(line)==0: continue
+        if len(line)<3: line.extend(['','',''])
+        cmd,lineEN,lineAF=line[:3]
+        if lineEN and lineAF:
+            if concurrent:
+                yield concurrent
+            concurrent={'en':[],'af':[]}
+        refEN=en.linetoref(lineEN)
+        refAF=af.linetoref(lineAF)
+        if refEN: concurrent['en'].append(refEN)
+        if refAF: concurrent['af'].append(refAF)
+    yield concurrent
+
+# Read the parallel file and sequence the verses
+def buildparallelsequence(filename, en, af):
+    # FIXME: Hack code
+    import csv
+    fd=csv.reader(open(filename,'r'))
+    countEN=0
+    countAF=0
+    snippets=0
+    for enaf in iterateparallel(fd,en,af):
+        countEN += en.addsnippet(enaf['en'])
+        countAF += af.addsnippet(enaf['af'])
+        snippets+=1
+    print(f'CHECK: snippets={snippets}, verses[en]={countEN}, verses[af]={countAF}')
+
+if __name__=="__main__":
+    paragraphs={}
+    paragraphsAF={}
+    ensettings={
+        'zz':'EN',
+        'lang':'King James Version 1611/1769',
+        'source': 'text/kingjamesbibleonline.txt',
+        'errata':'text/kingjamesbibleonline.errata' }
+    zusettings={
+        'zz':'ZU',
+        'lang':'Zulu 1959',
+        'source': 'text/zulu1959.txt' }
+    afsettings={
+        'zz':'AF',
+        'lang':'Afrikaans 1935/1953',
+        'source': 'text/af1953.txt',
+        'errata':'text/af1953.errata' }
+
+    en = BibleParser(ensettings)
+    zu = BibleParser(zusettings)
+    af = BibleParser(afsettings)
+    allversions=[en,af]
+    paragraphs={}
+    readparagraphs(paragraphs,'paragraphs.txt',en)
+    en.registerparagraphbreaks(paragraphs)
+    zu.registerparagraphbreaks(paragraphs)
+    buildparallelsequence('ppenafnt.csv',en,af)
+    en.moreparagraphbreaks()
     
-bookseq=list(range(40,67)) # 40	Matthew # 66 Revelation
-bookseq.append(19) # 19	Psalms
-bookseq.append(20) # 20 Proverbs
+    # Plan: iterate through sequence in english
+    # Afrikaans: paragraphs move a little bit
 
-paragraphs={}
-paragraphsAF={}
-ensettings={
-    'zz':'EN',
-    'lang':'King James Version 1611/1769',
-    'bookseq': bookseq,
-    'paragraphs': paragraphs,
-    'source': 'text/kingjamesbibleonline.txt',
-    'errata':'text/kingjamesbibleonline.errata' }
-zusettings={
-    'zz':'ZU',
-    'lang':'Zulu 1959',
-    'bookseq': bookseq,
-    'paragraphs': paragraphs,
-    'source': 'text/zulu1959.txt' }
-afsettings={
-    'zz':'AF',
-    'lang':'Afrikaans 1935/1953',
-    'bookseq': bookseq,
-    'paragraphs': paragraphsAF,
-    'source': 'text/af1953.txt',
-    'errata':'text/af1953.errata' }
-en = BibleParser(ensettings)
-zu = BibleParser(zusettings)
-af = BibleParser(afsettings)
-allversions=[en,af]
-readparagraphs(paragraphs,'paragraphs.txt',en)
-en.registerparagraphbreaks(paragraphs)
-zu.registerparagraphbreaks(paragraphs)
-# Afrikaans: paragraphs move a little bit
-af.setparajust(en)  # Figure out how different the chapter numbering is - assume they end the same, which is wrong for Hosea
-paragraphsAF=copy.copy(paragraphs) # maybe some custom something
-af.registerparagraphbreaks(paragraphsAF)
-
-di=0
-for filename,templates in alltemplates.items():
-    fd=open(filename,'w')
-    fd.write(templates['new'])
-    for chunknumber in range( len(en.chunksequence) ):
-        peek=en.chunksequence[chunknumber]
-        if peek['newbook']:
-            fd.write(templates['newbook'])
-        if peek['newchapter']:
-            fd.write(templates['newchapter'])
-        for vv in allversions:
-            if vv!=allversions[0]:
-                fd.write(templates['swlang'] % vv.settings)
-            fd.write(templates['newlang'] % vv.settings)
-            c=vv.chunksequence[chunknumber]
-            di+=1
-            sys.stdout.write( str(di)+' ' +c['book'] + ' '+str( c['chapter'])+':'+str(list(c['paragraph'].keys())[0] )+'  ')
-            if c['newbook']:
-                fd.write(templates['book'] % c)
-            if c['newchapter']:
-                fd.write(templates['chapter'] % c)
-            for v,text in c['paragraph'].items():
-                # Epistle postscripts
-                if text.find('<<[')>=0:
-                    text = re.sub('<<\[(.*?)\]>>',attribution,text,0)
-                # Psalm titles
-                if text.find('<<')>=0:
-                    text = re.sub('<<(.*?)>>',authorship,text,0)
-                # Regular italics
-                if text.find('[')>=0:
-                    text = re.sub(r'\[([^\]]*?)\]',italicise,text,0)
-                r={'v':v,'text':text,}
-                if v==1: versetmpl ='versei'
-                elif v==2: versetmpl ='verseii'
-                else : versetmpl ='verse'
-                fd.write(templates[versetmpl] % r)
-            fd.write(templates['endlang'] % vv.settings)
-            if c['endchapter']:
-                fd.write(templates['endchapter'])
-        if c['endbook']:
-            fd.write(templates['endbook'])
-        sys.stdout.write('\n')
-    fd.write(templates['end'])
-    fd.close()
-
+    di=0
+    for filename,templates in alltemplates.items():
+        fd=open(filename,'w')
+        fd.write(templates['new'])
+        for sniprange in en.getparagraphranges():
+            peek=en.getsnippetverses(sniprange)
+            if peek[0].newbook:
+                fd.write(templates['newbook'])
+            endbook=False
+            for vv in allversions:
+                if vv!=allversions[0]:
+                    fd.write(templates['swlang'] % vv.settings)
+                fd.write(templates['newlang'] % vv.settings)
+                verses=vv.getsnippetverses(sniprange)
+                for verse in verses:
+                    if verse.newbook:
+                        fd.write(templates['book'] % verse.pairs())
+                    if verse.newchapter:
+                        fd.write(templates['chapter'] % verse.pairs())
+                    # Epistle postscripts
+                    text=verse.text
+                    if text.find('<<[')>=0:
+                        text = re.sub('<<\[(.*?)\]>>',attribution,text,0)
+                    # Psalm titles
+                    if text.find('<<')>=0:
+                        text = re.sub('<<(.*?)>>',authorship,text,0)
+                    # Regular italics
+                    if text.find('[')>=0:
+                        text = re.sub(r'\[([^\]]*?)\]',italicise,text,0)
+                    v=verse.ref[2]
+                    r={'v':v,'text':text,}
+                    if v==1: versetmpl ='versei'
+                    elif v==2: versetmpl ='verseii'
+                    else : versetmpl ='verse'
+                    fd.write(templates[versetmpl] % r)
+                    if verse.endchapter:
+                        fd.write(templates['endchapter'])
+                    endbook = endbook or verse.endbook
+                fd.write(templates['endlang'] % vv.settings)
+            if endbook:
+                fd.write(templates['endbook'])
+            pass
+        fd.write(templates['end'])
+        fd.close()
 
