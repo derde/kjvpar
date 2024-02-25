@@ -18,12 +18,9 @@
 %\usepackage[utf8]{inputenc}% XeLaTeX is utf-8 or nuts
 %\usepackage[T1]{fontenc}% Don't do this - it causes pdf fonts not to happen .. supposedly makes french hyphenation a thing
 \usepackage[maxfloats=512]{morefloats}
-\usepackage{paracol}
+\setlength{\headsep}{3pt}% Seperation between text and body
 \usepackage{lettrine}% Drop caps letters
 \usepackage[bf,sf,center]{titlesec}% Required for modifying section titles -   bold, sans-serif, centered
-\usepackage[nocheck]{fancyhdr}% Headers on the page, left and right
-\usepackage{needspace}% Don't start new books at the bottom of the page
-\usepackage[english,dutch]{babel}% hypenation
 % Grid sets rigid baseline and glue lengths to keep register-true - front and back pages aligned
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -37,14 +34,17 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newcounter{qmylines}
+\usepackage[nocheck]{fancyhdr}% Headers on the page, left and right
+\usepackage{needspace}% Don't start new books at the bottom of the page
+\usepackage[english,dutch]{babel}% hypenation
 \usepackage[fontsize=\myfontsize,baseline=\mybaseline]{grid}% Register-true printing (back and front of page match)
+\usepackage[\mymargins]{geometry}%
+\geometry{papersize={\mypapersize}}
 % Bottom border is 0.7 instead of 1.0, because we're not using the footer, and it's hard to turn off
 %\usepackage[left=0.7cm,top=1.0cm,right=0.7cm,bottom=0.9cm,bindingoffset=0.0cm,headheight=5mm]{geometry}%
 %\usepackage[left=7mm,top=10mm,right=7mm,bottom=7mm,bindingoffset=8mm,headheight=5mm]{geometry}% Waterproof
-\usepackage[\mymargins]{geometry}% Africa
 %\usepackage[left=5mm,top=10mm,right=5mm,bottom=5mm,bindingoffset=5mm,headheight=5mm]{geometry}%
 %\geometry{papersize={148mm,221mm}}% Waterproof
-\geometry{papersize={\mypapersize}}
 \mypageadjustments% Any other page adjustments - crop package goes here
 %\usepackage[absolute,overlay]{textpos}% Put things in absolute positions (for thumb marker)
 \usepackage[absolute]{textpos}% Put things in absolute positions (for thumb marker)
@@ -62,6 +62,7 @@
 %\usepackage{etoolbox}
 %\usepackage{xltxtra}
 %\usepackage{setspace}
+\usepackage{paracol}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\setulmarginsandblock{2cm}{2cm}{*}
 %\setlrmarginsandblock{2cm}{2cm}{*}
@@ -92,7 +93,6 @@
     \fancyhead[C]{\myendnotesfont \textbf{\leftmark}}% hush
     \fancyhead[OR]{\thepage}% hush
 }
-\def\mybookname{GEN}
 \def\thelastpage{}%
 \gdef\mythumbindex{0}% Where to put the vertical thumb index
 \pagestyle{fancy}
@@ -174,29 +174,34 @@
 \newcommand{\versei}[2]{\noindent\mypreversei \hebrewleader\def\hebrewleader{}}%3 points up, count height as 0 points, kern at end
 \newcommand{\verseii}[2]{\mypreverseii\hebrewleader\def\hebrewleader{}\sharedverse{#1}{#2}}%3 points up, count height as 0 points, kern at end
 \renewcommand{\verse}[2]{\mypreverse\hebrewleader\def\hebrewleader{}\sharedverse{#1}{#2}}%3 points up, count height as 0 points, kern at end
+\newcommand{\ppspacing}{\addfontfeature{\myletterspace}}
 \newcommand{\PPnew}{}
-\newcommand{\PPnewbook}{}
 \newcommand{\PPnewchapter}{}
+\newcommand{\PPendchapterAF}{}
+\newcommand{\PPendchapterEN}{}
 \newcommand{\PPswlang}{}% Done with this language: fill up the column vertically
 \newcommand{\PPnewlang}{}
 \newcommand{\PPnewlangEN}{\begin{paracol}{2}\begin{leftcolumn}\selectlanguage{english}}
 \newcommand{\PPnewlangAF}{\begin{rightcolumn}\selectlanguage{dutch}}
-\newcommand{\PPbook}[1]{\mybooktitlepreamble\mybooktitlebox{#1}}
+\newcommand{\PPnewbook}{\mybooktitlepreamble}
+\newcommand{\PPbook}[1]{\mybooktitlebox{#1}}
 \newcommand{\PPchapter}[1]{\PPdropcapschapter{#1}}
-\newcommand{\PPversei}[2]{#2}% the space after the verse is a thing
-\newcommand{\PPverseii}[2]{\PPsyntheticparii\raisebox{\myverseraise}[0pt]{\myversefont\textbf{#1}}\versehskip#2}% the space after the verse is a thing
-\newcommand{\PPverse}[2]{\par\raisebox{\myverseraise}[0pt]{\myversefont\textbf{#1}}\versehskip#2}% the space after the verse is a thing
+% Heading for each book of the PPe: big text
+\newcommand{\PPverseref}[1]{\markboth{#1}{#1}}%
+\newcommand{\PPendreference}[2]{\markboth{#1}{#1}\def\mythumbindex{#2}}%
+\newcommand{\PPversei}[2]{\ppspacing #2}% the space after the verse is a thing
+\newcommand{\PPverseii}[2]{\PPsyntheticparii\raisebox{\myverseraise}[0pt]{\myversefont\textbf{#1}}\versehskip\ppspacing#2}% the space after the verse is a thing
+\newcommand{\PPverse}[2]{\par\raisebox{\myverseraise}[0pt]{\myversefont\textbf{#1}}\versehskip\ppspacing#2}% the space after the verse is a thing
 \newcommand{\PPpostscript}[1]{} % omit postscripts - ignore parameter, which is the text of the postscript
 \newcommand{\PPpar}{\PPsyntheticparii}
-\newcommand{\PPpsalmauthor}[1]{{\em #1}\PPsyntheticparii}
+\newcommand{\PPpsalmauthor}[1]{{\ppspacing\em #1}\PPsyntheticparii}
 \newcommand{\PPendlang}{}
 \newcommand{\PPendlangEN}{\end{leftcolumn}}
 \newcommand{\PPendlangAF}{\end{rightcolumn}\end{paracol}}
 \newcommand{\PPendchapter}{}%
-\newcommand{\PPendbook}{\par}
+\newcommand{\PPendbook}{}
 \newcommand{\PPend}{\par}
 %\newcommand{\PPpagetitles}[2]{\lock{#1}{#2}}%
-\newcommand{\PPonecolumn}{}%
 % FIXI?
 \newcommand{\PPthumbmark}[3]{% 1:horizontal tab, 2: vertical tab, 3: hspace
 \begin{textblock}{1}(#1,#2)%
@@ -212,8 +217,6 @@
 \setlength{\rightmarkspace}{\paperwidth-5em}% 
 \setlength{\rightmarksep}{0.5ex}%
 %\renewcommand{\PPtwocolumn}{\par}%
-%\renewcommand{\PPonecolumn}{\par}%
-\newcommand{\PPendlastbook}[1]{\PPonecolumn}%
 \newcommand{\PPenddocument}{}%
 %
 % \bookheadingstrut:
@@ -223,9 +226,6 @@
 \newcommand{\bookheadingstrut}[1]{% %\vskip\baselineskip% disappearing space when at the top of the page? don't work :(
 \rule[1.0\baselineskip]{0pt}{#1}% Number of lines for title - 1 down, two up
 }%
-% Heading for each book of the PPe: big text
-\newcommand{\PPnewreference}[2]{\markboth{#1}{#1}\def\mythumbindex{#2}}%
-\newcommand{\PPendreference}[2]{\markboth{#1}{#1}\def\mythumbindex{#2}}%
 % New chapter number 
 % Move the thumb index (just make sure it doesn't disappear)
 \newcommand{\PPtocendmulticol}{}%
@@ -280,7 +280,8 @@
 \begin{document}
 \hyphenpenalty=\myhypenpenalty
 \mainmatter%
-\addfontfeature{\myletterspace}% The 3em space is what a good font design uses ... and we trample it
+%FIXME - move this to \verse?
+%\addfontfeature{\myletterspace}% The 3em space is what a good font design uses ... and we trample it
 \mydocumentsettings
 %%% PAGE 1: BLANK PAGE %%%%%%%%%%%%%%%
 \def\mypagei{%

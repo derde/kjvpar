@@ -1,5 +1,5 @@
-ppenaf.pdf: pplayout.tex ppenaf.tex ppdefault.tex parallel.tex
+ppenaf.pdf: pplayout.tex ppenaf.tex ppdefault.tex parallel.tex hyph-en.tex
 	xelatex ppenaf.tex
 
-parallel.tex: parallel.py paragraphs.txt
+parallel.tex: parallel.py paragraphs.txt ppenafnt.csv
 	./parallel.py

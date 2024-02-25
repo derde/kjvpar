@@ -11,10 +11,11 @@
 \def\mysourcetext{english}%
 \def\mypageadjustments{}% Any other page adjustments - crop package goes here
 \def\mybooktitlepreamble{% before each new book title, we emit this:
-    \needspace{6\baselineskip}%
+    \needspace{5\baselineskip}%
     \null\par
 }
 \newcommand\mybooktitlebox[1]{%
+    \noindent
     \null
     \hfill%center it
     \raisebox{0.6\baselineskip}[0.5\baselineskip][0pt]{%
@@ -40,8 +41,8 @@
 \def\mydocumentsettings{%
   \rightskip=0pt plus 0.5em  % slightly ragged right - really improves readability, at the cost of 1.5% pages (12 pages over 800)
 }
-\def\myhypenpenalty{1000}% We are really quite willing to hyphenate
-\def\myheadsep{0.0em}
+\def\myhypenpenalty{100}% We are really quite willing to hyphenate
+%\def\myheadsep{0.0em}
 \def\myverseboldness{\myboldness}% verse number font scaling
 \def\myversefontstretch{\myfontstretch}% verse number font scaling
 \def\mychapterfontstretch{\myfontstretch}% verse number font scaling
@@ -56,7 +57,7 @@
 \def\myverseahspace{\myversehspace}% space after verse number before A
 \def\PPfontcustom{}
 \def\myboldness{FakeBold=1.01,}\def\myboldness{}%FakeBold is binary on/off, it seems
-\def\myletterspace{LetterSpace=0 plus 4 minus 0}
+%\def\myletterspace{LetterSpace=0 plus 4 minus 0}
 \def\myextradisplay{}% extra formatting notes, e.g. if you squash kerning
 \def\mylayoutblurb{No headings; verses share lines; ragged; psalm titles; epistle postscripts}
 \def\mycolumnsep{1em}

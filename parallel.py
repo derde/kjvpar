@@ -34,26 +34,48 @@ alltemplates={
     'parallel.tex': {
         'new':        '\\PPnew',
         'newbook':    '\\PPnewbook',
-        'newchapter': '\\PPnewchapter', #  synchronise left/right
+        'newchapter': '\\PPnewchapter\\PPnewchapter%(zz)s', #  synchronise left/right
         'swlang':     '\\PPswlang',   # switch between languages
         'newlang':    '\\PPnewlang\\PPnewlang%(zz)s',   # column
-        'book':       '\\PPbook{%(book)s}',
+        'book':       '\\PPbook{%(book)s}\n',
         'chapter':    '\\PPchapter{%(chapter)s}',
         'versei':     '\\PPversei{%(v)s}{%(text)s}\n',
         'verseii':    '\\PPverseii{%(v)s}{%(text)s}\n',
-        'verse':      '\\PPverse{%(v)s}{%(text)s}\n',
+        'verse':      '\\PPverse{%(v)s}\\PPverseref{%(reference)s}{%(text)s}\n',
         'endlang':    '\\PPendlang%(zz)s\\PPendlang',   # /column
-        'endchapter': '\\PPendchapter',
-        'endbook':    '\\PPendbook',
+        'endchapter': '\\PPendchapter\\PPendchapter%(zz)s',
+        'endbook':    '\\PPendbook\n',
         'end':        '\\PPend',
         'italics':    '{\\em %(italics)s}',
         'authorship': '\\PPpsalmauthor{%(authorship)s}',
         'attribution': '\\PPpostscript{%(attribution)s}',
     }
 }
+
+# Rough guess at text width 
+class TextWidth:
+    width = {'A': 772, 'B': 693, 'C': 718, 'D': 797, 'E': 668, 'F': 620, 'G': 796, 'H': 852, 'I': 378, 'J': 534, 'K': 731, 'L': 608, 'M': 1004, 'N': 826, 'O': 838, 'P': 664, 'Q': 847, 'R': 744, 'S': 597, 'T': 687, 'U': 816, 'V': 763, 'W': 1067, 'X': 726, 'Y': 717, 'Z': 659, 'a': 583, 'b': 636, 'c': 534, 'd': 646, 'e': 562, 'f': 374, 'g': 586, 'h': 658, 'i': 347, 'j': 296, 'k': 612, 'l': 340, 'm': 974, 'n': 650, 'o': 623, 'p': 641, 'q': 629, 'r': 448, 's': 456, 't': 389, 'u': 652, 'v': 597, 'w': 898, 'x': 584, 'y': 607, 'z': 529}
+    def __init__(self):
+        self.default = self.width['x']  # default letter width?
+        self.space = self.default//5*4  # default spacec width
+        self.width[' '] = self.space
+        self.width['.'] = self.width['j']//2
+        self.width[','] = self.width['j']//2
+    def measure(self,text):
+        w=0
+        for c in text:
+           w+=self.width.get(c,self.space) 
+        return w
+    def wordwidths(self,words):
+        'An array of word widths'
+        o=[]
+        for word in words.split():
+            o.append(self.measure(word)+self.space)
+        return o
     
 class Verse:
     def __init__(self,line,bibleparser):
+        self.textwidth=TextWidth()
         bookname,ref,text =bibleparser.decodeline(line)
         self.bookname=bookname
         self.ref=ref
@@ -63,7 +85,46 @@ class Verse:
         self.endchapter=False
         self.endbook=False
         self.newparagraph=self.newchapter  # this might fail for Job 34 or so
-        self.next=None # chained sequence of verses
+        self.next=None # chained sequence of verses in a snippet
+        self.bibleparser=bibleparser
+
+    # Get the linecount for this snippet and its friends
+    def linecount0(self,linewidth=43):
+        ntext=re.sub(r'[<>\[\]]','',self.text)
+        lines=0
+        while len(ntext)>linewidth:
+            trim=ntext[:linewidth]
+            line,carry=trim.rsplit(' ',1)
+            lines+=1
+            ntext=carry+ntext[linewidth:]
+        lines+=1 # min(len(ntext)/linewidth+0.5,1.0) # fuzzyness
+        lines=max(1,lines)
+        if self.next:
+            lines+=self.next.linecount()
+        return lines
+
+    # Get the linecount for this snippet and its friends
+    def linecount(self,margin=22000):
+        ntext=re.sub(r'[<>\[\]]','',self.text)
+        lines=0
+        wordwidths=self.textwidth.wordwidths(ntext)
+        x=0
+        lines=1
+        for width in wordwidths:
+            if x+width>margin:
+                lines+=1 # this word goes on the next line
+                x=0  # carriage return
+            x+=width # place word on line
+        if self.next:
+            lines+=self.next.linecount(margin)
+        return lines
+
+    def getreferencename(self):
+        bookname,chapters=self.bibleparser.getbookname(self.ref[0])
+        if chapters==1:
+            return bookname+' '+str(self.ref[2])
+        return bookname+' '+str(self.ref[1])+':'+str(self.ref[2])
+
     def pairs(self):
         return {
             'text':self.text,
@@ -85,6 +146,16 @@ class BibleParser:
         self.checkrefs={}
         self.snippets=[]
         self.setup()
+    def getbookname(self,booknumber):
+        # FIXME: Language-specific adjustments have to happen
+        c2=(booknumber,2,1)
+        if c2 not in self.allverses:
+            chapters=1
+        else:
+            chapters=2
+        booknames=self.settings.get('booknames',self.booknames)
+        return booknames[booknumber],chapters
+
     def setup(self):
         sourcefile=open(self.settings['source'],'r')
         textre=re.compile(r'^(.*?) (\d+):(\d+) (.*)')
@@ -149,23 +220,51 @@ class BibleParser:
             verse=self.allverses[ref]
             verse.newparagraph=True
 
-    def moreparagraphbreaks(self):
+    def moreparagraphbreaks(self,other,margin):
         # Have paragraph syncs every few verses
         runlength=0
+        leftlines=0
+        rightlines=0
+        linematchbreak=0
+        runlengthcount=0
+        shouldbreaksoon=0
         for i in range(len(self.snippets)):
             verse=self.snippets[i]
-            if verse.newparagraph: runlength=0
+            # Compare line counts between translations:
+            leftlines+=verse.linecount(margin)
+            rightlines+=other.snippets[i].linecount()
+            if i<len(self.snippets)-1:
+                leftnext=self.snippets[i+1].linecount()
+                rightnext=other.snippets[i+1].linecount()
+            if verse.newparagraph:
+                runlength=0
+                shouldbreaksoon=0
             runlength+=1
-            if runlength>maxchunk:
-                foundnew=False
+            if runlength>maxchunk or (shouldbreaksoon and runlength > 1):
+                # Don't break if we are about to do a paragraph break soon anyway:
+                breakingsoon=False
                 for j in range(1+i,1+i+minchunk):
                     if j>=len(self.snippets):
                         break
                     if self.snippets[j].newparagraph:
-                        foundnew=True
-                if not foundnew:
+                        breakingsoon=True
+                if not breakingsoon:
+                    if shouldbreaksoon:
+                        linematchbreak+=1
+                        verse.text='*'+verse.text # DEBUG!
+                    else:
+                        runlengthcount+=1
+                        verse.text='"'+verse.text # DEBUG!
                     verse.newparagraph=True
                     runlength=0
+                    leftlines=0
+                    rightlines=0
+                    shouldbreaksoon=0
+            else:
+                mismatchlr = (runlength>1 and abs((rightlines+rightnext)-(leftlines+leftnext))>0)
+                if mismatchlr:
+                    shouldbreaksoon+=1
+        sys.stderr.write(f'paragraph breaks: linematchbreak={linematchbreak}, runlengthcount={runlengthcount}\n')
 
     def getparagraphranges(self):
         # Return list of snippet ranges for paragraphs
@@ -281,7 +380,10 @@ if __name__=="__main__":
         'zz':'AF',
         'lang':'Afrikaans 1935/1953',
         'source': 'text/af1953.txt',
-        'errata':'text/af1953.errata' }
+        'errata':'text/af1953.errata',
+        'BOOKNAMES': [ 'GÉNESIS', 'EXODUS', 'LEVÍTIKUS', 'NÚMERI', 'DEUTERONÓMIUM', 'JOSUA', 'RIGTERS', 'RUT', 'I SAMUEL', 'II SAMUEL', 'I KONINGS', 'II KONINGS', 'I KRONIEKE', 'II KRONIEKE', 'ESRA', 'NEHEMÍA', 'ESTER', 'JOB', 'PSALMS', 'SPREUKE', 'PREDIKER', 'HOOGLIED', 'JESAJA', 'JEREMIA', 'KLAAGLIEDERE', 'ESÉGIËL', 'DANIËL', 'HOSÉA', 'JOËL', 'AMOS', 'OBÁDJA', 'JONA', 'MIGA', 'NAHUM', 'HÁBAKUK', 'SEFÁNJA', 'HAGGAI', 'SAGARÍA', 'MALEÁGI', 'MATTHÉÜS', 'MARKUS', 'LUKAS', 'JOHANNES', 'HANDELINGE', 'ROMEINE', 'I KORINTHIËRS', 'II KORINTHIËRS', 'GALÁSIËRS', 'EFÉSIËRS', 'FILIPPENSE', 'KOLOSSENSE', 'I THESSALONICENSE', 'II THESSALONICENSE', 'I TIMÓTHEÜS', 'II TIMÓTHEÜS', 'TITUS', 'FILÉMON', 'HEBREËRS', 'JAKOBUS', 'I PETRUS', 'II PETRUS', 'I JOHANNES', 'II JOHANNES', 'III JOHANNES', 'JUDAS', 'OPENBARING', ],
+        'booknames': [ 'Génesis', 'Exodus', 'Levítikus', 'Númeri', 'Deuteronómium', 'Josua', 'Rigters', 'Rut', 'I Samuel', 'II Samuel', 'I Konings', 'II Konings', 'I Kronieke', 'II Kronieke', 'Esra', 'Nehemía', 'Ester', 'Job', 'Psalms', 'Spreuke', 'Prediker', 'Hooglied', 'Jesaja', 'Jeremia', 'Klaagliedere', 'Eségiël', 'Daniël', 'Hoséa', 'Joël', 'Amos', 'Obádja', 'Jona', 'Miga', 'Nahum', 'Hábakuk', 'Sefánja', 'Haggai', 'Sagaría', 'Maleági', 'Matthéüs', 'Markus', 'Lukas', 'Johannes', 'Handelinge', 'Romeine', 'I Korinthiërs', 'II Korinthiërs', 'Galásiërs', 'Efésiërs', 'Filippense', 'Kolossense', 'I Thessalonicense', 'II Thessalonicense', 'I Timótheüs', 'II Timótheüs', 'Titus', 'Filémon', 'Hebreërs', 'Jakobus', 'I Petrus', 'II Petrus', 'I Johannes', 'II Johannes', 'III Johannes', 'Judas', 'Openbaring', ],
+         }
 
     en = BibleParser(ensettings)
     zu = BibleParser(zusettings)
@@ -292,7 +394,7 @@ if __name__=="__main__":
     en.registerparagraphbreaks(paragraphs)
     zu.registerparagraphbreaks(paragraphs)
     buildparallelsequence('ppenafnt.csv',en,af)
-    en.moreparagraphbreaks()
+    en.moreparagraphbreaks(af,22000)
     
     # Plan: iterate through sequence in english
     # Afrikaans: paragraphs move a little bit
@@ -327,17 +429,18 @@ if __name__=="__main__":
                     if text.find('[')>=0:
                         text = re.sub(r'\[([^\]]*?)\]',italicise,text,0)
                     v=verse.ref[2]
-                    r={'v':v,'text':text,}
+                    reference=verse.getreferencename() # the display of the verse
+                    r={'v':v,'text':text, 'reference': reference, 'REFERENCE': reference.upper() }
                     if v==1: versetmpl ='versei'
                     elif v==2: versetmpl ='verseii'
                     else : versetmpl ='verse'
                     fd.write(templates[versetmpl] % r)
                     if verse.endchapter:
-                        fd.write(templates['endchapter'])
+                        fd.write(templates['endchapter'] % vv.settings)
                     endbook = endbook or verse.endbook
                 fd.write(templates['endlang'] % vv.settings)
             if endbook:
-                fd.write(templates['endbook'])
+                fd.write(templates['endbook'] % vv.settings)
             pass
         fd.write(templates['end'])
         fd.close()
