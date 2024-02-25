@@ -8,8 +8,10 @@ def index(dicty,i):
     keys=list(dicty.keys())
     return dicty[keys[i]]
 
+rightmargin=21400
 maxchunk=5
-minchunk=2
+minchunk=2  # look ahead this far
+debug=False
 
 alltemplates={
     'parallel.html': {
@@ -72,6 +74,17 @@ class TextWidth:
         for word in words.split():
             o.append(self.measure(word)+self.space)
         return o
+    def wrap(self,text,margin=rightmargin,indent=0):
+        "Do wordwrap and count lines"
+        x=indent
+        lines=1
+        for width in self.wordwidths(text):
+            if x+width>margin:
+                lines+=1 # this word goes on the next line
+                x=0  # carriage return
+            x+=width # place word on line
+        return lines
+
     
 class Verse:
     def __init__(self,line,bibleparser):
@@ -104,17 +117,9 @@ class Verse:
         return lines
 
     # Get the linecount for this snippet and its friends
-    def linecount(self,margin=22000):
+    def linecount(self,margin=rightmargin):
         ntext=re.sub(r'[<>\[\]]','',self.text)
-        lines=0
-        wordwidths=self.textwidth.wordwidths(ntext)
-        x=0
-        lines=1
-        for width in wordwidths:
-            if x+width>margin:
-                lines+=1 # this word goes on the next line
-                x=0  # carriage return
-            x+=width # place word on line
+        lines=self.textwidth.wrap(ntext,margin,margin//20)
         if self.next:
             lines+=self.next.linecount(margin)
         return lines
@@ -233,9 +238,9 @@ class BibleParser:
             # Compare line counts between translations:
             leftlines+=verse.linecount(margin)
             rightlines+=other.snippets[i].linecount()
-            if i<len(self.snippets)-1:
-                leftnext=self.snippets[i+1].linecount()
-                rightnext=other.snippets[i+1].linecount()
+            #if i<len(self.snippets)-1:
+            #    leftnext=self.snippets[i+1].linecount()
+            #    rightnext=other.snippets[i+1].linecount()
             if verse.newparagraph:
                 runlength=0
                 shouldbreaksoon=0
@@ -251,17 +256,17 @@ class BibleParser:
                 if not breakingsoon:
                     if shouldbreaksoon:
                         linematchbreak+=1
-                        verse.text='*'+verse.text # DEBUG!
+                        if debug: verse.text='*'+verse.text # Mangle output for debug
                     else:
                         runlengthcount+=1
-                        verse.text='"'+verse.text # DEBUG!
+                        if debug: verse.text='"'+verse.text # Mangle output for debug
                     verse.newparagraph=True
                     runlength=0
                     leftlines=0
                     rightlines=0
                     shouldbreaksoon=0
             else:
-                mismatchlr = (runlength>1 and abs((rightlines+rightnext)-(leftlines+leftnext))>0)
+                mismatchlr = (runlength>1 and abs((rightlines)-(leftlines))>0)
                 if mismatchlr:
                     shouldbreaksoon+=1
         sys.stderr.write(f'paragraph breaks: linematchbreak={linematchbreak}, runlengthcount={runlengthcount}\n')
