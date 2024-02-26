@@ -41,9 +41,9 @@ alltemplates={
         'newlang':    '\\PPnewlang\\PPnewlang%(zz)s',   # column
         'book':       '\\PPbook{%(book)s}\n',
         'chapter':    '\\PPchapter{%(chapter)s}',
-        'versei':     '\\PPversei{%(v)s}{%(text)s}\n',
-        'verseii':    '\\PPverseii{%(v)s}{%(text)s}\n',
-        'verse':      '\\PPverse{%(v)s}\\PPverseref{%(reference)s}{%(text)s}\n',
+        'versei':     '\\PPversei{%(v)s}{%(reference)s}{%(text)s}\n',
+        'verseii':    '\\PPverseii{%(v)s}{%(reference)s}{%(text)s}\n',
+        'verse':      '\\PPverse{%(v)s}{%(reference)s}{%(text)s}\n',
         'endlang':    '\\PPendlang%(zz)s\\PPendlang',   # /column
         'endchapter': '\\PPendchapter\\PPendchapter%(zz)s',
         'endbook':    '\\PPendbook\n',

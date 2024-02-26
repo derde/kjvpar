@@ -188,10 +188,10 @@
 \newcommand{\PPchapter}[1]{\PPdropcapschapter{#1}}
 % Heading for each book of the PPe: big text
 \newcommand{\PPverseref}[1]{\markboth{#1}{#1}}%
-\newcommand{\PPendreference}[2]{\markboth{#1}{#1}\def\mythumbindex{#2}}%
-\newcommand{\PPversei}[2]{\ppspacing #2}% the space after the verse is a thing
-\newcommand{\PPverseii}[2]{\PPsyntheticparii\raisebox{\myverseraise}[0pt]{\myversefont\textbf{#1}}\versehskip\ppspacing#2}% the space after the verse is a thing
-\newcommand{\PPverse}[2]{\par\raisebox{\myverseraise}[0pt]{\myversefont\textbf{#1}}\versehskip\ppspacing#2}% the space after the verse is a thing
+%\newcommand{\PPendreference}[2]{\markboth{#1}{#1}\def\mythumbindex{#2}}%
+\newcommand{\PPversei}[3]{\ppspacing\PPverseref{#2} #3}% the space after the verse is a thing
+\newcommand{\PPverseii}[3]{\PPsyntheticparii\raisebox{\myverseraise}[0pt]{\myversefont\textbf{#1}}\versehskip\ppspacing\PPverseref{#2}#3}% the space after the verse is a thing
+\newcommand{\PPverse}[3]{\par\raisebox{\myverseraise}[0pt]{\myversefont\textbf{#1}}\versehskip\ppspacing\PPverseref{#2}#3}% the space after the verse is a thing
 \newcommand{\PPpostscript}[1]{} % omit postscripts - ignore parameter, which is the text of the postscript
 \newcommand{\PPpar}{\PPsyntheticparii}
 \newcommand{\PPpsalmauthor}[1]{{\ppspacing\em #1}\PPsyntheticparii}
