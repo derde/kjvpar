@@ -39,7 +39,7 @@ alltemplates={
         'newchapter': '\\PPnewchapter\\PPnewchapter%(zz)s', #  synchronise left/right
         'swlang':     '\\PPswlang',   # switch between languages
         'newlang':    '\\PPnewlang\\PPnewlang%(zz)s',   # column
-        'book':       '\\PPbook{%(book)s}\n',
+        'book':       '\\PPbook{%(bookname)s}\n',
         'chapter':    '\\PPchapter{%(chapter)s}',
         'versei':     '\\PPversei{%(v)s}{%(reference)s}{%(text)s}\n',
         'verseii':    '\\PPverseii{%(v)s}{%(reference)s}{%(text)s}\n',
@@ -131,11 +131,13 @@ class Verse:
         return bookname+' '+str(self.ref[1])+':'+str(self.ref[2])
 
     def pairs(self):
+        bookname,chapters=self.bibleparser.getbookname(self.ref[0])
         return {
             'text':self.text,
             'book':self.bookname,
             'chapter':self.ref[1],
             'verse':self.ref[2],
+            'bookname': bookname,
         }
     def __str__(self):
         return f'{self.bookname} {self.ref[1]}:{self.ref[2]}'
