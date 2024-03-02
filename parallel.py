@@ -369,11 +369,15 @@ def buildparallelsequence(filename, en, af):
         countEN += en.addsnippet(enaf['en'])
         countAF += af.addsnippet(enaf['af'])
         snippets+=1
-    print(f'CHECK: snippets={snippets}, verses[en]={countEN}, verses[af]={countAF}')
+    sys.stderr.write(f'CHECK: snippets={snippets}, verses[en]={countEN}, verses[af]={countAF}\n')
 
-if __name__=="__main__":
+def setup():
+    global en
+    global zu
+    global af
+    global allversions
+
     paragraphs={}
-    paragraphsAF={}
     ensettings={
         'zz':'EN',
         'lang':'King James Version 1611/1769',
@@ -403,6 +407,9 @@ if __name__=="__main__":
     buildparallelsequence('ppenafnt.csv',en,af)
     en.moreparagraphbreaks(af,22000)
     
+setup()
+
+if __name__=="__main__":
     # Plan: iterate through sequence in english
     # Afrikaans: paragraphs move a little bit
 
