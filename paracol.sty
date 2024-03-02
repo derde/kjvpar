@@ -140,7 +140,8 @@
   \fi\fi
   \global\maxdepth\@maxdepth
   \ifnum\outputpenalty>-\@Miv
-    \ifdim\@colroom<1.5\baselineskip
+    % 1.5 here:
+    \ifdim\@colroom<0.5\baselineskip
       \ifdim\@colroom<\textheight
         \ifpcol@sptextstart
           \global\vsize\@colroom
@@ -876,7 +877,8 @@
     \advance\@tempdima-\belowfootnoteskip
   \fi
   \ifx\@botlist\@empty\else \advance\@tempdima-\textfloatsep \fi
-  \ifdim\@tempdima<1.5\baselineskip
+    % 1.5 here 
+  \ifdim\@tempdima<0.5\baselineskip
     \setbox\@cclv\box\@holdpg \@makecol
     \pcol@outputfalse \@outputpage \pcol@outputtrue
     \global\let\pcol@currpage\@empty \pcol@startpage
@@ -2417,7 +2419,7 @@
       \vfil \penalty-\@M
       \global\pcol@syncfalse \pcol@visitallcols\newpage \global\pcol@synctrue
       \pcol@invokeoutput\pcol@op@switch}%
-    \ensurevspace{\baselineskip}%
+    \ensurevspace{0\baselineskip}%
   \else
     \pcol@invokeoutput\pcol@op@switch
   \fi
@@ -2466,7 +2468,7 @@
   \expandafter\gdef\csname pcol@colpream\number\@tempcnta\endcsname{#2}}
 
 \def\ensurevspace#1{{\@tempdima#1\relax \gdef\pcol@ensurevspace{#1}}}
-\ensurevspace{\baselineskip}
+\ensurevspace{0\baselineskip}
 
 %% Disabling \addcontentsline
 
