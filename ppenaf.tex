@@ -71,6 +71,11 @@
 %0.968/59*56 = .91877966101694915240
 % This works, but it seems neater to squash the font, rather than reduce the inter-character spacing:
 \def\myfontstretch{0.925}
+\def\usepackages{%
+    \usepackage{fp}% floating point arithmetic
+    \FPdiv{\myfontstretchAF}{\myfontstretch}{1.007109}%meh
+    \FPround{\myfontstretchAF}{\myfontstretchAF}{4}
+}
 %\def\myletterspace{LetterSpace=0 plus 0 minus 0}
 %\def\myfontstretch{0.875}
 %\def\myletterspace{}

@@ -36,7 +36,13 @@
 \newcounter{qmylines}
 \usepackage[nocheck]{fancyhdr}% Headers on the page, left and right
 \usepackage{needspace}% Don't start new books at the bottom of the page
-\usepackage[english,dutch]{babel}% hypenation
+%\usepackage[english,dutch]{babel}% hypenation
+\usepackage{polyglossia}%
+\setdefaultlanguage{english}
+\setotherlanguage{afrikaans}
+\setlanguagealias{afrikaans}{AF}
+\setlanguagealias{english}{EN}
+%%
 \usepackage[fontsize=\myfontsize,baseline=\mybaseline]{grid}% Register-true printing (back and front of page match)
 \usepackage[\mymargins]{geometry}%
 \geometry{papersize={\mypapersize}}
@@ -63,6 +69,7 @@
 %\usepackage{xltxtra}
 %\usepackage{setspace}
 \usepackage{paracol}
+\ensurevspace{0pt}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\setulmarginsandblock{2cm}{2cm}{*}
 %\setlrmarginsandblock{2cm}{2cm}{*}
@@ -115,6 +122,7 @@
 \fontspec{\myfontname}
 \setmainfont[\myfontopts \myboldness FakeStretch=\myfontstretch,Scale=1.00]{\myfontname}% 1006 pages +2
 \PPfontcustom
+\newfontfamily\myfontAF[\myfontopts \myboldness FakeStretch=\myfontstretchAF,Scale=1.0]{\myfontname}% Used for page headings
 \newfontfamily\mynostretchfont[FakeStretch=1]{\mysansfont}% Used for page headings
 \newfontfamily\myheadingfont[\myboldness FakeStretch=\myfontstretch,Scale=1.00]{\mysansfont}% Used for page headings
 \newfontfamily\mysmallcapsfont[\myfontopts\myboldness FakeStretch=\myfontstretch,Scale=0.80]{\myfontname}% Used for (synthetic) smallcaps
@@ -134,8 +142,9 @@
 \usepackage{xcolor}
 
 \definecolor{mygray}{gray}{\mygrayshade}
-\setlength{\columnsep}{\mycolumnsep}
-\setlength{\columnseprule}{\mycolumnseprule}%
+\setlength{\columnsep}{12pt}
+\setlength{\columnseprule}{0.4pt}%
+%\colseprulecolor{mygray}%
 %\setlength{\premulticols}{0\baselineskip}
 %\setlength{\postmulticols}{0\baselineskip}
 %\setlength{\multicolsep}{0\baselineskip}
@@ -175,7 +184,7 @@
     \PPparaheight=\ht0 \advance\PPparaheight by \dp0%
     #1%{\tiny y=\the\PPparaheight}\par
 %Write to the ppenaf.heights file: but the page numbers here are NOT the page numbers for the headings
-    \immediate\write\myparaheight{{#2},{#3},\the\PPparaheight}% Can't figure out how to merge these: merge them yourself
+    \immediate\write\myparaheight{#2,#3,\the\PPparaheight}% Can't figure out how to merge these: merge them yourself
     \write\myparapage{\thepage}% pr -mt ppenaf.pagecontents ppenaf.heights
 }
 \newcommand\PPmeasuretext[1]{\PPmeasuretextEX{#1}{\somelanguage}{\someverse}}%
@@ -192,26 +201,27 @@
 \newcommand{\PPendchapterEN}{}
 \newcommand{\PPswlang}{}% Done with this language: fill up the column vertically
 \newcommand{\PPnewlang}{}
-\newcommand{\PPnewlangEN}{\begin{paracol}{2}\begin{leftcolumn}\selectlanguage{english}\gdef\somelanguage{en}}
-\newcommand{\PPnewlangAF}{\begin{rightcolumn}\selectlanguage{dutch}\gdef\somelanguage{af}}
+\newcommand{\pplang}[1]{}
+\newcommand{\PPnewlangEN}{\begin{paracol}{2}\begin{leftcolumn}\renewcommand\pplang[1]{\begin{english}##1\end{english}}\gdef\somelanguage{en}}
+\newcommand{\PPnewlangAF}{\begin{rightcolumn}\renewcommand\pplang[1]{\begin{afrikaans}\myfontAF##1\end{afrikaans}}\gdef\somelanguage{af}}
 \newcommand{\PPnewbook}{\mybooktitlepreamble}
 \newcommand{\PPbook}[1]{\mybooktitlebox{#1}}
 \newcommand{\PPchapter}[1]{\PPdropcapschapter{#1}}
 % Heading for each book of the PPe: big text
 \newcommand{\PPverseref}[1]{\gdef\someverse{#1}\markboth{#1}{#1}}%
 %\newcommand{\PPendreference}[2]{\markboth{#1}{#1}\def\mythumbindex{#2}}%
-\newcommand{\PPversei}[3]{\PPmeasuretext{\PPverseref{#2}\versehskip\ppspacing#3}}% the space after the verse is a thing
+\newcommand{\PPversei}[3]{\PPmeasuretext{\PPverseref{#2}\versehskip\ppspacing\pplang{#3}}}% the space after the verse is a thing
 \newcommand{\PPverseii}[3]{%
   \ifdim\PPparaheight<1.1\baselineskip%
     \PPsyntheticpar% KQ% continue on same line
   \else
     \PPsyntheticparii% QK%
   \fi
-    \PPmeasuretext{\raisebox{\myverseraise}[0pt]{\myversefont\textbf{#1}}\versehskip\PPverseref{#2}\ppspacing#3}}% the space after the verse is a thing
-\newcommand{\PPverse}[3]{\par\PPmeasuretext{\raisebox{\myverseraise}[0pt]{\myversefont\textbf{#1}}\versehskip\PPverseref{#2}\ppspacing#3}}% the space after the verse is a thing
+    \PPmeasuretext{\raisebox{\myverseraise}[0pt]{\myversefont\textbf{#1}}\versehskip\PPverseref{#2}\ppspacing\pplang{#3}}}% the space after the verse is a thing
+\newcommand{\PPverse}[3]{\par\PPmeasuretext{\raisebox{\myverseraise}[0pt]{\myversefont\textbf{#1}}\versehskip\PPverseref{#2}\ppspacing\pplang{#3}}}% the space after the verse is a thing
 \newcommand{\PPpostscript}[1]{} % omit postscripts - ignore parameter, which is the text of the postscript
 \newcommand{\PPpar}{\PPsyntheticparii}
-\newcommand{\PPpsalmauthor}[1]{{\ppspacing\em #1}\PPsyntheticparii}
+\newcommand{\PPpsalmauthor}[1]{{\ppspacing\pplang{\em #1}}\PPsyntheticparii}
 \newcommand{\PPendlang}{}
 \newcommand{\PPendlangEN}{\end{leftcolumn}}
 \newcommand{\PPendlangAF}{\end{rightcolumn}\end{paracol}}
@@ -319,7 +329,7 @@
     \else%
         \makeatletter\ifdefined\f@family\f@family\fi \makeatother\ \the\fontdimen6\font\the\font, %
     \fi
-    \ENaspect\ \myfontstretch:1,
+    \ENaspect\ \myfontstretch:1, (af) \myfontstretchAF:1,
     \ENlinespacing\ \the\baselineskip
 }
 \def\myformattinginfoiii{%
