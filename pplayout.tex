@@ -182,10 +182,10 @@
 \newdimen\PPparaheight
 \newcommand\PPmeasuretextEX[3]{\setbox0=\vbox{#1}%
     \PPparaheight=\ht0 \advance\PPparaheight by \dp0%
-    #1%{\tiny y=\the\PPparaheight}\par
 %Write to the ppenaf.heights file: but the page numbers here are NOT the page numbers for the headings
     \immediate\write\myparaheight{#2,#3,\the\PPparaheight}% Can't figure out how to merge these: merge them yourself
     \write\myparapage{\thepage}% pr -mt ppenaf.pagecontents ppenaf.heights
+    #1%
 }
 \newcommand\PPmeasuretext[1]{\PPmeasuretextEX{#1}{\somelanguage}{\someverse}}%
 \newcommand{\sharedverse}[2]{\raisebox{\myverseraise}[0pt]{\myversefont\textbf{#1}}\def\mythumbindex{#2}}%3 points up, count height as 0 points, kern at end

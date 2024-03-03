@@ -22,9 +22,9 @@ alltemplates={
         'newlang':    '<td>',
         'book':       '<H1>%(book)s</H1>\n',
         'chapter':    '<h2>%(chapter)s</h2> ',
-        'versei':     '<p><sup>%(v)s</sup> %(text)s</p>\n',
-        'verseii':    '<p><sup>%(v)s</sup> %(text)s</p>\n',
-        'verse':      '<p><sup>%(v)s</sup> %(text)s</p>\n',
+        'versei':     '<p><sup>%(verse)s</sup> %(itext)s</p>\n',
+        'verseii':    '<p><sup>%(verse)s</sup> %(itext)s</p>\n',
+        'verse':      '<p><sup>%(verse)s</sup> %(itext)s</p>\n',
         'endlang':    '</td>',
         'endchapter': '</tr>',
         'endbook':    '</table>',
@@ -41,9 +41,9 @@ alltemplates={
         'newlang':    '\\PPnewlang\\PPnewlang%(zz)s',   # column
         'book':       '\\PPbook{%(bookname)s}\n',
         'chapter':    '\\PPchapter{%(chapter)s}',
-        'versei':     '\\PPversei{%(v)s}{%(reference)s}{%(text)s}\n',
-        'verseii':    '\\PPverseii{%(v)s}{%(reference)s}{%(text)s}\n',
-        'verse':      '\\PPverse{%(v)s}{%(reference)s}{%(text)s}\n',
+        'versei':     '\\PPversei{%(verse)s}{%(reference)s}{%(newhighlight)s%(itext)s%(endhighlight)s}\n',
+        'verseii':    '\\PPverseii{%(verse)s}{%(reference)s}{%(newhighlight)s%(itext)s%(endhighlight)s}\n',
+        'verse':      '\\PPverse{%(verse)s}{%(reference)s}{%(newhighlight)s%(itext)s%(endhighlight)s}\n',
         'endlang':    '\\PPendlang%(zz)s\\PPendlang',   # /column
         'endchapter': '\\PPendchapter\\PPendchapter%(zz)s',
         'endbook':    '\\PPendbook\n',
@@ -131,13 +131,24 @@ class Verse:
         return bookname+' '+str(self.ref[1])+':'+str(self.ref[2])
 
     def pairs(self):
+        'Printable template stuff for the verse'
         bookname,chapters=self.bibleparser.getbookname(self.ref[0])
+        newhighlight=''
+        endhighlight=''
+        if self.ref in self.bibleparser.highlights:
+            newhighlight=r'\textbf{'
+            endhighlight='}'
+        reference=self.getreferencename()
         return {
             'text':self.text,
             'book':self.bookname,
             'chapter':self.ref[1],
             'verse':self.ref[2],
             'bookname': bookname,
+            'newhighlight': newhighlight,
+            'endhighlight': endhighlight,
+            'reference': reference,
+            'REFERENCE': reference.upper(),
         }
     def __str__(self):
         return f'{self.bookname} {self.ref[1]}:{self.ref[2]}'
@@ -318,8 +329,8 @@ def attribution(m):
     return templates['attribution'] % r
 
 
-def readparagraphs(paragraphs,filename,language):
-    "language: look up paragraph book names in this language"
+def readverselist(filename,language):
+    "Iterate the verses in the file, returning a list of ref's"
     fd=open(filename,'r')
     for line in fd:
         m=re.search(' \d+:',line) 
@@ -337,8 +348,16 @@ def readparagraphs(paragraphs,filename,language):
                 verse=int(mmverse)
             bookindex=language.bookindex(bookname)
             ref=(bookindex,chapter,verse)
-            paragraphs[ref]=True
+            yield ref
     fd.close()
+
+def readverselistfile(filename,language):
+    "language: look up paragraph book names in this language"
+    paragraphs={}
+    for ref in readverselist(filename,language):
+        paragraphs[ref]=True
+    return paragraphs
+
 
 # Read from a parallel spec file
 def iterateparallel(csvfeed,en,af):
@@ -400,8 +419,11 @@ def setup():
     zu = BibleParser(zusettings)
     af = BibleParser(afsettings)
     allversions=[en,af]
-    paragraphs={}
-    readparagraphs(paragraphs,'paragraphs.txt',en)
+    paragraphs=readverselistfile('paragraphs.txt',en)
+    highlights=readverselistfile('highlights.txt',en)
+    en.highlights=highlights
+    af.highlights=highlights
+    zu.highlights=highlights
     en.registerparagraphbreaks(paragraphs)
     zu.registerparagraphbreaks(paragraphs)
     buildparallelsequence('ppenafnt.csv',en,af)
@@ -428,10 +450,11 @@ if __name__=="__main__":
                 fd.write(templates['newlang'] % vv.settings)
                 verses=vv.getsnippetverses(sniprange)
                 for verse in verses:
+                    pairs=verse.pairs()
                     if verse.newbook:
-                        fd.write(templates['book'] % verse.pairs())
+                        fd.write(templates['book'] % pairs)
                     if verse.newchapter:
-                        fd.write(templates['chapter'] % verse.pairs())
+                        fd.write(templates['chapter'] % pairs)
                     # Epistle postscripts
                     text=verse.text
                     if text.find('<<[')>=0:
@@ -442,13 +465,12 @@ if __name__=="__main__":
                     # Regular italics
                     if text.find('[')>=0:
                         text = re.sub(r'\[([^\]]*?)\]',italicise,text,0)
+                    pairs['itext']=text
                     v=verse.ref[2]
-                    reference=verse.getreferencename() # the display of the verse
-                    r={'v':v,'text':text, 'reference': reference, 'REFERENCE': reference.upper() }
                     if v==1: versetmpl ='versei'
                     elif v==2: versetmpl ='verseii'
                     else : versetmpl ='verse'
-                    fd.write(templates[versetmpl] % r)
+                    fd.write(templates[versetmpl] % pairs)
                     if verse.endchapter:
                         fd.write(templates['endchapter'] % vv.settings)
                     endbook = endbook or verse.endbook
