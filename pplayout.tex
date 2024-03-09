@@ -42,6 +42,62 @@
 \setotherlanguage{afrikaans}
 \setlanguagealias{afrikaans}{AF}
 \setlanguagealias{english}{EN}
+\usepackage{hyphenat}
+\hyphenation{
+% older forms missing from modern dictionary: *est
+ab-hor-rest ac-cep-test ap-prov-est ask-est bap-tiz-est bar-est bear-est be-hold-est
+be-liev-est be-tray-est blas-phem-est bring-est build-est call-est cam-est
+car-est chief-est com-est com-mand-est com-pel-lest con-demn-est con-si-der-est
+could-est des-pis-est des-troy-est did-dest dis-hon-our-est do-est dwell-est earn-est
+eld-est fast-est gav-est giv-est go-est great-est gu-est harv-est hat-est hear-est
+high-est hold-est holi-est hon-est judg-est keep-est kill-est knew-est know-est
+lack-est ledd-est l-est lett-est liv-est lov-est low-est mad-est mak-est
+may-est might-est mod-est need-est ought-est ow-est par-tak-est per-ceiv-est
+per-se-cut-est per-suad-est pray-est preach-est pri-est prot-est read-est reap-est
+re-gard-est re-main-est re-mem-ber-est repli-est re-proach-est re-quest rest-est
+sa-vour-est saw-est say-est seek-est se-est shew-est should-est sitt-est sleep-est
+small-est smit-est sow-est speak-est spend-est stand-est ston-est strait-est
+suf-fer-est tak-est talk-est tar-ri-est teach-est temp-est think-est tra-vail-est
+trea-sur-est troubl-est visit-est walk-est weep-est went-est would-est wr-est
+% older forms missing from modern dictionary: *eth
+abid-eth abound-eth ac-cept-eth ac-cus-eth ack-now-ledg-eth add-eth ad-van-tag-eth
+al-low-eth ans-wer-eth ap-pear-eth ap-proach-eth aris-eth as-cend-eth ask-eth
+avail-eth bap-tiz-eth bear-eth beat-eth be-com-eth be-hav-eth be-hold-eth be-liev-eth
+belong-eth be-tray-eth be-ray-eth bid-deth blas-phem-eth blow-eth boast-eth
+bridl-eth bring-eth build-eth burn-eth buy-eth call-eth car-eth carri-eth cast-eth
+catch-eth caus-eth ceas-eth chasten-eth cherish-eth cleans-eth cleav-eth climb-eth
+com-eth comfort-eth com-mand-eth com-mend-eth com-mitt-eth con-demn-eth con-fess-eth
+con-sist-eth con-strain-eth con-sult-eth con-tinu-eth con-vert-eth con-vinc-eth
+cor-rupt-eth count-eth cover-eth cri-eth cum-ber-eth curs-eth deal-eth decay-eth
+de-ceiv-eth de-fil-eth de-lay-eth de-ni-eth de-part-eth de-scend-eth de-scrib-eth
+de-sir-eth de-spis-eth de-vour-eth dif-fer-eth dip-peth dis-an-nul-leth
+dis-hon-our-eth di-vid-eth doubt-eth draw-eth drink-eth driv-eth dur-eth
+dwell-eth eat-eth ed-ifi-eth en-dur-eth en-tangl-eth en-ter-eth envi-eth es-teem-eth
+exalt-eth excell-eth exercis-eth exhort-eth fad-eth fail-eth fall-eth fear-eth
+feed-eth fill-eth find-eth foam-eth fol-low-eth for-bid-deth for-get-teth
+for-giv-eth for-sak-eth ga-ther-eth gen-der-eth giv-eth glori-eth gnash-eth 
+greet-eth groan-eth grow-eth hang-eth harden-eth hat-eth hear-eth help-eth hid-eth
+hold-eth hon-our-eth hop-eth humbl-eth im-put-eth in-creas-eth judg-eth jus-tifi-eth
+keep-eth kill-eth kindl-eth knock-eth know-eth la-bour-eth lack-eth lay-eth
+lead-eth lea-ven-eth leav-eth lett-eth light-en-eth light-eth limit-eth
+linger-eth list-eth liv-eth lodg-eth look-eth los-eth lov-eth lust-eth mak-eth
+marri-eth mean-eth mi-ni-ster-eth nam-eth need-eth nou-rish-eth oc-cupi-eth open-eth
+op-pos-eth over-com-eth own-eth pass-eth pe-rish-eth pe-rsuad-eth per-tain-eth
+per-vert-eth pin-eth plant-eth plow-eth pos-sess-eth pour-eth pray-eth preach-eth
+press-eth proceed-eth profit-eth prophesi-eth prosper-eth puff-eth purg-eth
+pu-ri-fi-eth pur-pos-eth putt-eth quick-en-eth rais-eth read-eth reap-eth re-ceiv-eth
+re-ckon-eth re-gard-eth reign-eth re-ject-eth re-joic-eth re-main-eth re-mem-ber-eth
+re-pent-eth re-sist-eth rest-eth re-stor-eth ris-eth roar-eth rul-eth run-neth
+salut-eth sanc-tifi-eth scat-ter-eth scourg-eth search-eth seek-eth seem-eth 
+sell-eth send-eth serv-eth sett-eth sew-eth shew-eth shin-eth shoot-eth shut-teth
+sig-ni-fi-eth sin-neth sitt-eth sleep-eth slum-ber-eth smi-teth sow-eth speak-eth
+stab-lish-eth stand-eth step-peth stink-eth stir-reth strength-en-eth strik-eth
+striv-eth stumbl-eth suf-fer-eth suf-fic-eth sup-pli-eth swear-eth tak-eth talk-eth
+teach-eth tear-eth tell-eth tempt-eth tes-ti-fi-eth think-eth thresh-eth
+touch-eth trans-gres-seth tra-vail-eth tread-eth tri-eth troubl-eth trust-eth
+un-der-stand-eth up-braid-eth vanish-eth vaunt-eth wait-eth walk-eth warr-eth
+watch-eth wa-ter-eth wa-ver-eth wax-eth wear-eth will-eth wi-ther-eth with-hold-eth
+wit-ness-eth work-eth wor-ship-peth yield-eth Tro-phi-mus}
 %%
 \usepackage[fontsize=\myfontsize,baseline=\mybaseline]{grid}% Register-true printing (back and front of page match)
 \usepackage[\mymargins]{geometry}%
@@ -70,6 +126,8 @@
 %\usepackage{setspace}
 \usepackage{paracol}
 \ensurevspace{0pt}
+%Save positions of verse references as we print
+\usepackage[user,savepos]{zref}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\setulmarginsandblock{2cm}{2cm}{*}
 %\setlrmarginsandblock{2cm}{2cm}{*}
@@ -79,6 +137,7 @@
 %\setlength{\parindent}{0.5em}
 \setlength{\parindent}{0.6em}
 %\setlength{\parskip}{0cm plus4mm minus1pt}
+\InputIfFileExists{\jobname.headings.tex}{}{}
 \fancypagestyle{noheadings}{%
     \fancyhead[EL]{}% hush
     \fancyhead[ER]{}% hush
@@ -107,11 +166,16 @@
 % register true is way better ...
 %\fancyhead[L]{\textsf{\leftmark}}% Top left header
 %\fancyhead[EL]{ - \em\textsf{\rightmark} - }% Top left header
-\fancyhead[ER]{\extramark\hspace{1em}}% This is the chapter marker block
-\fancyhead[OL]{\extramark}% This is the chapter marker block
+%\fancyhead[ER]{\extramark\hspace{1em}}% This is the chapter marker block
+%\fancyhead[OL]{\extramark}% This is the chapter marker block
 \newcommand\extramark{}
-\fancyhead[OR]{\myheadingfont \textbf{\textemdash\ \leftmark\hspace{1em}\null}\PPthumbmarkright{\mythumbindex}\oddbindingmarks}% Top right header
-\fancyhead[EL]{\myheadingfont \textbf{\textemdash\ \rightmark}\PPthumbmarkleft{\mythumbindex}\evenbindingmarks}% Top left header - leading dash is to discourage accidental reading of the heading
+\ifdefined\ppsave{\relax}\else{\newcommand{\ppget}[2]{\relax}}\fi
+%\fancyhead[ER]{\myheadingfont \textbf{\textemdash\ \ppget{AFrange}{\thepage}\hspace{1em}\null}\PPthumbmarkright{\mythumbindex}\oddbindingmarks}% Top right header
+\newcommand\pphcentre[1]{\makebox[0.46\linewidth]{#1}}
+\fancyhead[ER]{\pphcentre{\myheadingfont \textbf{\ppget{AFrange}{\thepage}}}\PPthumbmarkright{\mythumbindex}\oddbindingmarks}% Top right header
+\fancyhead[OR]{\pphcentre{\myheadingfont \textbf{\ppget{AFrange}{\thepage}}}\PPthumbmarkright{\mythumbindex}\oddbindingmarks}% Top right header
+\fancyhead[EL]{\pphcentre{\myheadingfont \textbf{\ppget{ENrange}{\thepage}}}\PPthumbmarkleft{\mythumbindex}\evenbindingmarks}% Top left header - leading dash is to discourage accidental reading of the heading
+\fancyhead[OL]{\pphcentre{\myheadingfont \textbf{\ppget{ENrange}{\thepage}}}\PPthumbmarkleft{\mythumbindex}\evenbindingmarks}% Top left header - leading dash is to discourage accidental reading of the heading
 \fancyhead[C]{\myheadingfont {\thepage}}% Center footer - bold is less readable
 \renewcommand{\headrulewidth}{0.0pt}% lines just amplify the skewness of skewly printed pages 
 \renewcommand{\footrulewidth}{0.0pt}%
@@ -120,7 +184,7 @@
 \gdef\myshowpageinfo{}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \fontspec{\myfontname}
-\setmainfont[\myfontopts \myboldness FakeStretch=\myfontstretch,Scale=1.00]{\myfontname}% 1006 pages +2
+\setmainfont[\myfontopts \myboldness FakeStretch=\myfontstretch,Scale=1.00, \myletterspace]{\myfontname}% 1006 pages +2
 \PPfontcustom
 \newfontfamily\myfontAF[\myfontopts \myboldness FakeStretch=\myfontstretchAF,Scale=1.0]{\myfontname}% Used for page headings
 \newfontfamily\mynostretchfont[FakeStretch=1]{\mysansfont}% Used for page headings
@@ -148,17 +212,20 @@
 %\setlength{\premulticols}{0\baselineskip}
 %\setlength{\postmulticols}{0\baselineskip}
 %\setlength{\multicolsep}{0\baselineskip}
-\setlength{\emergencystretch}{0\baselineskip}% we don't care what your emergency is: don't stretch
+%\setlength{\emergencystretch}{0\baselineskip}% we don't care what your emergency is: don't stretch
 %
 %
 %
-% \pretolerance is used to tell the processor when there is too much space between words, and an attempt should be made to hyphenate some of them; 
-% \tolerance is used to indicate when there is too much space even after breaking words.
+% \pretolerance is used to tell the processor when there is too much space
+% between words, and an attempt should be made to hyphenate some of them;
+% \tolerance is used to indicate when there is too much space even after
+% breaking words.
 % If we want to avoid breaking words, and avoid having too long lines, we have to use a very high value for 
 % \pretoletance. An “infinite” tolerance is represented by the value 10000.
 \pretolerance=10
+\tolerance=600\relax  % tolerance for variation in spacing
 \let\textquotedbl="
-\let\quotedblbase="
+%\let\quotedblbase="
 %
 %% % due to a bug in memoir (as of 2015/8/24) [twoside] option will give a spurious space
 %% % this will be fixed as memoir gets updated
@@ -177,6 +244,16 @@
 %%  \setaftersecskip{0em}
 %%  \setsecheadstyle{\marginhead}
 \def\hebrewleader{}%
+\newwrite\coords\immediate\openout\coords=\jobname.coords%
+\newcommand{\writecoordinates}[1]{%
+  \immediate\write\coords{#1,\thepage}%
+}
+\newcommand{\ppsaveposition}[2]{% Save the print position, given a #1 label, and #2 reference
+  \zsavepos{#1}%
+  \edef\temp{#1,#2,x=\the\dimexpr\zposx{#1}sp\relax, y=\the\dimexpr\zposy{#1}sp\relax}%
+  \writecoordinates{\temp}%
+}
+
 \newwrite\myparaheight\immediate\openout\myparaheight=\jobname.paraheight%
 \newwrite\myparapage\immediate\openout\myparapage=\jobname.parapage%
 \newdimen\PPparaheight
@@ -187,7 +264,8 @@
     \write\myparapage{\thepage}% pr -mt ppenaf.pagecontents ppenaf.heights
     #1%
 }
-\newcommand\PPmeasuretext[1]{\PPmeasuretextEX{#1}{\somelanguage}{\someverse}}%
+%\newcommand\PPmeasuretext[1]{\PPmeasuretextEX{#1}{\somelanguage}{\someverse}}%
+\newcommand\PPmeasuretext[1]{#1}% Non-measuring version
 \newcommand{\sharedverse}[2]{\raisebox{\myverseraise}[0pt]{\myversefont\textbf{#1}}\def\mythumbindex{#2}}%3 points up, count height as 0 points, kern at end
 \newcommand{\versehskip}{\hspace{\myversehspace}}
 \newcommand{\versehskipa}{\hspace{\myverseahspace}}% Kern verses starting with capital A
@@ -210,15 +288,15 @@
 % Heading for each book of the PPe: big text
 \newcommand{\PPverseref}[1]{\gdef\someverse{#1}\markboth{#1}{#1}}%
 %\newcommand{\PPendreference}[2]{\markboth{#1}{#1}\def\mythumbindex{#2}}%
-\newcommand{\PPversei}[3]{\PPmeasuretext{\PPverseref{#2}\versehskip\ppspacing\pplang{#3}}}% the space after the verse is a thing
-\newcommand{\PPverseii}[3]{%
-  \ifdim\PPparaheight<1.1\baselineskip%
-    \PPsyntheticpar% KQ% continue on same line
-  \else
+\newcommand{\PPversei}[4]{\PPmeasuretext{\PPverseref{#2}\ppsaveposition{#3}{#2}\versehskip\ppspacing\pplang{#4}}}% the space after the verse is a thing
+\newcommand{\PPverseii}[4]{%
+  %\ifdim\PPparaheight<1.1\baselineskip%
+  %  \PPsyntheticpar% KQ% continue on same line
+  %\else
     \PPsyntheticparii% QK%
-  \fi
-    \PPmeasuretext{\raisebox{\myverseraise}[0pt]{\myversefont\textbf{#1}}\versehskip\PPverseref{#2}\ppspacing\pplang{#3}}}% the space after the verse is a thing
-\newcommand{\PPverse}[3]{\par\PPmeasuretext{\raisebox{\myverseraise}[0pt]{\myversefont\textbf{#1}}\versehskip\PPverseref{#2}\ppspacing\pplang{#3}}}% the space after the verse is a thing
+  %\fi
+\PPmeasuretext{\raisebox{\myverseraise}[0pt]{\myversefont\textbf{#1}}\ppsaveposition{#3}{#2}{\versehskip\PPverseref{#2}\ppspacing\pplang{#4}}}}% the space after the verse is a thing
+\newcommand{\PPverse}[4]{\par\PPmeasuretext{\raisebox{\myverseraise}[0pt]{\myversefont\textbf{#1}}\ppsaveposition{#3}{#2}{\versehskip\PPverseref{#2}\ppspacing\pplang{#4}}}}% the space after the verse is a thing
 \newcommand{\PPpostscript}[1]{} % omit postscripts - ignore parameter, which is the text of the postscript
 \newcommand{\PPpar}{\PPsyntheticparii}
 \newcommand{\PPpsalmauthor}[1]{{\ppspacing\pplang{\em #1}}\PPsyntheticparii}

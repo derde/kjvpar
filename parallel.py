@@ -13,6 +13,13 @@ maxchunk=5
 minchunk=2  # look ahead this far
 debug=False
 
+seqnumber=10000
+def get_sequence():
+    global seqnumber
+    seqnumber+=1
+    o='PPsq'+str(seqnumber)
+    return o
+
 alltemplates={
     'parallel.html': {
         'new':        '<!-- Begin -->',
@@ -41,9 +48,9 @@ alltemplates={
         'newlang':    '\\PPnewlang\\PPnewlang%(zz)s',   # column
         'book':       '\\PPbook{%(bookname)s}\n',
         'chapter':    '\\PPchapter{%(chapter)s}',
-        'versei':     '\\PPversei{%(verse)s}{%(reference)s}{%(newhighlight)s%(itext)s%(endhighlight)s}\n',
-        'verseii':    '\\PPverseii{%(verse)s}{%(reference)s}{%(newhighlight)s%(itext)s%(endhighlight)s}\n',
-        'verse':      '\\PPverse{%(verse)s}{%(reference)s}{%(newhighlight)s%(itext)s%(endhighlight)s}\n',
+        'versei':     '\\PPversei{%(verse)s}{%(reference)s}{%(seq)s}{%(newhighlight)s%(itext)s%(endhighlight)s}\n',
+        'verseii':    '\\PPverseii{%(verse)s}{%(reference)s}{%(seq)s}{%(newhighlight)s%(itext)s%(endhighlight)s}\n',
+        'verse':      '\\PPverse{%(verse)s}{%(reference)s}{%(seq)s}{%(newhighlight)s%(itext)s%(endhighlight)s}\n',
         'endlang':    '\\PPendlang%(zz)s\\PPendlang',   # /column
         'endchapter': '\\PPendchapter\\PPendchapter%(zz)s',
         'endbook':    '\\PPendbook\n',
@@ -149,6 +156,7 @@ class Verse:
             'endhighlight': endhighlight,
             'reference': reference,
             'REFERENCE': reference.upper(),
+            'seq': get_sequence(),
         }
     def __str__(self):
         return f'{self.bookname} {self.ref[1]}:{self.ref[2]}'
@@ -156,6 +164,7 @@ class Verse:
 class BibleParser:
     def __init__(self,settings):
         self.settings=settings
+        self.zz=settings['zz']
         self.booknames=[]
         self.books={}
         self.counters={}
@@ -172,7 +181,11 @@ class BibleParser:
         else:
             chapters=2
         booknames=self.settings.get('booknames',self.booknames)
-        return booknames[booknumber],chapters
+        if booknumber<len(booknames):
+            bookname=booknames[booknumber]
+        else:
+            bookname='book-#'+str(booknumber)
+        return bookname,chapters
 
     def setup(self):
         sourcefile=open(self.settings['source'],'r')
@@ -223,6 +236,10 @@ class BibleParser:
         mbookname,ref,mtext=self.decodeline(line)
         return ref
 
+    def reftostr(self,ref):
+        mbookname,discard = self.getbookname(ref[0])
+        return f'{mbookname} {ref[1]}:{ref[2]}'
+
     def decodeline(self,line):
         m=re.search('(.*) (\d+):(\d+)\s*(.*)',line)
         if not m: return
@@ -235,8 +252,11 @@ class BibleParser:
 
     def registerparagraphbreaks(self,paragraphs):
         for ref in paragraphs:
-            verse=self.allverses[ref]
-            verse.newparagraph=True
+            if ref in self.allverses:
+                verse=self.allverses[ref]
+                verse.newparagraph=True
+            else:
+                print(self.zz+': cannot find ref '+str(ref)+': '+self.reftostr(ref))
 
     def moreparagraphbreaks(self,other,margin):
         # Have paragraph syncs every few verses
@@ -369,11 +389,11 @@ def iterateparallel(csvfeed,en,af):
         if lineEN and lineAF:
             if concurrent:
                 yield concurrent
-            concurrent={'en':[],'af':[]}
+            concurrent={en.zz:[],af.zz:[]}
         refEN=en.linetoref(lineEN)
         refAF=af.linetoref(lineAF)
-        if refEN: concurrent['en'].append(refEN)
-        if refAF: concurrent['af'].append(refAF)
+        if refEN: concurrent[en.zz].append(refEN)
+        if refAF: concurrent[af.zz].append(refAF)
     yield concurrent
 
 # Read the parallel file and sequence the verses
@@ -385,15 +405,16 @@ def buildparallelsequence(filename, en, af):
     countAF=0
     snippets=0
     for enaf in iterateparallel(fd,en,af):
-        countEN += en.addsnippet(enaf['en'])
-        countAF += af.addsnippet(enaf['af'])
+        countEN += en.addsnippet(enaf[en.zz])
+        countAF += af.addsnippet(enaf[af.zz])
         snippets+=1
     sys.stderr.write(f'CHECK: snippets={snippets}, verses[en]={countEN}, verses[af]={countAF}\n')
 
 def setup():
     global en
-    global zu
     global af
+    global zu
+    global gr
     global allversions
 
     paragraphs={}
@@ -406,6 +427,13 @@ def setup():
         'zz':'ZU',
         'lang':'Zulu 1959',
         'source': 'text/zulu1959.txt' }
+    grsettings={
+        'zz':'GR',
+        'lang':'Stephanus 1550',
+        'source': 'text/tr1550.txt',
+        'BOOKNAMES': [ "ΓΈΝΕΣΙΣ", "ΈΞΟΔΟΣ", "ΛΕΥΪΤΙΚΌ", "ΑΡΙΘΜΟΊ", "ΔΕΥΤΕΡΟΝΌΜΙΟ", "ΙΗΣΟΎΣ", "ΚΡΙΤΈΣ", "ΡΟΥΘ", "Α΄ ΒΑΣΙΛΈΩΝ", "Β΄ ΒΑΣΙΛΈΩΝ", "Γ΄ ΒΑΣΙΛΈΩΝ", "Δ΄ ΒΑΣΙΛΈΩΝ", "Α' ΠΑΡΑΛΕΙΠΟΜΈΝΩΝ", "Β' ΠΑΡΑΛΕΙΠΟΜΈΝΩΝ", "ΈΣΔΡΑΣ", "ΝΕΕΜΊΑΣ", "ΕΣΘΉΡ", "ΙΏΒ", "ΨΑΛΜΟΊ", "ΠΑΡΟΙΜΊΕΣ", "ΕΚΚΛΗΣΙΑΣΤΉΣ", "ΆΣΜΑ ΑΣΜΆΤΩΝ", "ΗΣΑΐΑΣ", "ΙΕΡΕΜΊΑΣ", "ΘΡΉΝΟΙ", "ΙΕΖΕΚΙΉΛ", "ΔΑΝΙΉΛ", "ΩΣΗΈ", "ΙΩΉΛ", "ΑΜΏΣ", "ΟΒΔΙΟΎ", "ΙΩΝΆΣ", "ΜΙΧΑΊΑΣ", "ΝΑΟΎΜ", "ΑΒΒΑΚΟΎΜ", "ΣΟΦΟΝΊΑΣ", "ΑΓΓΑΊΟΣ", "ΖΑΧΑΡΊΑΣ", "ΜΑΛΑΧΊΑΣ", "ΜΑΤΘΑΊΟΣ", "ΜΆΡΚΟΣ", "ΛΟΥΚΆΣ", "ΙΩΆΝΝΗΣ", "ΠΡΆΞΕΙΣ", "ΡΩΜΑΊΟΥΣ", "Α΄ ΚΟΡΙΝΘΊΟΥΣ", "Β΄ ΚΟΡΙΝΘΊΟΥΣ", "ΓΑΛΆΤΕΣ", "ΕΦΕΣΊΟΥΣ", "ΦΙΛΙΠΠΗΣΊΟΥΣ", "ΚΟΛΟΣΣΑΕΊΣ", "Α΄ ΘΕΣΣΑΛΟΝΙΚΕΊΣ", "Β΄ ΘΕΣΣΑΛΟΝΙΚΕΊΣ ", "Α΄ ΤΙΜΌΘΕΟ", "Β΄ ΤΙΜΌΘΕΟ", "ΤΊΤΟ", "ΦΙΛΉΜΟΝΑ", "ΕΒΡΑΊΟΥΣ", "ΙΑΚΏΒΟΥ", "Α΄ ΠΈΤΡΟΥ", "Β΄ ΠΈΤΡΟΥ", "Α΄ ΙΩΆΝΝΗ", "Β΄ ΙΩΆΝΝΗ", "Γ΄ ΙΩΆΝΝΗ", "ΙΟΎΔΑ", "ΑΠΟΚΆΛΥΨΗ", ],
+        'booknames': [ "Γένεσις", "Έξοδος", "Λευϊτικό", "Αριθμοί", "Δευτερονόμιο", "Ιησούς", "Κριτές", "Ρουθ", "Α΄ Βασιλέων", "Β΄ Βασιλέων", "Γ΄ Βασιλέων", "Δ΄ Βασιλέων", "Α' Παραλειπομένων", "Β' Παραλειπομένων", "Έσδρας", "Νεεμίας", "Εσθήρ", "Ιώβ", "Ψαλμοί", "Παροιμίες", "Εκκλησιαστής", "Άσμα Ασμάτων", "Ησαΐας", "Ιερεμίας", "Θρήνοι", "Ιεζεκιήλ", "Δανιήλ", "Ωσηέ", "Ιωήλ", "Αμώς", "Οβδιού", "Ιωνάς", "Μιχαίας", "Ναούμ", "Αββακούμ", "Σοφονίας", "Αγγαίος", "Ζαχαρίας", "Μαλαχίας", "Ματθαίος", "Μάρκος", "Λουκάς", "Ιωάννης", "Πράξεις", "Ρωμαίους", "Α΄ Κορινθίους", "Β΄ Κορινθίους", "Γαλάτες", "Εφεσίους", "Φιλιππησίους", "Κολοσσαείς", "Α΄ Θεσσαλονικείς", "Β΄ Θεσσαλονικείς ", "Α΄ Τιμόθεο", "Β΄ Τιμόθεο", "Τίτο", "Φιλήμονα", "Εβραίους", "Ιακώβου", "Α΄ Πέτρου", "Β΄ Πέτρου", "Α΄ Ιωάννη", "Β΄ Ιωάννη", "Γ΄ Ιωάννη", "Ιούδα", "Αποκάλυψη", ],
+        }
     afsettings={
         'zz':'AF',
         'lang':'Afrikaans 1935/1953',
@@ -418,14 +446,17 @@ def setup():
     en = BibleParser(ensettings)
     zu = BibleParser(zusettings)
     af = BibleParser(afsettings)
+    gr = BibleParser(grsettings)
     allversions=[en,af]
     paragraphs=readverselistfile('paragraphs.txt',en)
     highlights=readverselistfile('highlights.txt',en)
     en.highlights=highlights
     af.highlights=highlights
     zu.highlights=highlights
+    gr.highlights=highlights
     en.registerparagraphbreaks(paragraphs)
     zu.registerparagraphbreaks(paragraphs)
+    # gr.registerparagraphbreaks(paragraphs)
     buildparallelsequence('ppenafnt.csv',en,af)
     en.moreparagraphbreaks(af,22000)
     

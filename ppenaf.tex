@@ -19,8 +19,10 @@
 %  \rightskip=0pt plus 1.8em\relax% space on right hand margin: keep it small
 %  \parfillskip=0pt plus 10em\relax%   last line of paragraph space: use up all of the spare space here.
 %  \spaceskip=\dimexpr\the\fontdimen2\font-\the\fontdimen4\font\relax plus 0.8em % plus \the\fontdimen4\font % space between words: keep it constant, with tiny changes, no up-side
-  \spaceskip=0.4em plus 0.8em minus 0.2em\relax% plus \the\fontdimen4\font % space between words: keep it constant, with tiny changes, no up-side
-  \rightskip=0pt plus 1ex\relax% space on right hand margin: keep it small
+  %\spaceskip=0.4em plus 0.8em minus 0.2em\relax% plus \the\fontdimen4\font % space between words: keep it constant, with tiny changes, no up-side
+  \spaceskip=0.25em plus 0.35em minus 0.05em\relax% plus \the\fontdimen4\font % space between words: keep it constant, with tiny changes, no up-side
+  %\rightskip=0pt plus 1ex\relax% space on right hand margin: keep it small
+  \rightskip=0pt\relax% space on right hand margin: keep it small
   \parfillskip=0pt plus \linewidth\relax%   last line of paragraph space: use up all of the spare space here.
 }
 \def\myhypenpenalty{10}%   Lower penalty means more hypenation and fewer pages
@@ -62,24 +64,27 @@
 \def\mysansfont{[GrazeShorter.otf]}
 \def\myfontsize{9.00pt}
 \def\mybaseline{9.00pt}
-\def\myletterspace{}
 \def\myfontopts{
     BoldFont=[GrazeShorter-Bold.otf],
     ItalicFont=[GrazeShorter-Italic.otf],
     BoldItalicFont=[GrazeShorter-BoldItalic.otf],
 }
+%\def\myfontname{Noto Serif}
+%def\myfontopts{}
 %8.57*59/56 = 9.02910714285714285714
 %0.968/59*56 = .91877966101694915240
 % This works, but it seems neater to squash the font, rather than reduce the inter-character spacing:
 \def\myfontstretch{0.925}
 \def\usepackages{%
-    \usepackage{fp}% floating point arithmetic
+    \usepackage[tracking,shrink=2,stretch=20]{microtype}
+    \emergencystretch=6em
+    \usepackage{fp}% floating point arithmetic to calculate the actual stretch for Afrikaans
     \FPdiv{\myfontstretchAF}{\myfontstretch}{1.007109}%meh
     \FPround{\myfontstretchAF}{\myfontstretchAF}{4}
 }
-%\def\myletterspace{LetterSpace=0 plus 0 minus 0}
+%\def\myletterspace{LetterSpace=0.0 plus 25.0}
 %\def\myfontstretch{0.875}
-%\def\myletterspace{}
+\def\myletterspace{}
 \def\myextradisplay{}
 \def\mytoccolumns{3}
 \def\mychapterscale{1.00}
