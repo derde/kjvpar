@@ -1,0 +1,76 @@
+
+Paragraph vs continuous: 16% difference, font size difference: 8%:
+    639 pages paragraph per verse
+    551 pages continuous
+
+Checklist: DONE :
+    🗸 Margins
+    🗸 Extra paragraph break at Matthew 1:2
+    🗸 Proper alignment of mismatched verse numbers (use list of precise alignments)
+    🗸 Page numbers
+    🗸 Switch to upper-case KJV
+    🗸 Verse 2 must not interfere with lettrine
+    🗸 Verse 1 must not be shown
+    🗸 Special verses highlighted
+    🗸 Special verse highlighting: bold+italics in John 1:12 "even"
+    🗸 Justify right margin (maybe review)
+    🗸 Column spacing and line between
+    🗸 Overfull hboxes!
+    🗸 Gray the chapter numbers like the headings like
+    🗸 Enable English and Afrikaans hyphenation
+    🗸 Afrikaans accents for book titles
+    🗸 1 Timothy weird page break! (was double needspace)
+    🗸 Blank line appears before page wrap when a paragraph begins at the bottom of a page
+    🗸 Chapter first line indentation (is too stretchy) (use hskip, not space)
+    🗸 Chapter verse 2 next to DropCaps should NOT indent, but after lettrine, it SHOULD indent (work-around would be to stretchy verse 1 too)
+    🗸 Drop Psalms and Proverbs
+Checklist: REVIEW :
+    Check English and Afrikaans hyphenation
+    Check font for all Afrikaans accents for spacing, kerning, etc:  !-—’”„ ok: ËÉáäéêëíïóòôúüý OT only: ēōÓÚŌ; high, but no collisions: ÁÍ; high, can lowercase: Ê -- review kerning of accented letters
+    Intra-word space to make things better (l i k e   t h i s ...) ... try using other font .. did luatex+microtype, not  https://unifraktur.sourceforge.net/letterspacing.html#letterspacing_support-note_xelatex says \usepackage{fontspec,xspace} and then define a custom \em command like \renewcommand\emshape{\xspace\addfontfeature{LetterSpace=20.0,WordSpace=1.5,Ligatures={NoCommon}}} ..
+    Check for chapters and booknames orphaned at the end of the page (needspace adjustment for book and chapter)
+Checklist: TODO :
+    🗸 Page headings - paracol breaks this, so log the references and page numbers to aux file, and make a csv with the heading for each page from that
+    𐄂 Page headings - if justified, then right justify the margin too - no space like for ragged right
+    🗸 Page headings should be CAPITALISED
+    🗸 Page headings should be BOLD
+    Book thumbnails - left margin shows book position
+    Page print checker - right margin dot that draws a cross in the margin
+    ISBN number
+    Cover page
+    Read-it-yourself gospel instructions through highlighted verses
+    Special text pages
+
+    Manual Paragraph breaks: John to Revelation (copy from paragraph bible)
+    Somehow align stair-stepped parallel columns - but first do paragraph breaks
+    Chapter position and size ... and wrapping
+    Psalms: italics for Afrikaans titles
+    Titles for books (The Gospel According to St Matthew)
+    Chapter subscripts
+    Inter-book spacing (formatting? line?)
+    Book titles that don't fit - 2 Thessalonians (fixed by centering properly) now II Thessalonicense heading doesn't fit: make a plan (SᴍᴀʟʟCᴀᴘꜱ?)
+    Cover design
+    Font kerning (especially "PAULUS")
+    Check font for all Afrikaans italics accents for spacing, kerning, etc (are there italics though?)
+    Check for presentation of CAPITALISED PHRASES: consider smallcaps
+    Afrikaans: LEADING CAPS resolution (e.g. leave it, sMALLcAPS?)
+
+TODO: Future::
+    KJV/Zulu
+    KJV/Greek
+
+References::
+
+Q. Ideas
+    https://tex.stackexchange.com/questions/86366/syncing-text-on-bilingual-pages
+
+Q. How about using conTeXt ?
+    https://tex.stackexchange.com/questions/113899/parallel-text-in-context
+A. conTeXt doesn't seem to have side-by-side printing
+
+reledmac/examples/4-reledpar_columns_titles_in_line_numbering_with_notes.pdf
+reledmac/examples/4-reledpar_columns_titles_in_line_numbering_with_notes.tex
+
+
+
+

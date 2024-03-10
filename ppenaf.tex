@@ -61,7 +61,8 @@
 \def\mydisplayfont{Graze Shorter}
 \def\myfontname{[GrazeShorter.otf]}
 \def\mysansfontii{Liberation Sans}
-\def\mysansfont{[GrazeShorter.otf]}
+\def\mysansfont{Liberation Sans}
+%\def\mysansfont{[GrazeShorter.otf]}
 \def\myfontsize{9.00pt}
 \def\mybaseline{9.00pt}
 \def\myfontopts{
@@ -93,6 +94,8 @@
 % Improvements post-publishing 2023
 \def\mypredocument{%
     %\pretolerance=50
+    \pretolerance=20
+    \tolerance=800\relax  % tolerance for variation in spacing
     %\renewcommand{\headruleskip}{-2pt}
     \frenchspacing% Oh wow ... this saves two pages!
     \input{hyph-en.tex}
@@ -122,8 +125,8 @@
 Words of Christ in black.\par
 }
 % To omit binding marks
-\renewcommand{\oddbindingmarks}{}
-\renewcommand{\evenbindingmarks}{}
+%\renewcommand{\oddbindingmarks}{}
+%\renewcommand{\evenbindingmarks}{}
 
 \def\biblbeforeoldtestament{\par\newpage
 %\gdef\mycurrentsection{THE OLD TESTAMENT}\thispagestyle{sectionheadings}%\begin{center}{\textbf{THE OLD TESTAMENT}}\end{center}\par
@@ -133,6 +136,7 @@ Words of Christ in black.\par
 }%
 \def\ENsubtitle{kjb1769 afr1953 ppenaf-a5-440}
 \def\ENmotto{The fruit of the righteous is a tree of life;\par and he that winneth souls is wise.}
+    
 \def\ENmottoii{http://soulwinning.africa/}
 \def\biblISBN{Printed in South Africa by CTP Printers Cape Town\par
 ISBN: 978-0-XXXX-XXXX-5, \copyright Calvary Hope Baptist Church 2024, with this licence:}
@@ -148,6 +152,9 @@ and with the former translations
 diligently compared and revised,
 by his Majesty's special command
 }
+% Load default page counts, which is used for the print checker and thumbnail
+\gdef \mypagecount {500}
+\InputIfFileExists{\jobname.section}{}{}
 \input{pplayout.tex}
 
 %\input{parallel.tex} % this is done by pplayout.tex

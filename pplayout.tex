@@ -110,7 +110,8 @@ wit-ness-eth work-eth wor-ship-peth yield-eth Tro-phi-mus}
 \mypageadjustments% Any other page adjustments - crop package goes here
 %\usepackage[absolute,overlay]{textpos}% Put things in absolute positions (for thumb marker)
 \usepackage[absolute]{textpos}% Put things in absolute positions (for thumb marker)
-\TPGrid[0mm,10mm]{30}{38}% defines tiny boxes down right hand margin for book name - see "textblock" below.  For 66 books, we have 61 markers
+%FIXME: Use \mypagecount+n from aux file:
+\TPGrid[0mm,10mm]{30}{\mypagecount}% defines tiny boxes down right hand margin for book name - see "textblock" below.  For 66 books, we have 61 markers
 %FIXME \setlength{\headsep}{\myheadsep}% Seperation between text and body
 % 0.3528pt/mm ... 334pt,510pt
 %\usepackage[grid]{mymulticol}
@@ -172,10 +173,10 @@ wit-ness-eth work-eth wor-ship-peth yield-eth Tro-phi-mus}
 \ifdefined\ppsave{\relax}\else{\newcommand{\ppget}[2]{\relax}}\fi
 %\fancyhead[ER]{\myheadingfont \textbf{\textemdash\ \ppget{AFrange}{\thepage}\hspace{1em}\null}\PPthumbmarkright{\mythumbindex}\oddbindingmarks}% Top right header
 \newcommand\pphcentre[1]{\makebox[0.46\linewidth]{#1}}
-\fancyhead[ER]{\pphcentre{\myheadingfont \textbf{\ppget{AFrange}{\thepage}}}\PPthumbmarkright{\mythumbindex}\oddbindingmarks}% Top right header
-\fancyhead[OR]{\pphcentre{\myheadingfont \textbf{\ppget{AFrange}{\thepage}}}\PPthumbmarkright{\mythumbindex}\oddbindingmarks}% Top right header
-\fancyhead[EL]{\pphcentre{\myheadingfont \textbf{\ppget{ENrange}{\thepage}}}\PPthumbmarkleft{\mythumbindex}\evenbindingmarks}% Top left header - leading dash is to discourage accidental reading of the heading
-\fancyhead[OL]{\pphcentre{\myheadingfont \textbf{\ppget{ENrange}{\thepage}}}\PPthumbmarkleft{\mythumbindex}\evenbindingmarks}% Top left header - leading dash is to discourage accidental reading of the heading
+\fancyhead[ER]{\pphcentre{\myheadingfont \textbf{\ppget{AFrange}{\thepage}}}\PPthumbmarkleft{\mythumbindex}}% Top right header
+\fancyhead[OR]{\pphcentre{\myheadingfont \textbf{\ppget{AFrange}{\thepage}}}\PPthumbmarkright{\theppbookno}}% Top right header
+\fancyhead[EL]{\pphcentre{\myheadingfont \textbf{\ppget{ENrange}{\thepage}}}}% Top left header - leading dash is to discourage accidental reading of the heading
+\fancyhead[OL]{\pphcentre{\myheadingfont \textbf{\ppget{ENrange}{\thepage}}}}% Top left header - leading dash is to discourage accidental reading of the heading
 \fancyhead[C]{\myheadingfont {\thepage}}% Center footer - bold is less readable
 \renewcommand{\headrulewidth}{0.0pt}% lines just amplify the skewness of skewly printed pages 
 \renewcommand{\footrulewidth}{0.0pt}%
@@ -222,8 +223,6 @@ wit-ness-eth work-eth wor-ship-peth yield-eth Tro-phi-mus}
 % breaking words.
 % If we want to avoid breaking words, and avoid having too long lines, we have to use a very high value for 
 % \pretoletance. An “infinite” tolerance is represented by the value 10000.
-\pretolerance=10
-\tolerance=600\relax  % tolerance for variation in spacing
 \let\textquotedbl="
 %\let\quotedblbase="
 %
@@ -245,13 +244,10 @@ wit-ness-eth work-eth wor-ship-peth yield-eth Tro-phi-mus}
 %%  \setsecheadstyle{\marginhead}
 \def\hebrewleader{}%
 \newwrite\coords\immediate\openout\coords=\jobname.coords%
-\newcommand{\writecoordinates}[1]{%
-  \immediate\write\coords{#1,\thepage}%
-}
 \newcommand{\ppsaveposition}[2]{% Save the print position, given a #1 label, and #2 reference
   \zsavepos{#1}%
   \edef\temp{#1,#2,x=\the\dimexpr\zposx{#1}sp\relax, y=\the\dimexpr\zposy{#1}sp\relax}%
-  \writecoordinates{\temp}%
+  \immediate\write\coords{\temp,\thepage}%
 }
 
 \newwrite\myparaheight\immediate\openout\myparaheight=\jobname.paraheight%
@@ -282,7 +278,8 @@ wit-ness-eth work-eth wor-ship-peth yield-eth Tro-phi-mus}
 \newcommand{\pplang}[1]{}
 \newcommand{\PPnewlangEN}{\begin{paracol}{2}\begin{leftcolumn}\renewcommand\pplang[1]{\begin{english}##1\end{english}}\gdef\somelanguage{en}}
 \newcommand{\PPnewlangAF}{\begin{rightcolumn}\renewcommand\pplang[1]{\begin{afrikaans}\myfontAF##1\end{afrikaans}}\gdef\somelanguage{af}}
-\newcommand{\PPnewbook}{\mybooktitlepreamble}
+\newcounter{ppbookno}
+\newcommand{\PPnewbook}{\mybooktitlepreamble\addtocounter{ppbookno}{18}}
 \newcommand{\PPbook}[1]{\mybooktitlebox{#1}}
 \newcommand{\PPchapter}[1]{\PPdropcapschapter{#1}}
 % Heading for each book of the PPe: big text
@@ -316,7 +313,7 @@ wit-ness-eth work-eth wor-ship-peth yield-eth Tro-phi-mus}
 \end{textblock}
 }
 \newcommand{\PPthumbmarkright}[1]{\PPthumbmark{29}{#1}{0.5mm}}%
-\newcommand{\PPthumbmarkleft}[1]{\PPthumbmark{0}{#1}{-4mm}}%
+\newcommand{\PPthumbmarkleft}[1]{\PPthumbmark{0}{\thepage}{-4mm}}%
 \newlength{\rightmarkspace}%
 \newlength{\rightmarksep}
 \setlength{\rightmarkspace}{\paperwidth-5em}% 
@@ -353,7 +350,7 @@ wit-ness-eth work-eth wor-ship-peth yield-eth Tro-phi-mus}
 %\newcommand{\PPdropcapschapter}[1]{\null\needspace{0.5\baselineskip}%
 \newcommand{\PPdropcapschapter}[1]{\needspace{\mychapterspace}% big mystery here ... for needspace within 2 column environment, this is the number of lines /2 /2 (ie div 4)
 %\lettrine[lines=2, lraise=0.05, lhang=0.00, findent=3pt, nindent=0pt, loversize=0.0]{\hspace{2pt}\textbf{\mychapterfont \smash{#1}}}{}}% bug: if you raise by 0.05, it breaks grid alignment for register-true 
-\lettrine[lines=2, lraise=0.00, lhang=0.00, findent=\mylettrinefindent, nindent=0pt, loversize=0.0]{\raisebox{\mychapterraise}[0pt]{\textbf{\mychapterfont\mychapterfontextra\color{mygray} #1}}}{}%
+  \lettrine[lines=2, lraise=0.00, lhang=0.00, findent=\mylettrinefindent, nindent=0pt, loversize=0.0]{\raisebox{\mychapterraise}[0pt]{\textbf{\mychapterfont\mychapterfontextra\color{mygray} #1}}}{}%
 }%
 %debug: \textbf{#1}}%
 % Work around lettrine bug with "Fpar" definition from https://tex.stackexchange.com/questions/369868/using-lettrine-with-short-paragraphs :
