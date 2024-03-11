@@ -24,6 +24,7 @@ Checklist: DONE :
     🗸 Chapter first line indentation (is too stretchy) (use hskip, not space)
     🗸 Chapter verse 2 next to DropCaps should NOT indent, but after lettrine, it SHOULD indent (work-around would be to stretchy verse 1 too)
     🗸 Drop Psalms and Proverbs
+    🗸 Page print checker - right margin dot that draws a cross in the margin
 Checklist: REVIEW :
     Check English and Afrikaans hyphenation
     Check font for all Afrikaans accents for spacing, kerning, etc:  !-—’”„ ok: ËÉáäéêëíïóòôúüý OT only: ēōÓÚŌ; high, but no collisions: ÁÍ; high, can lowercase: Ê -- review kerning of accented letters
@@ -35,7 +36,6 @@ Checklist: TODO :
     🗸 Page headings should be CAPITALISED
     🗸 Page headings should be BOLD
     Book thumbnails - left margin shows book position (might be wrong too!)
-    Page print checker - right margin dot that draws a cross in the margin - it's there, but it's wrong
     ISBN number
     Cover page
     Read-it-yourself gospel instructions through highlighted verses
