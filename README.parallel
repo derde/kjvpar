@@ -34,8 +34,8 @@ Checklist: TODO :
     𐄂 Page headings - if justified, then right justify the margin too - no space like for ragged right
     🗸 Page headings should be CAPITALISED
     🗸 Page headings should be BOLD
-    Book thumbnails - left margin shows book position
-    Page print checker - right margin dot that draws a cross in the margin
+    Book thumbnails - left margin shows book position (might be wrong too!)
+    Page print checker - right margin dot that draws a cross in the margin - it's there, but it's wrong
     ISBN number
     Cover page
     Read-it-yourself gospel instructions through highlighted verses
@@ -44,7 +44,6 @@ Checklist: TODO :
     Manual Paragraph breaks: John to Revelation (copy from paragraph bible)
     Somehow align stair-stepped parallel columns - but first do paragraph breaks
     Chapter position and size ... and wrapping
-    Psalms: italics for Afrikaans titles
     Titles for books (The Gospel According to St Matthew)
     Chapter subscripts
     Inter-book spacing (formatting? line?)
@@ -54,6 +53,8 @@ Checklist: TODO :
     Check font for all Afrikaans italics accents for spacing, kerning, etc (are there italics though?)
     Check for presentation of CAPITALISED PHRASES: consider smallcaps
     Afrikaans: LEADING CAPS resolution (e.g. leave it, sMALLcAPS?)
+Checklist: WONTFIX:
+    Not done: Psalms: italics for Afrikaans titles
 
 TODO: Future::
     KJV/Zulu

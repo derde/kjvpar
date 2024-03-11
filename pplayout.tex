@@ -173,7 +173,12 @@ wit-ness-eth work-eth wor-ship-peth yield-eth Tro-phi-mus}
 \ifdefined\ppsave{\relax}\else{\newcommand{\ppget}[2]{\relax}}\fi
 %\fancyhead[ER]{\myheadingfont \textbf{\textemdash\ \ppget{AFrange}{\thepage}\hspace{1em}\null}\PPthumbmarkright{\mythumbindex}\oddbindingmarks}% Top right header
 \newcommand\pphcentre[1]{\makebox[0.46\linewidth]{#1}}
-\fancyhead[ER]{\pphcentre{\myheadingfont \textbf{\ppget{AFrange}{\thepage}}}\PPthumbmarkleft{\mythumbindex}}% Top right header
+\newcounter{ppmarker}
+\newcommand{\calcppmarker}{%  Marker at pagecount-currentpage
+    \setcounter{ppmarker}{\mypagecount}%
+    \addtocounter{ppmarker}{-\thepage}%
+}
+\fancyhead[ER]{\pphcentre{\myheadingfont \textbf{\ppget{AFrange}{\thepage}}}\calcppmarker\PPthumbmarkleft{\theppmarker}}% Top right header
 \fancyhead[OR]{\pphcentre{\myheadingfont \textbf{\ppget{AFrange}{\thepage}}}\PPthumbmarkright{\theppbookno}}% Top right header
 \fancyhead[EL]{\pphcentre{\myheadingfont \textbf{\ppget{ENrange}{\thepage}}}}% Top left header - leading dash is to discourage accidental reading of the heading
 \fancyhead[OL]{\pphcentre{\myheadingfont \textbf{\ppget{ENrange}{\thepage}}}}% Top left header - leading dash is to discourage accidental reading of the heading
@@ -305,15 +310,15 @@ wit-ness-eth work-eth wor-ship-peth yield-eth Tro-phi-mus}
 \newcommand{\PPend}{\par}
 %\newcommand{\PPpagetitles}[2]{\lock{#1}{#2}}%
 % FIXI?
-\newcommand{\PPthumbmark}[3]{% 1:horizontal tab, 2: vertical tab, 3: hspace
+\newcommand{\PPthumbmark}[4]{% 1:horizontal tab, 2: vertical tab, 3: hspace, 4: lightgray
 \begin{textblock}{1}(#1,#2)%
-%\rule[0em]{1em}{1ex}%
-\hfuzz=72pt
-\raisebox{0pt}[0pt]{\hspace{#3}\color{lightgray}\rule[0em]{8mm}{1.5em}}% vert offset, width, height
+    %\rule[0em]{1em}{1ex}%
+    \hfuzz=72pt
+    \raisebox{0pt}[0pt]{\hspace{#3}\color{#4}\rule[0em]{8mm}{1.5em}}% vert offset, width, height
 \end{textblock}
 }
-\newcommand{\PPthumbmarkright}[1]{\PPthumbmark{29}{#1}{0.5mm}}%
-\newcommand{\PPthumbmarkleft}[1]{\PPthumbmark{0}{\thepage}{-4mm}}%
+\newcommand{\PPthumbmarkright}[1]{\PPthumbmark{29}{#1}{0.5mm}{lightgray}}%
+\newcommand{\PPthumbmarkleft}[1]{\PPthumbmark{0}{#1}{-4mm}{lightgray}}%
 \newlength{\rightmarkspace}%
 \newlength{\rightmarksep}
 \setlength{\rightmarkspace}{\paperwidth-5em}% 
