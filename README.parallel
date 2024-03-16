@@ -35,26 +35,28 @@ Checklist: TODO :
     𐄂 Page headings - if justified, then right justify the margin too - no space like for ragged right
     🗸 Page headings should be CAPITALISED
     🗸 Page headings should be BOLD
-    Book thumbnails - left margin shows book position (might be wrong too!)
-    ISBN number
+    🗸 Book thumbnails - left margin shows book position (might be wrong too!)
+    Title: KJV 1953 Afrikaans Parallel Bible New Testament 2024; Publisher: Calvary Hope Baptist Church
+    ISBN number (sent 2024-03-16)
     Cover page
-    Read-it-yourself gospel instructions through highlighted verses
-    Special text pages
-
+    Read-it-yourself gospel instructions through highlighted verses: circle-number the verses, and provide page references in the outline
+    Special text page: Cover page
+    Special text page: Preface to KJV (extract)
+    Special text page: Preface to 1953 (extract)
     Manual Paragraph breaks: John to Revelation (copy from paragraph bible)
     Somehow align stair-stepped parallel columns - but first do paragraph breaks
     Chapter position and size ... and wrapping
     Titles for books (The Gospel According to St Matthew)
-    Chapter subscripts
-    Inter-book spacing (formatting? line?)
+    Chapter subscripts (? what did I mean by this)
+    Inter-book spacing - at the begin of a new page, just the title, intra page, a separator line - uspecially book at the beginning of a new page, (formatting? line?)
     Book titles that don't fit - 2 Thessalonians (fixed by centering properly) now II Thessalonicense heading doesn't fit: make a plan (SᴍᴀʟʟCᴀᴘꜱ?)
-    Cover design
+    🗸 Cover design
     Font kerning (especially "PAULUS")
     Check font for all Afrikaans italics accents for spacing, kerning, etc (are there italics though?)
     Check for presentation of CAPITALISED PHRASES: consider smallcaps
-    Afrikaans: LEADING CAPS resolution (e.g. leave it, sMALLcAPS?)
+    Afrikaans: LEADING CAPS resolution (e.g. leave it, sMALLcAPS, ?)
 Checklist: WONTFIX:
-    Not done: Psalms: italics for Afrikaans titles
+    Not done: Psalms: italics for Afrikaans titles (Psalms cut from book)
 
 TODO: Future::
     KJV/Zulu
