@@ -128,7 +128,7 @@ wit-ness-eth work-eth wor-ship-peth yield-eth Tro-phi-mus}
 \usepackage{paracol}
 \ensurevspace{0pt}
 %Save positions of verse references as we print
-\usepackage[user,savepos]{zref}
+\usepackage[user,savepos,abspage]{zref}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\setulmarginsandblock{2cm}{2cm}{*}
 %\setlrmarginsandblock{2cm}{2cm}{*}
@@ -248,11 +248,12 @@ wit-ness-eth work-eth wor-ship-peth yield-eth Tro-phi-mus}
 %%  \setaftersecskip{0em}
 %%  \setsecheadstyle{\marginhead}
 \def\hebrewleader{}%
-\newwrite\coords\immediate\openout\coords=\jobname.coords%
+%\newwrite\coords\immediate\openout\coords=\jobname.coords%
 \newcommand{\ppsaveposition}[2]{% Save the print position, given a #1 label, and #2 reference
+  \zlabel{#1}%
   \zsavepos{#1}%
-  \edef\temp{#1,#2,x=\the\dimexpr\zposx{#1}sp\relax, y=\the\dimexpr\zposy{#1}sp\relax}%
-  \immediate\write\coords{\temp,\thepage}%
+  %\edef\temp{#1,#2,x=\the\dimexpr\zposx{#1}sp\relax, y=\the\dimexpr\zposy{#1}sp,\zpageref{#1}}%
+  %\immediate\write\coords{\temp,\thepage}%
 }
 
 \newwrite\myparaheight\immediate\openout\myparaheight=\jobname.paraheight%

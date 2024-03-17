@@ -9,8 +9,8 @@ def index(dicty,i):
     return dicty[keys[i]]
 
 rightmargin=21400
-maxchunk=5
-minchunk=2  # look ahead this far
+maxchunk=10
+minchunk=5  # look ahead this far
 debug=False
 
 seqnumber=10000

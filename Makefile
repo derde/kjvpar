@@ -1,5 +1,6 @@
 ppenaf.pdf: pplayout.tex ppenaf.tex ppdefault.tex parallel.tex hyph-en.tex
 	lualatex ppenaf.tex # for microtype
+	./coords-to-headings.py # parallel.aux -> ppenaf.headings.csv
 
 parallel.tex: parallel.py paragraphs.txt ppenafnt.csv highlights.txt
 	./parallel.py
@@ -9,7 +10,7 @@ ppenaf.headings.csv: parallel.tex ppenaf.coords
 
 build:
 	make ppenaf.pdf
-	./coords-to-headings.py
+	# ./coords-to-headings.py # parallel.aux -> ppenaf.headings.csv
 	lualatex ppenaf.tex
 	make ppenaf-book.pdf
 

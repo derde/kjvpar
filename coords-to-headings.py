@@ -8,10 +8,12 @@ import re
 parallelfd=open('parallel.tex','r')
 
 # ppenaf.coords:PPsq25928,Matthéüs 1:4,x=210.59714pt, y=391.37599pt,3
-coords=open('ppenaf.coords','r')
+coords=open('parallel.aux','r')
 
 ref2verse={'AF':{},'EN':{}}
 ref2lang={}
+ref2bcv={}
+ref2reference={}
 pplang_re=re.compile(r'\\PPnewlang([A-Z]+)')
 
 # 1=>4; 2=>Matthéüs 1:4; 3=>PPsq25928; 
@@ -28,27 +30,35 @@ for line in parallelfd:
     ref2lang[ppref]=lang
     ref=ref2verse[lang]
     ref[ppref]=bookchapterverse
+    ref2bcv[ppref]=bookchapterverse
 parallelfd.close()
 
 def iteraterefs(coords):
     # Find first and last reference on each page
+    page_re=re.compile(r'newlabel\{(.*?)\}.*\\page\{(\d+)\}')
+    posy_re=re.compile(r'newlabel\{(.*?)\}.*\\posx\{(\d+)\}\\posy\{(\d+)\}')
     pages = {}
-    coords_re=re.compile(r'(PP.*?),(.*?),x=(.*?)pt, y=(.*?)pt,(\d+)')
     for line in coords:
-        coords_m = coords_re.search(line)
-        if not coords_m: continue
-        ppref,bibref,x,y,page = coords_m.groups()
-        yield (ppref,bibref,x,y,page)
+        page_m=page_re.search(line)
+        posy_m=posy_re.search(line)
+        if page_m:
+            ppref,page = page_m.groups()
+            pages[ppref]=page
+        if posy_m:
+            ppref,x,y = posy_m.groups()
+            page=pages[ppref]
+            yield (ppref,x,y,page)
 
 data={}        
-for ppref,bibref,x,y,page in iteraterefs(coords):
+for ppref,x,y,page in iteraterefs(coords):
+    bcv=ref2bcv[ppref] # book,chapter,verse
     p=data.setdefault(page,{})
     p['page']=int(page)
     lang=ref2lang[ppref]
     rightname = lang+'right'
     leftname = lang+'left'
-    if leftname not in p: p[leftname]=bibref
-    p[rightname]=bibref
+    if leftname not in p: p[leftname]=bcv
+    p[rightname]=bcv
 
 def decoderef(ref):
     m=re.search(r'^(.*) (\d+):(\d+)',ref)
