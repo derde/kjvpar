@@ -1,4 +1,4 @@
-ppenaf.pdf: pplayout.tex ppenaf.tex ppdefault.tex parallel.tex hyph-en.tex
+ppenaf.pdf: pplayout.tex ppenaf.tex ppdefault.tex parallel.tex hyph-en.tex booktitles.ini
 	lualatex ppenaf.tex # for microtype
 	./coords-to-headings.py # parallel.aux -> ppenaf.headings.csv
 

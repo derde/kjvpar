@@ -2,7 +2,11 @@
 \def\ENpretitle{%
 DIE BYBEL: NUWE TESTAMENT\par
 HOLY BIBLE: NEW TESTAMENT}
+\def\AFpretitle{%
+DIE BYBEL: NUWE TESTAMENT\par
+HOLY BIBLE: NEW TESTAMENT}
 \def\ENtitle{King James Bible}
+
 \def\ENsubtitle{kjvtex compact}
 \def\ENmotto{The fruit of the righteous is a tree of life;\par and he that winneth souls is wise.}
 \def\ENcopyright{You may copy freely and republish in whole, or in part.\par}
@@ -14,7 +18,13 @@ HOLY BIBLE: NEW TESTAMENT}
 \def\mypageadjustments{}% Any other page adjustments - crop package goes here
 \def\mybooktitlepreamble{% before each new book title, we emit this:
     \needspace{\mybookspace}%
-    \null\par
+    \null%\par
+}
+\newcommand\mybooktitlename[1]{%
+    \noindent
+    \null
+    \hfill\tiny #1\hfill\null
+    \break\noindent\normalsize
 }
 \newcommand\mybooktitlebox[1]{%
     \noindent

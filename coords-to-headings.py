@@ -50,6 +50,7 @@ def iteraterefs(coords):
             yield (ppref,x,y,page)
 
 data={}        
+toc={'EN': [], 'AF': [] }
 for ppref,x,y,page in iteraterefs(coords):
     bcv=ref2bcv[ppref] # book,chapter,verse
     p=data.setdefault(page,{})
@@ -59,6 +60,10 @@ for ppref,x,y,page in iteraterefs(coords):
     leftname = lang+'left'
     if leftname not in p: p[leftname]=bcv
     p[rightname]=bcv
+
+    if bcv.endswith(' 1:1'):
+        book=bcv[:-4]
+        toc[lang].append('\\PPtoc{'+book+'}{'+page+'}\n')
 
 def decoderef(ref):
     m=re.search(r'^(.*) (\d+):(\d+)',ref)
@@ -97,24 +102,24 @@ for p in data.values():
     for lang in 'EN','AF':
         bookleft,chapterleft,verseleft=decoderef(p[lang+'left'])
         bookright,chapterright,verseright=decoderef(p[lang+'right'])
-        bookleft=bookleft.upper()
-        bookright=bookright.upper()
+        BOOKLEFT=bookleft.upper()
+        BOOKRIGHT=bookright.upper()
         rangekey=lang+'range'
-        if bookleft+chapterleft==bookright+chapterright:
-            p[rangekey]=f'{bookleft} {chapterleft}'.strip()
+        if BOOKLEFT+chapterleft==BOOKRIGHT+chapterright:
+            p[rangekey]=f'{BOOKLEFT} {chapterleft}'.strip()
         else:
-            if bookleft==bookright: 
+            if BOOKLEFT==BOOKRIGHT: 
                 if chapterleft==chapterright:
-                    p[rangekey]=f'{bookleft} {chapterleft}'.strip()
+                    p[rangekey]=f'{BOOKLEFT} {chapterleft}'.strip()
                 else:
-                    p[rangekey]=f'{bookleft} {chapterleft} - {chapterright}'
+                    p[rangekey]=f'{BOOKLEFT} {chapterleft} - {chapterright}'
             else:
                 # If we have multiple books, ignore all but the last in the title
                 if chapterright in ('','1'):
                     rangeleftleft=''
                 else:
                     rangeleftleft='1 - '
-                p[rangekey]=f'{bookright} {rangeleftleft}{chapterright}'.strip() # strip because 1-chapter book is blank chapter
+                p[rangekey]=f'{BOOKRIGHT} {rangeleftleft}{chapterright}'.strip() # strip because 1-chapter book is blank chapter
 
     fo.write('%(page)s,%(ENleft)s,%(AFleft)s,%(ENright)s,%(AFright)s,%(ENrange)s,%(AFrange)s\n' % p)
     
@@ -122,6 +127,10 @@ for p in data.values():
         # for k in 'left','right','range':
         for k in ( 'range', ):
             ft.write('\\ppsave{%s}{%s}{%s}\n' % (lang+k, p['page'], p[lang+k]) )
+
+for lang in 'EN','AF':
+    tocs=''.join(toc[lang])
+    ft.write('\\newcommand{\\PPtoc'+lang+'}{\n'+tocs+'\n}\n')
 
 ft.close()
 fo.close()

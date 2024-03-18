@@ -286,7 +286,9 @@ wit-ness-eth work-eth wor-ship-peth yield-eth Tro-phi-mus}
 \newcommand{\PPnewlangAF}{\begin{rightcolumn}\renewcommand\pplang[1]{\begin{afrikaans}\myfontAF##1\end{afrikaans}}\gdef\somelanguage{af}}
 \newcounter{ppbookno}
 \newcommand{\PPnewbook}{\mybooktitlepreamble\addtocounter{ppbookno}{18}}
-\newcommand{\PPbook}[1]{\mybooktitlebox{#1}}
+%\newcommand{\PPbook}[1]{\mybooktitlebox{#1}}
+\newcommand{\PPbook}[1]{}
+\newcommand{\PPbooktitle}[2]{\mybooktitlename{#1}\mybooktitlebox{#2}}
 \newcommand{\PPchapter}[1]{\PPdropcapschapter{#1}}
 % Heading for each book of the PPe: big text
 \newcommand{\PPverseref}[1]{\gdef\someverse{#1}\markboth{#1}{#1}}%
@@ -440,7 +442,7 @@ Font
 \myformattinginfoii
 \myformattinginfoiii%
 \par
-Source code: https://github.com/derde/kjvtex, ``\jobname.tex''
+Source code: https://github.com/derde/kjvpar, ``\jobname.tex''
 \par
 Source text
 \ifdefined\srcfilename{\srcfilename, }\fi

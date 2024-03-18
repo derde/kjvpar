@@ -8,6 +8,7 @@ def index(dicty,i):
     keys=list(dicty.keys())
     return dicty[keys[i]]
 
+booktitlesini='booktitles.ini'
 rightmargin=21400
 maxchunk=10
 minchunk=5  # look ahead this far
@@ -28,6 +29,7 @@ alltemplates={
         'swlang':     '',
         'newlang':    '<td>',
         'book':       '<H1>%(book)s</H1>\n',
+        'booktitle':  '<H3>%(booktitle)s</H3>\n<H1>%(booktitlename)s</H1>\n',
         'chapter':    '<h2>%(chapter)s</h2> ',
         'versei':     '<p><sup>%(verse)s</sup> %(itext)s</p>\n',
         'verseii':    '<p><sup>%(verse)s</sup> %(itext)s</p>\n',
@@ -47,6 +49,7 @@ alltemplates={
         'swlang':     '\\PPswlang',   # switch between languages
         'newlang':    '\\PPnewlang\\PPnewlang%(zz)s',   # column
         'book':       '\\PPbook{%(bookname)s}\n',
+        'booktitle':  '\\PPbooktitle{%(booktitle)s}{%(booktitlename)s}\n',
         'chapter':    '\\PPchapter{%(chapter)s}',
         'versei':     '\\PPversei{%(verse)s}{%(reference)s}{%(seq)s}{%(newhighlight)s%(itext)s%(endhighlight)s}\n',
         'verseii':    '\\PPverseii{%(verse)s}{%(reference)s}{%(seq)s}{%(newhighlight)s%(itext)s%(endhighlight)s}\n',
@@ -146,12 +149,15 @@ class Verse:
             newhighlight=r'\textbf{'
             endhighlight='}'
         reference=self.getreferencename()
+        booktitle,booktitlename=self.bibleparser.getbooktitle(self.ref[0]).strip('{}').split('{',1)
         return {
             'text':self.text,
             'book':self.bookname,
             'chapter':self.ref[1],
             'verse':self.ref[2],
             'bookname': bookname,
+            'booktitle': booktitle,
+            'booktitlename': booktitlename,
             'newhighlight': newhighlight,
             'endhighlight': endhighlight,
             'reference': reference,
@@ -173,6 +179,13 @@ class BibleParser:
         self.checkrefs={}
         self.snippets=[]
         self.setup()
+    def getbooktitle(self,booknumber):
+        booktitles=self.settings.get('booktitles',self.booknames)
+        if booknumber<len(booktitles):
+            return booktitles[booknumber]
+        else:
+            return 'book-#'+str(booknumber)
+
     def getbookname(self,booknumber):
         # FIXME: Language-specific adjustments have to happen
         c2=(booknumber,2,1)
@@ -410,6 +423,18 @@ def buildparallelsequence(filename, en, af):
         snippets+=1
     sys.stderr.write(f'CHECK: snippets={snippets}, verses[en]={countEN}, verses[af]={countAF}\n')
 
+def iniread(inifile,thesection):
+    o=[]
+    fd=open(inifile,'r')
+    section=''
+    for line in fd:
+        if line.startswith('[') and line.strip().endswith(']'):
+            section=line.strip().strip('[]')
+            continue
+        if section==thesection:
+            o.append(line.strip())
+    return o
+
 def setup():
     global en
     global af
@@ -422,7 +447,7 @@ def setup():
         'zz':'EN',
         'lang':'King James Version 1611/1769',
         'source': 'text/kingjamesbibleonline.txt',
-        'errata':'text/kingjamesbibleonline.errata' }
+        'booktitles': iniread(booktitlesini,'en'), }
     zusettings={
         'zz':'ZU',
         'lang':'Zulu 1959',
@@ -438,9 +463,9 @@ def setup():
         'zz':'AF',
         'lang':'Afrikaans 1935/1953',
         'source': 'text/af1953.txt',
-        'errata':'text/af1953.errata',
-        'BOOKNAMES': [ 'GÉNESIS', 'EXODUS', 'LEVÍTIKUS', 'NÚMERI', 'DEUTERONÓMIUM', 'JOSUA', 'RIGTERS', 'RUT', 'I SAMUEL', 'II SAMUEL', 'I KONINGS', 'II KONINGS', 'I KRONIEKE', 'II KRONIEKE', 'ESRA', 'NEHEMÍA', 'ESTER', 'JOB', 'PSALMS', 'SPREUKE', 'PREDIKER', 'HOOGLIED', 'JESAJA', 'JEREMIA', 'KLAAGLIEDERE', 'ESÉGIËL', 'DANIËL', 'HOSÉA', 'JOËL', 'AMOS', 'OBÁDJA', 'JONA', 'MIGA', 'NAHUM', 'HÁBAKUK', 'SEFÁNJA', 'HAGGAI', 'SAGARÍA', 'MALEÁGI', 'MATTHÉÜS', 'MARKUS', 'LUKAS', 'JOHANNES', 'HANDELINGE', 'ROMEINE', 'I KORINTHIËRS', 'II KORINTHIËRS', 'GALÁSIËRS', 'EFÉSIËRS', 'FILIPPENSE', 'KOLOSSENSE', 'I THESSALONICENSE', 'II THESSALONICENSE', 'I TIMÓTHEÜS', 'II TIMÓTHEÜS', 'TITUS', 'FILÉMON', 'HEBREËRS', 'JAKOBUS', 'I PETRUS', 'II PETRUS', 'I JOHANNES', 'II JOHANNES', 'III JOHANNES', 'JUDAS', 'OPENBARING', ],
-        'booknames': [ 'Génesis', 'Exodus', 'Levítikus', 'Númeri', 'Deuteronómium', 'Josua', 'Rigters', 'Rut', 'I Samuel', 'II Samuel', 'I Konings', 'II Konings', 'I Kronieke', 'II Kronieke', 'Esra', 'Nehemía', 'Ester', 'Job', 'Psalms', 'Spreuke', 'Prediker', 'Hooglied', 'Jesaja', 'Jeremia', 'Klaagliedere', 'Eségiël', 'Daniël', 'Hoséa', 'Joël', 'Amos', 'Obádja', 'Jona', 'Miga', 'Nahum', 'Hábakuk', 'Sefánja', 'Haggai', 'Sagaría', 'Maleági', 'Matthéüs', 'Markus', 'Lukas', 'Johannes', 'Handelinge', 'Romeine', 'I Korinthiërs', 'II Korinthiërs', 'Galásiërs', 'Efésiërs', 'Filippense', 'Kolossense', 'I Thessalonicense', 'II Thessalonicense', 'I Timótheüs', 'II Timótheüs', 'Titus', 'Filémon', 'Hebreërs', 'Jakobus', 'I Petrus', 'II Petrus', 'I Johannes', 'II Johannes', 'III Johannes', 'Judas', 'Openbaring', ],
+        'BOOKNAMES': [ 'GÉNESIS', 'EXODUS', 'LEVÍTIKUS', 'NÚMERI', 'DEUTERONÓMIUM', 'JOSUA', 'RIGTERS', 'RUT', '1 SAMUEL', '2 SAMUEL', '1 KONINGS', '2 KONINGS', '1 KRONIEKE', '2 KRONIEKE', 'ESRA', 'NEHEMÍA', 'ESTER', 'JOB', 'PSALMS', 'SPREUKE', 'PREDIKER', 'HOOGLIED', 'JESAJA', 'JEREMIA', 'KLAAGLIEDERE', 'ESÉGIËL', 'DANIËL', 'HOSÉA', 'JOËL', 'AMOS', 'OBÁDJA', 'JONA', 'MIGA', 'NAHUM', 'HÁBAKUK', 'SEFÁNJA', 'HAGGAI', 'SAGARÍA', 'MALEÁGI', 'MATTHÉÜS', 'MARKUS', 'LUKAS', 'JOHANNES', 'HANDELINGE', 'ROMEINE', '1 KORINTHIËRS', '2 KORINTHIËRS', 'GALÁSIËRS', 'EFÉSIËRS', 'FILIPPENSE', 'KOLOSSENSE', '1 THESSALONICENSE', '2 THESSALONICENSE', '1 TIMÓTHEÜS', '2 TIMÓTHEÜS', 'TITUS', 'FILÉMON', 'HEBREËRS', 'JAKOBUS', '1 PETRUS', '2 PETRUS', '1 JOHANNES', '2 JOHANNES', '3 JOHANNES', 'JUDAS', 'OPENBARING', ],
+        'booknames': [ 'Génesis', 'Exodus', 'Levítikus', 'Númeri', 'Deuteronómium', 'Josua', 'Rigters', 'Rut', '1 Samuel', '2 Samuel', '1 Konings', '2 Konings', '1 Kronieke', '2 Kronieke', 'Esra', 'Nehemía', 'Ester', 'Job', 'Psalms', 'Spreuke', 'Prediker', 'Hooglied', 'Jesaja', 'Jeremia', 'Klaagliedere', 'Eségiël', 'Daniël', 'Hoséa', 'Joël', 'Amos', 'Obádja', 'Jona', 'Miga', 'Nahum', 'Hábakuk', 'Sefánja', 'Haggai', 'Sagaría', 'Maleági', 'Matthéüs', 'Markus', 'Lukas', 'Johannes', 'Handelinge', 'Romeine', '1 Korinthiërs', '2 Korinthiërs', 'Galásiërs', 'Efésiërs', 'Filippense', 'Kolossense', '1 Thessalonicense', '2 Thessalonicense', '1 Timótheüs', '2 Timótheüs', 'Titus', 'Filémon', 'Hebreërs', 'Jakobus', '1 Petrus', '2 Petrus', '1 Johannes', '2 Johannes', '3 Johannes', 'Judas', 'Openbaring', ],
+        'booktitles': iniread(booktitlesini,'af'),
          }
 
     en = BibleParser(ensettings)
@@ -483,6 +508,7 @@ if __name__=="__main__":
                 for verse in verses:
                     pairs=verse.pairs()
                     if verse.newbook:
+                        fd.write(templates['booktitle'] % pairs)
                         fd.write(templates['book'] % pairs)
                     if verse.newchapter:
                         fd.write(templates['chapter'] % pairs)
