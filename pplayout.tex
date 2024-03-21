@@ -462,29 +462,37 @@ Text area {\uselengthunit{mm}\rndprintlength{\textwidth}}$\times${\uselengthunit
 }
 \newpage
 }}}\fi
+
+
 %%% PAGE 3: TITLE PAGE %%%%%%%%%%%%%%%
 % Kerning adjustment: big deal page-count affecter
 % Big deal don't hypenate rule: we would save pages by hypenating, but it's ugly
+\newcommand\PPtoc[2]{#1\hfill.. #2\par}
 \def\mypageiii{
-\thispagestyle{noheadings}%
-%\fontsize{10}{10}\selectfont%
-\null
-%\bookheadingstrut{3\baselineskip}\par
-%\vfill
-\begin{center}%
-\textsc{\mybooktitlesettingsz\ENpretitle}%HOLY BIBLE
-\par
-\bookheadingstrut{3\baselineskip}
-\raisebox{0.6\baselineskip}[0.5\baselineskip][0pt]{{\mybooktitlefont\mybooktitlesettingsz\mybooktitletextbf{\ENtitle}}}% King James Bible
-\par
-\textsc{\mybooktitlesettingsz\ENsubtitle}% kjvtex compactt
-\ifdefined\ENsubtitleii\ENsubtitleii\fi % soulwinning.info
-\par
+    \thispagestyle{noheadings}%
+    %\fontsize{10}{10}\selectfont%
+    \vfill
+    %\bookheadingstrut{3\baselineskip}\par
+    KJV 1953 Afrikaans Parallel Bible New Testament 2024
+    \vfill
+    {\mybooktitlefont\mybooktitlesettingsz\mybooktitletextbf{DIE BYBEL}}\par% King James Bible
+    {\textsc\mybooktitlesettingsz Ou Vertaling, 1953\par Nuwe Testament}% kjvtex compactt
+    \vfill
+    {\mybooktitlefont\mybooktitlesettingsz\mybooktitletextbf{HOLY BIBLE}}\par% King James Bible
+    {\textsc\mybooktitlesettingsz Authorised Version, 1611\par New Testament}% kjvtex compactt
+    \vfill
+http://soulwinnning.africa/af
+
+\begin{paracol}{2}
+\begin{leftcolumn}\PPtocAF\end{leftcolumn}
+\begin{rightcolumn}\PPtocEN\end{rightcolumn}
+\end{paracol}
 \vfill
 \par
 \ENmotto
 \vfill
 \end{center}
+}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 % emit table of contents, if we have it:
 %% \newread\myfiletocread

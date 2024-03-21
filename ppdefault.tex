@@ -1,21 +1,5 @@
 % default definitions that you might override per file
-\def\ENpretitle{%
-DIE BYBEL: NUWE TESTAMENT\par
-HOLY BIBLE: NEW TESTAMENT}
-\def\AFpretitle{%
-DIE BYBEL: NUWE TESTAMENT\par
-HOLY BIBLE: NEW TESTAMENT}
-\def\ENtitle{King James Bible}
-
-\def\ENsubtitle{kjvtex compact}
-\def\ENmotto{The fruit of the righteous is a tree of life;\par and he that winneth souls is wise.}
-\def\ENcopyright{You may copy freely and republish in whole, or in part.\par}
-\def\ENpages{pages}%
-\def\ENaspect{aspect}%
-\def\ENlinespacing{line spacing}%
 \def\mytexlanguage{english}%
-\def\mysourcetext{english}%
-\def\mypageadjustments{}% Any other page adjustments - crop package goes here
 \def\mybooktitlepreamble{% before each new book title, we emit this:
     \needspace{\mybookspace}%
     \null%\par
@@ -56,7 +40,7 @@ HOLY BIBLE: NEW TESTAMENT}
 \def\myverseboldness{\myboldness}% verse number font scaling
 \def\myversefontstretch{\myfontstretch}% verse number font scaling
 \def\mychapterfontstretch{\myfontstretch}% verse number font scaling
-\def\mychapterfontname{\mysansfont}% verse number font scaling
+\def\mychapterfontname{\mysansfontname}% verse number font scaling
 \def\mychapterfontextra{\relax}% fontextra ... things like \color{mygray}
 \def\myversescale{0.65}% verse number font scaling
 \def\mychapterscale{0.90}% chapter number scale
@@ -67,7 +51,6 @@ HOLY BIBLE: NEW TESTAMENT}
 \def\myverseraise{2pt}% verse number superscript scaling
 \def\myversehspace{0.8pt}% space after verse number
 \def\myverseahspace{\myversehspace}% space after verse number before A
-\def\PPfontcustom{}
 \def\myboldness{FakeBold=1.01,}\def\myboldness{}%FakeBold is binary on/off, it seems
 %\def\myletterspace{LetterSpace=0 plus 4 minus 0}
 \def\myextradisplay{}% extra formatting notes, e.g. if you squash kerning
@@ -77,16 +60,6 @@ HOLY BIBLE: NEW TESTAMENT}
 \def\mygrayshade{0.33}
 \def\mylettrinefindent{3pt}
 \def\mycolumnseprule{0em}
-\def\PPnewparagraph{\par}% Paragraph break instruction
-\def\PPbeforeoldtestament{\par\newpage}% NEW PAGE before old testament
-\def\PPbeforenewtestament{\par\newpage}% NEW PAGE before new testament
-\def\PPafternewtestament{}% Pages after new testament
-\newcommand{\PPpsalmheading}[1]{{\em #1}\PPeparnoindent}% A psalm of psalmist
-\newcommand{\PPsectionseparator}[1]{% END OF THE PROPHETS. or THE END.
-    \PPonecolumn% we're actually still in the book
-    \par\null\par% a little space
-    {\hfill{\em #1}\hfill}\par% somehow this ends up right justified ... weird, but good
-    }%
 \newcommand{\PPepistleattribution}[1]{\par{\em #1}}% Written by dude from place
 \newcommand{\hebrewprefix}[1]{\def\hebrewleader{\myhebrewfont #1\ }}%
 \newcommand{\hebrewinfix}[1]{{\myhebrewfont #1}\kern 0.3em}%
@@ -109,16 +82,8 @@ HOLY BIBLE: NEW TESTAMENT}
 }}
 \newcommand\oddbindingmarks{\showbindingmarks{0pt}}
 \newcommand\evenbindingmarks{\showbindingmarks{\paperwidth-1pt}}
-\def\myversefontname{\mysansfont}
-\def\mysansfontii{\mysansfont}
-
-% Pages before Genesis
-\newcommand\myfrontmatter{%
-    \mypagei%    blank
-    \mypageii%   print info page
-    \mypageiii%  title page
-    \mypageiv%   blank again
-}
+\def\myversefontname{\mysansfontname}
+\def\mysansfontiiname{\mysansfontname}
 
 \newcommand\myrearmatter{%
     % Nothing to see here, sorry - no maps, no concordance, no dictionary, no weights and measures
@@ -168,5 +133,4 @@ HOLY BIBLE: NEW TESTAMENT}
 \newcommand{\boldverse}{\renewcommand{\PP}[1]{\textbf{##1}\renewcommand{\PP}[1]{####1}}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 

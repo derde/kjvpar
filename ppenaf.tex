@@ -4,16 +4,7 @@
 % pplayout.tex
 %   parallel.tex
 \input{ppdefault.tex} % default settings
-\def\mysourcetext{parallel} % load this file as our Bible text
-\def\mycontentcolumns{2}
-%\def\mymargins{left=8.0mm,top=10mm,right=7.0mm,bottom=7mm,bindingoffset=1mm,headheight=13mm}
-%\def\mymargins{left=8.0mm,top=10mm,right=7.0mm,bottom=7mm,bindingoffset=1mm}
-\def\mymargins{left=10.0mm,top=10mm,right=7.0mm,bottom=7mm,bindingoffset=1mm,headheight=7mm}
-\def\mypapersize{135mm,195mm}% A5, less 6.5mm right facing/reverse, and 7.5mm top and bottom
-%\def\mymargins{left=5mm,top=5mm+9mm,right=13mm+5mm,bottom=7.5mm+5mm,bindingoffset=5mm,headheight=5mm}
-%\def\mypapersize{148mm,210mm}% A5, less 10mm right, and 7.5mm top and bottom
 \def\mycolumnsep{0.8em}
-%\def\mycolumnseprule{0.6pt}
 \def\mydocumentsettings{
 %  \spaceskip=\dimexpr\the\fontdimen2\font-\the\fontdimen4\font\relax plus 0.07em % plus \the\fontdimen4\font % space between words: keep it constant, with tiny changes, no up-side
 %  \rightskip=0pt plus 1.8em\relax% space on right hand margin: keep it small
@@ -58,11 +49,11 @@
     %FINAL PRINTING:
     %\showcropmarksonpage
 }% Any other page adjustments - crop package goes here
-\def\mydisplayfont{Graze Shorter}
+\def\mydisplayfontname{Graze Shorter}
 \def\myfontname{[GrazeShorter.otf]}
-\def\mysansfontii{Liberation Sans}
-\def\mysansfont{Liberation Sans}
-%\def\mysansfont{[GrazeShorter.otf]}
+\def\mysansfontiiname{Liberation Sans}
+\def\mysansfontname{Liberation Sans}
+%\def\mysansfontname{[GrazeShorter.otf]}
 \def\myfontsize{9.00pt}
 \def\mybaseline{9.00pt}
 \def\myfontopts{
@@ -102,44 +93,30 @@
 }
 % /end 
 
-\renewcommand\myfrontmatter{%
-    %\mypagei%   blank
-    \mypageiii%  title page
-    \mypageii%   print info page
-    %\mypageiv%  blank again
+\newcommand\ppFrontMatter{%
+    %\ppblankpage%   blank
+    \pptitlepage%  title page
+    \ppinfopage%   print info page
+    %\ppblankagain%  blank again
 }
-%\def\biblbeforeoldtestament{\newpage\thispagestyle{noheadings}\null\vfill\begin{center}THE OLD TESTAMENT\end{center}\vfill\null\vfill}
-\def\biblbeforenewtestament{\newpage\thispagestyle{noheadings}\null\vfill\begin{center}THE NEW TESTAMENT\end{center}\vfill\null\vfill}
 \input{kjvtopics.tex}
 \def\myrearmatter{
-%    \mypagei% blank
-%    \mypageii%   print info page
+    \ppblankpage% blank
+%    \ppinfopage%   print info page
 %    \kjvwordlist
 %    \kjvtopics
 }
 %To omit manuscript titles (and save a page!)
-%\renewcommand{\biblpsalmheading}[1]{}
-\renewcommand{\PPepistleattribution}[1]{}
-%\renewcommand{\biblsectionseparator}[1]{}% END OF THE PROPHETS and THE END at revelation
-\def\mylayoutblurb{No headings; verses share lines; ragged; psalm titles; no epistle postscripts;\par
-Words of Christ in black.\par
-}
+%%
 % To omit binding marks
 %\renewcommand{\oddbindingmarks}{}
 %\renewcommand{\evenbindingmarks}{}
 
-\def\biblbeforeoldtestament{\par\newpage
-%\gdef\mycurrentsection{THE OLD TESTAMENT}\thispagestyle{sectionheadings}%\begin{center}{\textbf{THE OLD TESTAMENT}}\end{center}\par
-}%
-\def\biblbeforenewtestament{\par\newpage
-%\gdef\mycurrentsection{THE NEW TESTAMENT}\thispagestyle{sectionheadings}%\begin{center}{\textbf{THE OLD TESTAMENT}}\end{center}\par
-}%
-\def\ENsubtitle{KJV 1953 Afrikaans Parallel Bible, New Testament}
-\def\ENmotto{The fruit of the righteous is a tree of life;\par and he that winneth souls is wise.}
     
-\def\ENmottoii{http://soulwinning.africa/af}
 \def\biblISBN{Printed in South Africa by CTP Printers Cape Town\par
-ISBN: 978-0-XXXX-XXXX-5, \copyright Calvary Hope Baptist Church 2024, with this licence:}
+ISBN: 978-0-7961-6044-7\par
+Layout \copyright Calvary Hope Baptist Church 2024, with this licence:\par
+You may copy freely and republish in whole, or in part.\par}
 % Job end of book doesn't play nice - it's just the same length as the page
 %\def\PPendchapterjobxli{\null\par\null\par}% End of Job 41 - two blank lines
 \def\preNTintro{
@@ -155,7 +132,614 @@ by his Majesty's special command
 % Load default page counts, which is used for the print checker and thumbnail
 \gdef \mypagecount {500}
 \InputIfFileExists{\jobname.section}{}{}
-\input{pplayout.tex}
 
-%\input{parallel.tex} % this is done by pplayout.tex
+%%%%%%%%%%%%%%%%%pplayout%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\input{pplayout.tex}
+
+% !TeX document-id = {7879a0e9-c3ab-473f-99fc-635c7bcf5210}
+% !TEX encoding = UTF-8 Unicode
+% !TEX TS-program = XeLaTeX
+\documentclass[8pt,twoside,openany,a4paper]{extbook}
+%\usepackage[utf8]{inputenc}
+% openany says chapters start on either page
+% twoside says it's a real book
+%\usepackage{microtype}% Improves spacing
+%\usepackage{lastpage}
+\usepackage{calc}
+\usepackage{fontspec}
+\usepackages
+% \usepackage{xunicode}
+% \usepackage[margin=0.8in]{geometry}
+%\usepackage[left=1.5cm,top=2.0cm,right=1.5cm,bottom=1.5cm,bindingoffset=0.5cm]{geometry}
+%\geometry{papersize={7.444in,9.681in},total={4.8in,6.8in}}%
+% 235mm x 165mm -
+%\usepackage[utf8]{inputenc}% XeLaTeX is utf-8 or nuts
+%\usepackage[T1]{fontenc}% Don't do this - it causes pdf fonts not to happen .. supposedly makes french hyphenation a thing
+\usepackage[maxfloats=512]{morefloats}
+\setlength{\headsep}{3pt}% Seperation between text and body
+\usepackage{lettrine}% Drop caps letters
+\usepackage[bf,sf,center]{titlesec}% Required for modifying section titles -   bold, sans-serif, centered
+% Grid sets rigid baseline and glue lengths to keep register-true - front and back pages aligned
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% NOTO SERIF EXTRACONDENSED:
+%\def\myfontopts{Path=ExtraCondensed/,}
+%\def\myfontname{NotoSerif-ExtraCondensed}
+%\def\myfontsize{10.00pt}
+%\def\mybaseline{10.50pt}
+%\def\mysansfontname{DejaVu Sans Condensed}
+%\def\myfontstretch{1.00}\def\myboldness{FakeBold=1.00,}\def\myboldness{}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcounter{qmylines}
+\usepackage[nocheck]{fancyhdr}% Headers on the page, left and right
+\usepackage{needspace}% Don't start new books at the bottom of the page
+%\usepackage[english,dutch]{babel}% hypenation
+\usepackage{polyglossia}%
+\setdefaultlanguage{english}
+\setotherlanguage{afrikaans}
+\setlanguagealias{afrikaans}{AF}
+\setlanguagealias{english}{EN}
+\usepackage{hyphenat}
+\hyphenation{
+% older forms missing from modern dictionary: *est
+ab-hor-rest ac-cep-test ap-prov-est ask-est bap-tiz-est bar-est bear-est be-hold-est
+be-liev-est be-tray-est blas-phem-est bring-est build-est call-est cam-est
+car-est chief-est com-est com-mand-est com-pel-lest con-demn-est con-si-der-est
+could-est des-pis-est des-troy-est did-dest dis-hon-our-est do-est dwell-est earn-est
+eld-est fast-est gav-est giv-est go-est great-est gu-est harv-est hat-est hear-est
+high-est hold-est holi-est hon-est judg-est keep-est kill-est knew-est know-est
+lack-est ledd-est l-est lett-est liv-est lov-est low-est mad-est mak-est
+may-est might-est mod-est need-est ought-est ow-est par-tak-est per-ceiv-est
+per-se-cut-est per-suad-est pray-est preach-est pri-est prot-est read-est reap-est
+re-gard-est re-main-est re-mem-ber-est repli-est re-proach-est re-quest rest-est
+sa-vour-est saw-est say-est seek-est se-est shew-est should-est sitt-est sleep-est
+small-est smit-est sow-est speak-est spend-est stand-est ston-est strait-est
+suf-fer-est tak-est talk-est tar-ri-est teach-est temp-est think-est tra-vail-est
+trea-sur-est troubl-est visit-est walk-est weep-est went-est would-est wr-est
+% older forms missing from modern dictionary: *eth
+abid-eth abound-eth ac-cept-eth ac-cus-eth ack-now-ledg-eth add-eth ad-van-tag-eth
+al-low-eth ans-wer-eth ap-pear-eth ap-proach-eth aris-eth as-cend-eth ask-eth
+avail-eth bap-tiz-eth bear-eth beat-eth be-com-eth be-hav-eth be-hold-eth be-liev-eth
+belong-eth be-tray-eth be-ray-eth bid-deth blas-phem-eth blow-eth boast-eth
+bridl-eth bring-eth build-eth burn-eth buy-eth call-eth car-eth carri-eth cast-eth
+catch-eth caus-eth ceas-eth chasten-eth cherish-eth cleans-eth cleav-eth climb-eth
+com-eth comfort-eth com-mand-eth com-mend-eth com-mitt-eth con-demn-eth con-fess-eth
+con-sist-eth con-strain-eth con-sult-eth con-tinu-eth con-vert-eth con-vinc-eth
+cor-rupt-eth count-eth cover-eth cri-eth cum-ber-eth curs-eth deal-eth decay-eth
+de-ceiv-eth de-fil-eth de-lay-eth de-ni-eth de-part-eth de-scend-eth de-scrib-eth
+de-sir-eth de-spis-eth de-vour-eth dif-fer-eth dip-peth dis-an-nul-leth
+dis-hon-our-eth di-vid-eth doubt-eth draw-eth drink-eth driv-eth dur-eth
+dwell-eth eat-eth ed-ifi-eth en-dur-eth en-tangl-eth en-ter-eth envi-eth es-teem-eth
+exalt-eth excell-eth exercis-eth exhort-eth fad-eth fail-eth fall-eth fear-eth
+feed-eth fill-eth find-eth foam-eth fol-low-eth for-bid-deth for-get-teth
+for-giv-eth for-sak-eth ga-ther-eth gen-der-eth giv-eth glori-eth gnash-eth 
+greet-eth groan-eth grow-eth hang-eth harden-eth hat-eth hear-eth help-eth hid-eth
+hold-eth hon-our-eth hop-eth humbl-eth im-put-eth in-creas-eth judg-eth jus-tifi-eth
+keep-eth kill-eth kindl-eth knock-eth know-eth la-bour-eth lack-eth lay-eth
+lead-eth lea-ven-eth leav-eth lett-eth light-en-eth light-eth limit-eth
+linger-eth list-eth liv-eth lodg-eth look-eth los-eth lov-eth lust-eth mak-eth
+marri-eth mean-eth mi-ni-ster-eth nam-eth need-eth nou-rish-eth oc-cupi-eth open-eth
+op-pos-eth over-com-eth own-eth pass-eth pe-rish-eth pe-rsuad-eth per-tain-eth
+per-vert-eth pin-eth plant-eth plow-eth pos-sess-eth pour-eth pray-eth preach-eth
+press-eth proceed-eth profit-eth prophesi-eth prosper-eth puff-eth purg-eth
+pu-ri-fi-eth pur-pos-eth putt-eth quick-en-eth rais-eth read-eth reap-eth re-ceiv-eth
+re-ckon-eth re-gard-eth reign-eth re-ject-eth re-joic-eth re-main-eth re-mem-ber-eth
+re-pent-eth re-sist-eth rest-eth re-stor-eth ris-eth roar-eth rul-eth run-neth
+salut-eth sanc-tifi-eth scat-ter-eth scourg-eth search-eth seek-eth seem-eth 
+sell-eth send-eth serv-eth sett-eth sew-eth shew-eth shin-eth shoot-eth shut-teth
+sig-ni-fi-eth sin-neth sitt-eth sleep-eth slum-ber-eth smi-teth sow-eth speak-eth
+stab-lish-eth stand-eth step-peth stink-eth stir-reth strength-en-eth strik-eth
+striv-eth stumbl-eth suf-fer-eth suf-fic-eth sup-pli-eth swear-eth tak-eth talk-eth
+teach-eth tear-eth tell-eth tempt-eth tes-ti-fi-eth think-eth thresh-eth
+touch-eth trans-gres-seth tra-vail-eth tread-eth tri-eth troubl-eth trust-eth
+un-der-stand-eth up-braid-eth vanish-eth vaunt-eth wait-eth walk-eth warr-eth
+watch-eth wa-ter-eth wa-ver-eth wax-eth wear-eth will-eth wi-ther-eth with-hold-eth
+wit-ness-eth work-eth wor-ship-peth yield-eth Tro-phi-mus}
+%%
+\def\mymargins{left=10.0mm,top=10mm,right=7.0mm,bottom=7mm,bindingoffset=1mm,headheight=7mm}
+\def\mypapersize{135mm,195mm}% A5, less 6.5mm right facing/reverse, and 7.5mm top and bottom
+%%
+\usepackage[fontsize=\myfontsize,baseline=\mybaseline]{grid}% Register-true printing (back and front of page match)
+\usepackage[\mymargins]{geometry}%
+\geometry{papersize={\mypapersize}}
+% Bottom border is 0.7 instead of 1.0, because we're not using the footer, and it's hard to turn off
+%\usepackage[left=0.7cm,top=1.0cm,right=0.7cm,bottom=0.9cm,bindingoffset=0.0cm,headheight=5mm]{geometry}%
+%\usepackage[left=7mm,top=10mm,right=7mm,bottom=7mm,bindingoffset=8mm,headheight=5mm]{geometry}% Waterproof
+%\usepackage[left=5mm,top=10mm,right=5mm,bottom=5mm,bindingoffset=5mm,headheight=5mm]{geometry}%
+%\geometry{papersize={148mm,221mm}}% Waterproof
+\mypageadjustments% Any other page adjustments - crop package goes here
+%\usepackage[absolute,overlay]{textpos}% Put things in absolute positions (for thumb marker)
+\usepackage[absolute]{textpos}% Put things in absolute positions (for thumb marker)
+%FIXME: Use \mypagecount+n from aux file:
+\TPGrid[0mm,10mm]{30}{\mypagecount}% defines tiny boxes down right hand margin for book name - see "textblock" below.  For 66 books, we have 61 markers
+%FIXME \setlength{\headsep}{\myheadsep}% Seperation between text and body
+% 0.3528pt/mm ... 334pt,510pt
+%\usepackage[grid]{mymulticol}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\premulticols = 50pt
+%\postmulticols= 20pt
+%\multicolsep = 12pt plus 4pt minus 3pt
+%
+%This complains about initex being required ... 
+%\usepackage{etoolbox}
+%\usepackage{xltxtra}
+%\usepackage{setspace}
+\usepackage{paracol}
+\ensurevspace{0pt}
+%Save positions of verse references as we print
+\usepackage[user,savepos,abspage]{zref}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\setulmarginsandblock{2cm}{2cm}{*}
+%\setlrmarginsandblock{2cm}{2cm}{*}
+%\checkandfixthelayout
+%%%%%%%%%%%%%
+%Nice spacing, but not grid-like:
+%\setlength{\parindent}{0.5em}
+\setlength{\parindent}{0.6em}
+%\setlength{\parskip}{0cm plus4mm minus1pt}
+\InputIfFileExists{\jobname.headings.tex}{}{}
+\fancypagestyle{noheadings}{%
+    \fancyhead[EL]{}% hush
+    \fancyhead[ER]{}% hush
+    \fancyhead[OL]{}% hush
+    \fancyhead[C]{}% hush
+    \fancyhead[OR]{}% hush
+}
+\fancypagestyle{sectionheadings}{%
+    \fancyhead[EL]{\thepage}% hush
+    \fancyhead[ER]{}% hush
+    \fancyhead[OL]{}% hush
+    \fancyhead[C]{\myheadingfont \textbf{\mycurrentsection}}% hush
+    \fancyhead[OR]{\thepage}% hush
+}
+\fancypagestyle{endmatter}{%
+    \fancyhead[EL]{\thepage}% hush
+    \fancyhead[ER]{}% hush
+    \fancyhead[OL]{}% hush
+    \fancyhead[C]{\myendnotesfont \textbf{\leftmark}}% hush
+    \fancyhead[OR]{\thepage}% hush
+}
+\def\thelastpage{}%
+\gdef\mythumbindex{0}% Where to put the vertical thumb index
+\pagestyle{fancy}
+\fancyhf{}
+% register true is way better ...
+%\fancyhead[L]{\textsf{\leftmark}}% Top left header
+%\fancyhead[EL]{ - \em\textsf{\rightmark} - }% Top left header
+%\fancyhead[ER]{\extramark\hspace{1em}}% This is the chapter marker block
+%\fancyhead[OL]{\extramark}% This is the chapter marker block
+\newcommand\extramark{}
+\ifdefined\ppsave{\relax}\else{\newcommand{\ppget}[2]{\relax}}\fi
+%\fancyhead[ER]{\myheadingfont \textbf{\textemdash\ \ppget{AFrange}{\thepage}\hspace{1em}\null}\PPbookmarker{\mythumbindex}\oddbindingmarks}% Top right header
+\newcommand\pphcentre[1]{\makebox[0.46\linewidth]{#1}}
+\newcounter{ppmarker}
+\newcommand{\calcppmarker}{%  Marker at pagecount-currentpage
+    \setcounter{ppmarker}{\mypagecount}%
+    \addtocounter{ppmarker}{-\thepage}%
+}
+\fancyhead[ER]{\pphcentre{\myheadingfont \textbf{\ppget{AFrange}{\thepage}}}\calcppmarker\PPbookmarker{\theppmarker}}% Top right header
+\fancyhead[OR]{\pphcentre{\myheadingfont \textbf{\ppget{AFrange}{\thepage}}}\PPpagemarker{\theppbookno}}% Top right header
+\fancyhead[EL]{\pphcentre{\myheadingfont \textbf{\ppget{ENrange}{\thepage}}}}% Top left header - leading dash is to discourage accidental reading of the heading
+\fancyhead[OL]{\pphcentre{\myheadingfont \textbf{\ppget{ENrange}{\thepage}}}}% Top left header - leading dash is to discourage accidental reading of the heading
+\fancyhead[C]{\myheadingfont {\thepage}}% Center footer - bold is less readable
+\renewcommand{\headrulewidth}{0.0pt}% lines just amplify the skewness of skewly printed pages 
+\renewcommand{\footrulewidth}{0.0pt}%
+%\defaultfontfeatures{Scale=MatchLowercase}
+\defaultfontfeatures{}
+\gdef\myshowpageinfo{}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\fontspec{\myfontname}
+\setmainfont[\myfontopts \myboldness FakeStretch=\myfontstretch,Scale=1.00, \myletterspace]{\myfontname}% 1006 pages +2
+\newfontfamily\myfontAF[\myfontopts \myboldness FakeStretch=\myfontstretchAF,Scale=1.0]{\myfontname}% Used for page headings
+\newfontfamily\mynostretchfont[FakeStretch=1]{\mysansfontname}% Used for page headings
+\newfontfamily\myheadingfont[\myboldness FakeStretch=\myfontstretch,Scale=1.00]{\mysansfontname}% Used for page headings
+\newfontfamily\mysmallcapsfont[\myfontopts\myboldness FakeStretch=\myfontstretch,Scale=0.80]{\myfontname}% Used for (synthetic) smallcaps
+\newfontfamily\mylatexfont[FakeStretch=1.0]{Liberation Serif}% For saying "Latex" without looking ugly
+\newfontfamily\myhebrewfont[]{Liberation Serif}% For Psalm 119
+%\fontspec{Gentium Book Plus}\setmainfont[Numbers=Uppercase]{Gentium Book Plus}% 947 pages +2
+% \fontspec[Scale=0.8]{Times New Roman}% (TimesNewRoman1)
+% map TimesNewRoman(0)/bx/sc (bold smallcaps) to Junicode(1)/m/sc (normal smallcaps of fake bold)
+% \DeclareFontShape{EU1}{TimesNewRoman(0)}{m}{sc}{<->ssub * TimesNewRoman(1)/m/sc}{}
+
+\newfontfamily\myversefont[\myboldness FakeStretch=\myversefontstretch,Scale=\myversescale]{\myversefontname}
+\newfontfamily\mybooktitlefont[\myfontopts \myboldness FakeStretch=\myfontstretch,Scale=2.0]{\myfontname}
+\newfontfamily\mychapterfont[\myboldness FakeStretch=\mychapterfontstretch,Scale=\mychapterscale]{\mychapterfontname}
+\newfontfamily\myendnotesfont[\myboldness FakeStretch=\myfontstretch,Scale=\mychapterscale]{\mysansfontiiname}
+\newfontfamily\myprefacefont[FakeStretch=\myfontstretch,Scale=0.9]{\mysansfontname}
+\usepackage{printlen}% provide \printlength command, and \rndprintlength - to print the page size nicely
+\usepackage{paracol}
+\usepackage{xcolor}
+\definecolor{mygray}{gray}{\mygrayshade}
+%\colseprulecolor{mygray}%
+%\setlength{\premulticols}{0\baselineskip}
+%\setlength{\postmulticols}{0\baselineskip}
+%\setlength{\multicolsep}{0\baselineskip}
+%\setlength{\emergencystretch}{0\baselineskip}% we don't care what your emergency is: don't stretch
+%
+%
+%
+% \pretolerance is used to tell the processor when there is too much space
+% between words, and an attempt should be made to hyphenate some of them;
+% \tolerance is used to indicate when there is too much space even after
+% breaking words.
+% If we want to avoid breaking words, and avoid having too long lines, we have to use a very high value for 
+% \pretoletance. An “infinite” tolerance is represented by the value 10000.
+\let\textquotedbl="
+%\let\quotedblbase="
+%
+%% % due to a bug in memoir (as of 2015/8/24) [twoside] option will give a spurious space
+%% % this will be fixed as memoir gets updated
+%% % \counterwithin{section}{chapter}
+%% % \counterwithin{chapter}{verse}
+%% \chapterstyle{section}
+%% \newcommand*{\thebooktitle}{}
+%% \renewcommand*{\printbooktitle}[1]{\gdef\thebooktitle{#1}\booktitlefont #1}
+%% \renewcommand*{\printchapternum}{\chapnumfot\thebooktitle\ \thechapter}
+%% \renewcommand{\thesection}{\arabic{section}}
+%% \newcommand{\marginbox}[1]{%
+%%    \parbox[t][0pt]{0em}{\bfseries\huge\raggedleft\leavevmode #1}}
+%%  \newcommand{\marginhead}[1]{%
+%%    {\llap{\marginbox{#1}\kern1em}}}
+%%  \setsecindent{0em}
+%%  \setaftersecskip{0em}
+%%  \setsecheadstyle{\marginhead}
+\def\hebrewleader{}%
+%\newwrite\coords\immediate\openout\coords=\jobname.coords%
+\newcommand{\ppsaveposition}[2]{% Save the print position, given a #1 label, and #2 reference
+  \zlabel{#1}%
+  \zsavepos{#1}%
+  %\edef\temp{#1,#2,x=\the\dimexpr\zposx{#1}sp\relax, y=\the\dimexpr\zposy{#1}sp,\zpageref{#1}}%
+  %\immediate\write\coords{\temp,\thepage}%
+}
+
+\newwrite\myparaheight\immediate\openout\myparaheight=\jobname.paraheight%
+\newwrite\myparapage\immediate\openout\myparapage=\jobname.parapage%
+\newdimen\PPparaheight
+\newcommand\PPmeasuretextEX[3]{\setbox0=\vbox{#1}%
+    \PPparaheight=\ht0 \advance\PPparaheight by \dp0%
+%Write to the ppenaf.heights file: but the page numbers here are NOT the page numbers for the headings
+    \immediate\write\myparaheight{#2,#3,\the\PPparaheight}% Can't figure out how to merge these: merge them yourself
+    \write\myparapage{\thepage}% pr -mt ppenaf.pagecontents ppenaf.heights
+    #1%
+}
+%\newcommand\PPmeasuretext[1]{\PPmeasuretextEX{#1}{\somelanguage}{\someverse}}%
+\newcommand\PPmeasuretext[1]{#1}% Non-measuring version
+\newcommand{\sharedverse}[2]{\raisebox{\myverseraise}[0pt]{\myversefont\textbf{#1}}\def\mythumbindex{#2}}%3 points up, count height as 0 points, kern at end
+\newcommand{\versehskip}{\hspace{\myversehspace}}
+\newcommand{\versehskipa}{\hspace{\myverseahspace}}% Kern verses starting with capital A
+\newcommand{\versei}[2]{\noindent\mypreversei \hebrewleader\def\hebrewleader{}}%3 points up, count height as 0 points, kern at end
+\newcommand{\verseii}[2]{\mypreverseii\hebrewleader\def\hebrewleader{}\sharedverse{#1}{#2}}%3 points up, count height as 0 points, kern at end
+\renewcommand{\verse}[2]{\mypreverse\hebrewleader\def\hebrewleader{}\sharedverse{#1}{#2}}%3 points up, count height as 0 points, kern at end
+\newcommand{\ppspacing}{\addfontfeature{\myletterspace}}
+\newcommand{\PPnew}{}
+\newcommand{\PPnewchapter}{}
+\newcommand{\PPendchapterAF}{}
+\newcommand{\PPendchapterEN}{}
+\newcommand{\PPswlang}{}% Done with this language: fill up the column vertically
+\newcommand{\PPnewlang}{}
+\newcommand{\pplang}[1]{}
+\newcommand{\PPnewlangEN}{\begin{paracol}{2}\begin{leftcolumn}\renewcommand\pplang[1]{\begin{english}##1\end{english}}\gdef\somelanguage{en}}
+\newcommand{\PPnewlangAF}{\begin{rightcolumn}\renewcommand\pplang[1]{\begin{afrikaans}\myfontAF##1\end{afrikaans}}\gdef\somelanguage{af}}
+\newcounter{ppbookno}
+\newcommand{\PPnewbook}{\mybooktitlepreamble\addtocounter{ppbookno}{18}}
+%\newcommand{\PPbook}[1]{\mybooktitlebox{#1}}
+\newcommand{\PPbook}[1]{}
+\newcommand{\PPbooktitle}[2]{\mybooktitlename{#1}\mybooktitlebox{#2}}
+\newcommand{\PPchapter}[1]{\PPdropcapschapter{#1}}
+% Heading for each book of the PPe: big text
+\newcommand{\PPverseref}[1]{\gdef\someverse{#1}\markboth{#1}{#1}}%
+%\newcommand{\PPendreference}[2]{\markboth{#1}{#1}\def\mythumbindex{#2}}%
+\newcommand{\PPversei}[4]{\PPmeasuretext{\PPverseref{#2}\ppsaveposition{#3}{#2}\versehskip\ppspacing\pplang{#4}}}% the space after the verse is a thing
+\newcommand{\PPverseii}[4]{%
+  %\ifdim\PPparaheight<1.1\baselineskip%
+  %  \PPsyntheticpar% KQ% continue on same line
+  %\else
+    \PPsyntheticparii% QK%
+  %\fi
+\PPmeasuretext{\raisebox{\myverseraise}[0pt]{\myversefont\textbf{#1}}\ppsaveposition{#3}{#2}{\versehskip\PPverseref{#2}\ppspacing\pplang{#4}}}}% the space after the verse is a thing
+\newcommand{\PPverse}[4]{\par\PPmeasuretext{\raisebox{\myverseraise}[0pt]{\myversefont\textbf{#1}}\ppsaveposition{#3}{#2}{\versehskip\PPverseref{#2}\ppspacing\pplang{#4}}}}% the space after the verse is a thing
+\newcommand{\PPpostscript}[1]{} % omit postscripts - ignore parameter, which is the text of the postscript
+\newcommand{\PPpar}{\PPsyntheticparii}
+\newcommand{\PPpsalmauthor}[1]{{\ppspacing\pplang{\em #1}}\PPsyntheticparii}
+\newcommand{\PPendlang}{}
+\newcommand{\PPendlangEN}{\end{leftcolumn}}
+\newcommand{\PPendlangAF}{\end{rightcolumn}\end{paracol}}
+\newcommand{\PPendchapter}{}%
+\newcommand{\PPendbook}{}
+\newcommand{\PPend}{\par}
+%\newcommand{\PPpagetitles}[2]{\lock{#1}{#2}}%
+% FIXI?
+\newcommand{\PPthumbmark}[5]{% 1:horizontal tab, 2: vertical tab, 3: hspace, 4: lightgray
+\begin{textblock}{1}(#1,#2)%
+    %\rule[0em]{1em}{1ex}%
+    \hfuzz=72pt
+    \raisebox{0pt}[0pt]{\hspace{#3}\color{#4}\rule[0em]{8mm}{#5}}% vert offset, width, height
+\end{textblock}
+}
+%\newcommand{\PPbookmarker}[1]{\PPthumbmark{29}{#1}{0.5mm}{lightgray}{1.5em}}%
+%\newcommand{\PPpagemarker}[1]{\PPthumbmark{0}{#1}{-4mm}{lightgray}{0.5em}}%
+\newcommand{\PPbookmarker}[1]{\PPthumbmark{0}{#1}{-4mm}{lightgray}{1.5em}}%
+\newcommand{\PPpagemarker}[1]{\PPthumbmark{29}{#1}{0.5mm}{lightgray}{0.5em}}%
+\newlength{\rightmarkspace}%
+\newlength{\rightmarksep}
+\setlength{\rightmarkspace}{\paperwidth-5em}% 
+\setlength{\rightmarksep}{0.5ex}%
+%\renewcommand{\PPtwocolumn}{\par}%
+\newcommand{\PPenddocument}{}%
+%
+% \bookheadingstrut:
+% * The 1.3\baselineskip is necessary sinnce the large text has a big baseline
+% * 0pt makes it invisible
+% * 4\baselineskip means it covers 4 lines
+\newcommand{\bookheadingstrut}[1]{% %\vskip\baselineskip% disappearing space when at the top of the page? don't work :(
+\rule[1.0\baselineskip]{0pt}{#1}% Number of lines for title - 1 down, two up
+}%
+% New chapter number 
+% Move the thumb index (just make sure it doesn't disappear)
+% ppenaf.headings.tex defines PPtocAF and PPtocEN which format table-of-contents entries with PPtoc:
+\newcommand\PPtoc[2]{\noindent\hspace{2em}#1 \mydotfill{ #2\hspace{2em}\null}}
+%
+%\newcommand{\PPchapter}[2]{\vspace{2cm}\needspace{3\baselineskip}}
+%% %New book in separate paracol
+%% \begin{paracol}{2}%
+%% \textbf{\Huge #1}%
+%% \switchcolumn%
+%% \textbf{\Huge #2}%
+%% \end{paracol}\nopagebreak}%
+%% \setlength{\abnormalparskip{1pt}}
+%%%%%%%%%%%%%%%%%%%%%%%%%
+%\newcommand{\PPdropcapschapter}[1]{\null\needspace{0.5\baselineskip}%
+\newcommand{\PPdropcapschapter}[1]{\needspace{\mychapterspace}% big mystery here ... for needspace within 2 column environment, this is the number of lines /2 /2 (ie div 4)
+%\lettrine[lines=2, lraise=0.05, lhang=0.00, findent=3pt, nindent=0pt, loversize=0.0]{\hspace{2pt}\textbf{\mychapterfont \smash{#1}}}{}}% bug: if you raise by 0.05, it breaks grid alignment for register-true 
+  \lettrine[lines=2, lraise=0.00, lhang=0.00, findent=\mylettrinefindent, nindent=0pt, loversize=0.0]{\raisebox{\mychapterraise}[0pt]{\textbf{\mychapterfont\mychapterfontextra\color{mygray} #1}}}{}%
+}%
+%debug: \textbf{#1}}%
+% Work around lettrine bug with "Fpar" definition from https://tex.stackexchange.com/questions/369868/using-lettrine-with-short-paragraphs :
+% Synthetic paragraph that should be used for verse 2, in case it is right net to verse 1 and the dropcaps chapter number
+\def\PPsyntheticpar{\hfil\vadjust{\vskip\parskip}\break\noindent}%
+\def\PPsyntheticparii{\hfil\vadjust{\vskip\parskip}\break\indent}%
+% Don't warn for slightly overfull hboxen
+\hfuzz=2pt%
+% All our vertical stuff is bad for now
+\vbadness=10000%
+\vfuzz=0pt%
+% Try to avoid stranded chapter header at the bottom of the page (this doesn't work)
+%\widowpenalty=0%
+%\clubpenalty=0%
+% Pretty separator
+%\setlength{\columnseprule}{0.3pt}%
+%\setlength{\headsep}{3pt}%
+% Make leading dots for the table of contents - extra complex because text is too long sometimes:
+\newcommand*{\mydotfill}[1]{%
+    \noindent%
+    \raggedright
+    {\nobreak
+    \hskip 0pt plus 1em minus 0pt
+    \penalty50\null\nobreak
+     \dotfill#1%
+     \parfillskip=0pt \finalhyphendemerits=0 \par}
+}
+\mypredocument
+\begin{document}
+\hyphenpenalty=\myhypenpenalty
+\mainmatter%
+%FIXME - move this to \verse?
+%\addfontfeature{\myletterspace}% The 3em space is what a good font design uses ... and we trample it
+\mydocumentsettings
+%%% PAGE 1: BLANK PAGE %%%%%%%%%%%%%%%
+\def\ppblankpage{%
+    \shipout\null\stepcounter{page}%this page intentionally left blank
+}
+%%% PAGE 2: BOOK INFO PAGE%%%%%%%%%%%%%%%
+\def\myformattinginfoi{%
+    \myshowpageinfo
+    \ifdefined\paperwidth{%
+        \uselengthunit{mm}\rndprintlength{\paperwidth}%
+        $\times$%
+        \rndprintlength{\paperheight}%
+    }, \fi%
+}
+\def\myformattinginfoii{%
+    \ifdefined\mydisplayfontname%
+        \mydisplayfontname\ \myfontsize, %
+    \else%
+        \makeatletter\ifdefined\f@family\f@family\fi \makeatother\ \the\fontdimen6\font\the\font, %
+    \fi
+    aspect\ \myfontstretch:1, (af) \myfontstretchAF:1,
+    line spacing\ \the\baselineskip
+}
+\def\myformattinginfoiii{%
+    \ifdefined\myextradisplay{, \myextradisplay}\fi
+}
+\def\ppPrefaceEN{
+\myprefacefont
+{\centering \color{mygray}\bf Calvary Hope Baptist Church}
+
+This edition of the Bible has been prepared by Calvary Hope Baptist Church
+(Cape Town) for the furtherance of the Gospel of Jesus Christ in South Africa.
+A number of verses that are useful in teaching the Gospel of Christ with
+simplicity have been highlighted in bold text.
+
+The English text is the Bible of 1611 authorised by King James of England, with
+the spelling and capitalisation revisions of 1769 (KJV).  The Afrikaans text is the
+Bible of 1933, published by the decision of hte join commission representing
+the three Dutch Churches in South Africa, as revised in 1953 by the Bible
+Society of South Africa.
+
+Both translations were translated from the received text in Greek: the English
+was informed by prior translations in English and other languages, and the
+Afrikaans was based on the Dutch Statenvertaling.  Both the KJV and the
+1953 Afrikaans are superior to the wholesale revisions that followed them,
+because the revisions are based on an inferior synthetic modern revision of the
+text, and false theories of translation.
+}
+
+\def\ppPrefaceAF{\begin{afrikaans}
+\myprefacefont
+{\centering \color{mygray}\bf Calvary Hope Baptist Church}
+
+Dié uitgawe van die Bybel is deur Calvary Hope Baptist Church (Kaapstad) uitgegee
+vir die bevordering van die Evangelie van Jesus Christus in Suid Afrika.  Enkele
+verse wat dikwels gebruik word om die Evangelie van Chrisus met eenvoudigheid
+te leer is in die teks beklemtoon.
+
+Die Engelse teks is die Bybel van 1611 gemagtig deur Koning James van Engeland,
+met die spelling en hoofletter hersienings van 1769 (KJV).  Die Afrikaanse teks
+is die Bybel van 1933 uitgesit in opdrag van die gesamentlike komissie
+vertenwoordigende die drie Hollandse Kerke in Suid-Afrika, soos hersien in 1953
+deur die Bybelgenootskap van Suid-Afrika. 
+
+Albei vertalings is vertaal van die Griekse {\em Textus Receptus}: die Engels
+was ingelig deur die vorige vertalings in Engels en ander tale, en die
+Afrikaans het die Nederlandse Statenvertaling as beginpunt gebruik.  Beide die
+die 1953 Ou Vertaling en die KJV is beter as die nuwe vertalings wat op hulle
+gevolg het, omdat nuwe vertalings gebruik maak van 'n minderwaardige kunsmatige
+moderne Griekse teks, en valse ideës oor vertaling.
+\end{afrikaans}
+}
+
+\gdef\ppinfopage{
+% preface
+\begin{paracol}{2}%
+    \begin{leftcolumn}\ppPrefaceEN\end{leftcolumn}%
+    \begin{rightcolumn}\ppPrefaceAF\end{rightcolumn}%
+\end{paracol}
+% skip
+\spaceskip=0.33em\relax
+\null\vfill
+\InputIfFileExists{\jobname.pages}{}{}
+\thispagestyle{noheadings}%
+DIE BYBEL: Nuwe Testament\par
+HOLY BIBLE: New Testament\par
+{\sc KJV 1953 Afrikaans Parallel Bible New Testament 2024}
+\par
+\ifdefined\PPISBN{\PPISBN\par}\fi
+You may copy freely and republish in whole, or in part.\par
+\ifdefined\ENmottoii{\ENmottoii\par}\fi
+\null\par
+{\PPtocpre
+Typesetting by {\mylatexfont \LaTeX{}}, %
+\myformattinginfoi
+\par
+Font
+\myformattinginfoii
+\myformattinginfoiii%
+\par
+Source code: https://github.com/derde/kjvpar, ``\jobname.tex''
+\par
+\input{md5sum.tex}
+\PPmdsumEN\ \PPsourcefileEN\par
+\PPmdsumAF\ \PPsourcefileAF\par
+\par
+\newcounter{mylines}
+\setcounter{mylines}{ \textheight / \baselineskip}
+\newlength{\mybestlinespace}
+\setlength{\mybestlinespace}{\textheight / \themylines}
+Text area {\uselengthunit{mm}\rndprintlength{\textwidth}}$\times${\uselengthunit{mm}\rndprintlength{\textheight}} 
+ (\arabic{mylines}$\times${\uselengthunit{pt}\rndprintlength{\mybestlinespace}})
+\par
+No headings; verses share lines; ragged; psalm titles; no epistle postscripts;\par
+Words of Christ in black.\par
+%\par\bookheadingstrut{3\baselineskip}%
+\par
+\PPtocpost
+}
+\newpage
+}
+
+
+%%% PAGE 3: TITLE PAGE %%%%%%%%%%%%%%%
+% Kerning adjustment: big deal page-count affecter
+% Big deal don't hypenate rule: we would save pages by hypenating, but it's ugly
+\def\pptitlepage{
+\thispagestyle{noheadings}%
+%\par\noindent
+\null
+\vfill
+\null\par
+{\noindent\hfil\sc KJV 1953 Afrikaans Parallel Bible New Testament 2024\hfil}
+\null\par
+\null\par
+\null
+\begin{paracol}{2}%
+    \begin{leftcolumn}%
+        \begin{english}%
+        {\centering
+            {\noindent\bookheadingstrut{3\baselineskip}{\mybooktitlefont\mybooktitlesettingsz\mybooktitletextbf{HOLY BIBLE}}}\par% King James Bible
+            {\noindent\sc Authorised Version, 1611, KJV}\par
+            {\noindent\sc New Testament}\par% kjvtex compactt
+        }%
+        \null\par
+        \PPtocEN\par
+        \bookheadingstrut{3\baselineskip}\null\par
+        {\centering
+            {\noindent \em How beautiful are the feet of them that preach the gospel of peace, and bring glad tidings of good things!}\par
+        }%
+        \end{english}%
+    \end{leftcolumn}%
+    \begin{rightcolumn}%
+        \begin{afrikaans}%
+        {\centering
+            {\noindent\bookheadingstrut{3\baselineskip}{\mybooktitlefont\mybooktitlesettingsz\mybooktitletextbf{DIE BYBEL}}}\par% King James Bible
+            {\noindent\sc Ou Vertaling, 1953}\par
+            {\noindent\sc Nuwe Testament}\par% kjvtex compactt
+        }%
+        \null\par
+        \PPtocAF\par
+        \bookheadingstrut{3\baselineskip}\null\par
+        {\centering
+            {\noindent \em Hoe lieflik is die voete van die wat die evangelie van vrede verkondig, van die wat die evangelie van die goeie verkondig!}\par
+        }%
+        \bookheadingstrut{3\baselineskip}\null\par
+        \end{afrikaans}%
+    \end{rightcolumn}%
+\end{paracol}%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\null
+\vfill
+\begin{center}
+    \small http://soulwinning.africa/af
+\end{center}
+%%%%%%%%%%%%%%%%%%%%%
+% Commands that write the table of content later
+%%%%%%%%%%%%%
+\newpage
+}
+%%% PAGE 4: BLANK PAGE %%%%%%%%%%%%%%%
+\def\ppblankagain{%
+    \shipout\null\stepcounter{page}%this page intentionally left blank
+}
+%%%%
+\setlength{\columnsep}{24pt}
+\setlength{\columnseprule}{0.1pt}%
+\ppFrontMatter
+\setlength{\columnsep}{12pt}
+\setlength{\columnseprule}{0.4pt}%
+%\ppblankagain%blank again
+%%% PAGE 5: FIRST PAGE OF CONTENT %%%%%%%%%%%%%%%
+\newwrite\mytoc\immediate\openout\mytoc=\jobname.section%
+\pagestyle{fancy}
+\mydocumentsettings % Take II: apply document settings again, in case we changed things
+\include{parallel.tex}% Load main content, from parallel.tex
+%% Write out stats and stuff for laters
+\newwrite\mypages
+\immediate\openout\mypages=\jobname.pages%
+\addtocounter{page}{-1}% adjust for presentation
+\immediate\write\mypages{\unexpanded{\gdef\myshowpageinfo}{\thepage\ pages }}% FIXME: adds one to the page .. weird
+\addtocounter{page}{1}% un-adjust for presentation
+% FIXME: this is dumb:
+% I think we're done here ...
+%% Oh wait, we might write out something more here
+\myrearmatter% print the rear matter pages (not counted above!)
+%%% PAGE n: RECORD PAGE COUNT AND QUIT %%%%
+\addtocounter{page}{-1}% adjust for presentatoin
+\immediate\write\mypages{\unexpanded{\gdef\mypagecount}{\thepage}}% FIXME: adds one to the page .. weird
+\addtocounter{page}{1}% un-adjust for presentation
+\immediate\closeout\mytoc%
+\immediate\closeout\mypages%
+\PPenddocument
+%%\bigskip%%\ldots
+\end{document}
 

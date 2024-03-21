@@ -3,6 +3,7 @@
 import re
 import copy
 import sys
+import os
 
 def index(dicty,i):
     keys=list(dicty.keys())
@@ -23,6 +24,7 @@ def get_sequence():
 
 alltemplates={
     'parallel.html': {
+        'sourcefile':     '<b>%(zz)s</b>: md5sum <b>%(md5sum)s</b><p>',
         'new':        '<!-- Begin -->',
         'newbook':    '<table>',
         'newchapter': '<tr>',
@@ -43,6 +45,7 @@ alltemplates={
         'attribution': '<b>%(attribution)s</b><br>',
     },
     'parallel.tex': {
+        'sourcefile': '\\def\\PPmdsum%(zz)s{%(md5sum)s}\n\\def\\PPsourcefile%(zz)s{%(sourcefile)s}\n',
         'new':        '\\PPnew',
         'newbook':    '\\PPnewbook',
         'newchapter': '\\PPnewchapter\\PPnewchapter%(zz)s', #  synchronise left/right
@@ -201,7 +204,8 @@ class BibleParser:
         return bookname,chapters
 
     def setup(self):
-        sourcefile=open(self.settings['source'],'r')
+        self.settings['md5sum'] = os.popen('md5sum "%(sourcefile)s"' % self.settings,'r').readline().split()[0]
+        sourcefile=open(self.settings['sourcefile'],'r')
         textre=re.compile(r'^(.*?) (\d+):(\d+) (.*)')
         for line in sourcefile:
             m=textre.search(line)
@@ -446,23 +450,23 @@ def setup():
     ensettings={
         'zz':'EN',
         'lang':'King James Version 1611/1769',
-        'source': 'text/kingjamesbibleonline.txt',
+        'sourcefile': 'text/kingjamesbibleonline.txt',
         'booktitles': iniread(booktitlesini,'en'), }
     zusettings={
         'zz':'ZU',
         'lang':'Zulu 1959',
-        'source': 'text/zulu1959.txt' }
+        'sourcefile': 'text/zulu1959.txt' }
     grsettings={
         'zz':'GR',
         'lang':'Stephanus 1550',
-        'source': 'text/tr1550.txt',
+        'sourcefile': 'text/tr1550.txt',
         'BOOKNAMES': [ "ΓΈΝΕΣΙΣ", "ΈΞΟΔΟΣ", "ΛΕΥΪΤΙΚΌ", "ΑΡΙΘΜΟΊ", "ΔΕΥΤΕΡΟΝΌΜΙΟ", "ΙΗΣΟΎΣ", "ΚΡΙΤΈΣ", "ΡΟΥΘ", "Α΄ ΒΑΣΙΛΈΩΝ", "Β΄ ΒΑΣΙΛΈΩΝ", "Γ΄ ΒΑΣΙΛΈΩΝ", "Δ΄ ΒΑΣΙΛΈΩΝ", "Α' ΠΑΡΑΛΕΙΠΟΜΈΝΩΝ", "Β' ΠΑΡΑΛΕΙΠΟΜΈΝΩΝ", "ΈΣΔΡΑΣ", "ΝΕΕΜΊΑΣ", "ΕΣΘΉΡ", "ΙΏΒ", "ΨΑΛΜΟΊ", "ΠΑΡΟΙΜΊΕΣ", "ΕΚΚΛΗΣΙΑΣΤΉΣ", "ΆΣΜΑ ΑΣΜΆΤΩΝ", "ΗΣΑΐΑΣ", "ΙΕΡΕΜΊΑΣ", "ΘΡΉΝΟΙ", "ΙΕΖΕΚΙΉΛ", "ΔΑΝΙΉΛ", "ΩΣΗΈ", "ΙΩΉΛ", "ΑΜΏΣ", "ΟΒΔΙΟΎ", "ΙΩΝΆΣ", "ΜΙΧΑΊΑΣ", "ΝΑΟΎΜ", "ΑΒΒΑΚΟΎΜ", "ΣΟΦΟΝΊΑΣ", "ΑΓΓΑΊΟΣ", "ΖΑΧΑΡΊΑΣ", "ΜΑΛΑΧΊΑΣ", "ΜΑΤΘΑΊΟΣ", "ΜΆΡΚΟΣ", "ΛΟΥΚΆΣ", "ΙΩΆΝΝΗΣ", "ΠΡΆΞΕΙΣ", "ΡΩΜΑΊΟΥΣ", "Α΄ ΚΟΡΙΝΘΊΟΥΣ", "Β΄ ΚΟΡΙΝΘΊΟΥΣ", "ΓΑΛΆΤΕΣ", "ΕΦΕΣΊΟΥΣ", "ΦΙΛΙΠΠΗΣΊΟΥΣ", "ΚΟΛΟΣΣΑΕΊΣ", "Α΄ ΘΕΣΣΑΛΟΝΙΚΕΊΣ", "Β΄ ΘΕΣΣΑΛΟΝΙΚΕΊΣ ", "Α΄ ΤΙΜΌΘΕΟ", "Β΄ ΤΙΜΌΘΕΟ", "ΤΊΤΟ", "ΦΙΛΉΜΟΝΑ", "ΕΒΡΑΊΟΥΣ", "ΙΑΚΏΒΟΥ", "Α΄ ΠΈΤΡΟΥ", "Β΄ ΠΈΤΡΟΥ", "Α΄ ΙΩΆΝΝΗ", "Β΄ ΙΩΆΝΝΗ", "Γ΄ ΙΩΆΝΝΗ", "ΙΟΎΔΑ", "ΑΠΟΚΆΛΥΨΗ", ],
         'booknames': [ "Γένεσις", "Έξοδος", "Λευϊτικό", "Αριθμοί", "Δευτερονόμιο", "Ιησούς", "Κριτές", "Ρουθ", "Α΄ Βασιλέων", "Β΄ Βασιλέων", "Γ΄ Βασιλέων", "Δ΄ Βασιλέων", "Α' Παραλειπομένων", "Β' Παραλειπομένων", "Έσδρας", "Νεεμίας", "Εσθήρ", "Ιώβ", "Ψαλμοί", "Παροιμίες", "Εκκλησιαστής", "Άσμα Ασμάτων", "Ησαΐας", "Ιερεμίας", "Θρήνοι", "Ιεζεκιήλ", "Δανιήλ", "Ωσηέ", "Ιωήλ", "Αμώς", "Οβδιού", "Ιωνάς", "Μιχαίας", "Ναούμ", "Αββακούμ", "Σοφονίας", "Αγγαίος", "Ζαχαρίας", "Μαλαχίας", "Ματθαίος", "Μάρκος", "Λουκάς", "Ιωάννης", "Πράξεις", "Ρωμαίους", "Α΄ Κορινθίους", "Β΄ Κορινθίους", "Γαλάτες", "Εφεσίους", "Φιλιππησίους", "Κολοσσαείς", "Α΄ Θεσσαλονικείς", "Β΄ Θεσσαλονικείς ", "Α΄ Τιμόθεο", "Β΄ Τιμόθεο", "Τίτο", "Φιλήμονα", "Εβραίους", "Ιακώβου", "Α΄ Πέτρου", "Β΄ Πέτρου", "Α΄ Ιωάννη", "Β΄ Ιωάννη", "Γ΄ Ιωάννη", "Ιούδα", "Αποκάλυψη", ],
         }
     afsettings={
         'zz':'AF',
         'lang':'Afrikaans 1935/1953',
-        'source': 'text/af1953.txt',
+        'sourcefile': 'text/af1953.txt',
         'BOOKNAMES': [ 'GÉNESIS', 'EXODUS', 'LEVÍTIKUS', 'NÚMERI', 'DEUTERONÓMIUM', 'JOSUA', 'RIGTERS', 'RUT', '1 SAMUEL', '2 SAMUEL', '1 KONINGS', '2 KONINGS', '1 KRONIEKE', '2 KRONIEKE', 'ESRA', 'NEHEMÍA', 'ESTER', 'JOB', 'PSALMS', 'SPREUKE', 'PREDIKER', 'HOOGLIED', 'JESAJA', 'JEREMIA', 'KLAAGLIEDERE', 'ESÉGIËL', 'DANIËL', 'HOSÉA', 'JOËL', 'AMOS', 'OBÁDJA', 'JONA', 'MIGA', 'NAHUM', 'HÁBAKUK', 'SEFÁNJA', 'HAGGAI', 'SAGARÍA', 'MALEÁGI', 'MATTHÉÜS', 'MARKUS', 'LUKAS', 'JOHANNES', 'HANDELINGE', 'ROMEINE', '1 KORINTHIËRS', '2 KORINTHIËRS', 'GALÁSIËRS', 'EFÉSIËRS', 'FILIPPENSE', 'KOLOSSENSE', '1 THESSALONICENSE', '2 THESSALONICENSE', '1 TIMÓTHEÜS', '2 TIMÓTHEÜS', 'TITUS', 'FILÉMON', 'HEBREËRS', 'JAKOBUS', '1 PETRUS', '2 PETRUS', '1 JOHANNES', '2 JOHANNES', '3 JOHANNES', 'JUDAS', 'OPENBARING', ],
         'booknames': [ 'Génesis', 'Exodus', 'Levítikus', 'Númeri', 'Deuteronómium', 'Josua', 'Rigters', 'Rut', '1 Samuel', '2 Samuel', '1 Konings', '2 Konings', '1 Kronieke', '2 Kronieke', 'Esra', 'Nehemía', 'Ester', 'Job', 'Psalms', 'Spreuke', 'Prediker', 'Hooglied', 'Jesaja', 'Jeremia', 'Klaagliedere', 'Eségiël', 'Daniël', 'Hoséa', 'Joël', 'Amos', 'Obádja', 'Jona', 'Miga', 'Nahum', 'Hábakuk', 'Sefánja', 'Haggai', 'Sagaría', 'Maleági', 'Matthéüs', 'Markus', 'Lukas', 'Johannes', 'Handelinge', 'Romeine', '1 Korinthiërs', '2 Korinthiërs', 'Galásiërs', 'Efésiërs', 'Filippense', 'Kolossense', '1 Thessalonicense', '2 Thessalonicense', '1 Timótheüs', '2 Timótheüs', 'Titus', 'Filémon', 'Hebreërs', 'Jakobus', '1 Petrus', '2 Petrus', '1 Johannes', '2 Johannes', '3 Johannes', 'Judas', 'Openbaring', ],
         'booktitles': iniread(booktitlesini,'af'),
@@ -494,6 +498,8 @@ if __name__=="__main__":
     di=0
     for filename,templates in alltemplates.items():
         fd=open(filename,'w')
+        for vv in allversions:
+            fd.write(templates['sourcefile'] % vv.settings)
         fd.write(templates['new'])
         for sniprange in en.getparagraphranges():
             peek=en.getsnippetverses(sniprange)

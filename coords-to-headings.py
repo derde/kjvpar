@@ -130,7 +130,7 @@ for p in data.values():
 
 for lang in 'EN','AF':
     tocs=''.join(toc[lang])
-    ft.write('\\newcommand{\\PPtoc'+lang+'}{\n'+tocs+'\n}\n')
+    ft.write('\\newcommand{\\PPtoc'+lang+'}{\n'+tocs+'}\n')
 
 ft.close()
 fo.close()
