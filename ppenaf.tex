@@ -15,6 +15,7 @@
   %\rightskip=0pt plus 1ex\relax% space on right hand margin: keep it small
   \rightskip=0pt\relax% space on right hand margin: keep it small
   \parfillskip=0pt plus \linewidth\relax%   last line of paragraph space: use up all of the spare space here.
+  \emergencystretch=4em
 }
 \def\myhypenpenalty{10}%   Lower penalty means more hypenation and fewer pages
 \def\showredgrid{%
@@ -54,8 +55,8 @@
 \def\mysansfontiiname{Liberation Sans}
 \def\mysansfontname{Liberation Sans}
 %\def\mysansfontname{[GrazeShorter.otf]}
-\def\myfontsize{9.00pt}
-\def\mybaseline{9.00pt}
+\def\myfontsize{9.50pt}
+\def\mybaseline{9.50pt}
 \def\myfontopts{
     BoldFont=[GrazeShorter-Bold.otf],
     ItalicFont=[GrazeShorter-Italic.otf],
@@ -68,11 +69,10 @@
 % This works, but it seems neater to squash the font, rather than reduce the inter-character spacing:
 \def\myfontstretch{0.925}
 \def\usepackages{%
-    \usepackage[tracking,shrink=2,stretch=20]{microtype}
-    \emergencystretch=6em
+    \usepackage[tracking=alltext]{microtype}
     \usepackage{fp}% floating point arithmetic to calculate the actual stretch for Afrikaans
     \FPdiv{\myfontstretchAF}{\myfontstretch}{1.007109}%meh
-    \FPround{\myfontstretchAF}{\myfontstretchAF}{4}
+    \FPround{\myfontstretchAF}{\myfontstretchAF}{3}
 }
 %\def\myletterspace{LetterSpace=0.0 plus 25.0}
 %\def\myfontstretch{0.875}
@@ -101,7 +101,8 @@
 }
 \input{kjvtopics.tex}
 \def\myrearmatter{
-    \ppblankpage% blank
+%    \ppblankpage% blank
+    \ppgospeloutlinepage%
 %    \ppinfopage%   print info page
 %    \kjvwordlist
 %    \kjvtopics
@@ -183,6 +184,8 @@ by his Majesty's special command
 \usepackage{hyphenat}
 \hyphenation{
 % older forms missing from modern dictionary: *est
+cove-nant-ed
+cove-nant-break-ers Je-ru-sa-lem Oli-vet De-me-trius breth-ren Ti-mo-theus
 ab-hor-rest ac-cep-test ap-prov-est ask-est bap-tiz-est bar-est bear-est be-hold-est
 be-liev-est be-tray-est blas-phem-est bring-est build-est call-est cam-est
 car-est chief-est com-est com-mand-est com-pel-lest con-demn-est con-si-der-est
@@ -344,10 +347,11 @@ wit-ness-eth work-eth wor-ship-peth yield-eth Tro-phi-mus}
 % \DeclareFontShape{EU1}{TimesNewRoman(0)}{m}{sc}{<->ssub * TimesNewRoman(1)/m/sc}{}
 
 \newfontfamily\myversefont[\myboldness FakeStretch=\myversefontstretch,Scale=\myversescale]{\myversefontname}
-\newfontfamily\mybooktitlefont[\myfontopts \myboldness FakeStretch=\myfontstretch,Scale=2.0]{\myfontname}
+\newfontfamily\mybooktitlefont[\myfontopts \myboldness FakeStretch=\myfontstretch,Scale=1.75]{\myfontname}
 \newfontfamily\mychapterfont[\myboldness FakeStretch=\mychapterfontstretch,Scale=\mychapterscale]{\mychapterfontname}
 \newfontfamily\myendnotesfont[\myboldness FakeStretch=\myfontstretch,Scale=\mychapterscale]{\mysansfontiiname}
 \newfontfamily\myprefacefont[FakeStretch=\myfontstretch,Scale=0.9]{\mysansfontname}
+\newfontfamily\mygospelfont[FakeStretch=\myfontstretch,Scale=0.75]{\mysansfontname}
 \usepackage{printlen}% provide \printlength command, and \rndprintlength - to print the page size nicely
 \usepackage{paracol}
 \usepackage{xcolor}
@@ -442,7 +446,8 @@ wit-ness-eth work-eth wor-ship-peth yield-eth Tro-phi-mus}
 \newcommand{\PPverse}[4]{\par\PPmeasuretext{\raisebox{\myverseraise}[0pt]{\myversefont\textbf{#1}}\ppsaveposition{#3}{#2}{\versehskip\PPverseref{#2}\ppspacing\pplang{#4}}}}% the space after the verse is a thing
 \newcommand{\PPpostscript}[1]{} % omit postscripts - ignore parameter, which is the text of the postscript
 \newcommand{\PPpar}{\PPsyntheticparii}
-\newcommand{\PPpsalmauthor}[1]{{\ppspacing\pplang{\em #1}}\PPsyntheticparii}
+%\newcommand{\PPpsalmauthor}[1]{{\ppspacing\pplang{\em #1}}\PPsyntheticparii}
+\newcommand{\PPpsalmauthor}[1]{}% Omit
 \newcommand{\PPendlang}{}
 \newcommand{\PPendlangEN}{\end{leftcolumn}}
 \newcommand{\PPendlangAF}{\end{rightcolumn}\end{paracol}}
@@ -555,11 +560,11 @@ wit-ness-eth work-eth wor-ship-peth yield-eth Tro-phi-mus}
 }
 \def\ppPrefaceEN{
 \myprefacefont
-{\centering \color{mygray}\bf Calvary Hope Baptist Church}
+{\noindent\null\hfill \color{mygray}\textbf{Calvary Hope Baptist Church}\hfill\null}
 
-This edition of the Bible has been prepared by Calvary Hope Baptist Church
-(Cape Town) for the furtherance of the Gospel of Jesus Christ in South Africa.
-A number of verses that are useful in teaching the Gospel of Christ with
+\noindent This Bible has been printed by Calvary Hope Baptist Church (Cape
+Town) for the furtherance of the Gospel of Jesus Christ in South Africa.  A
+number of verses that are useful in teaching the Gospel of Christ with
 simplicity have been highlighted in bold text.
 
 The English text is the Bible of 1611 authorised by King James of England, with
@@ -568,35 +573,35 @@ Bible of 1933, published by the decision of hte join commission representing
 the three Dutch Churches in South Africa, as revised in 1953 by the Bible
 Society of South Africa.
 
-Both translations were translated from the received text in Greek: the English
+Both translations were translated from the Greek Received Text: the English
 was informed by prior translations in English and other languages, and the
 Afrikaans was based on the Dutch Statenvertaling.  Both the KJV and the
 1953 Afrikaans are superior to the wholesale revisions that followed them,
-because the revisions are based on an inferior synthetic modern revision of the
-text, and false theories of translation.
+because the revisions translate an inferior synthetic modern revision of the
+text, and use faulty theories of translation.
 }
 
 \def\ppPrefaceAF{\begin{afrikaans}
 \myprefacefont
-{\centering \color{mygray}\bf Calvary Hope Baptist Church}
+{\noindent\null\hfill \color{mygray}\textbf{Calvary Hope Baptist Church}\hfill\null}
 
-Dié uitgawe van die Bybel is deur Calvary Hope Baptist Church (Kaapstad) uitgegee
-vir die bevordering van die Evangelie van Jesus Christus in Suid Afrika.  Enkele
-verse wat dikwels gebruik word om die Evangelie van Chrisus met eenvoudigheid
-te leer is in die teks beklemtoon.
+\noindent Dié Bybel is deur Calvary Hope Baptist Church (Kaapstad) gedruk vir die
+bevordering van die Evangelie van Jesus Christus in Suid Afrika.  Enkele verse
+wat dikwels gebruik word om die Evangelie van Chrisus met eenvoudigheid te leer
+is in die teks beklemtoon.
 
 Die Engelse teks is die Bybel van 1611 gemagtig deur Koning James van Engeland,
-met die spelling en hoofletter hersienings van 1769 (KJV).  Die Afrikaanse teks
-is die Bybel van 1933 uitgesit in opdrag van die gesamentlike komissie
-vertenwoordigende die drie Hollandse Kerke in Suid-Afrika, soos hersien in 1953
+met die spelling en leesteken hersienings van 1769 (KJV).  Die Afrikaanse teks
+is die Bybel van 1933 uitgesit in opdrag van die Gesamentlike Komissie
+Vertenwoordigende die Drie Hollandse Kerke in Suid-Afrika, soos hersien in 1953
 deur die Bybelgenootskap van Suid-Afrika. 
 
 Albei vertalings is vertaal van die Griekse {\em Textus Receptus}: die Engels
 was ingelig deur die vorige vertalings in Engels en ander tale, en die
-Afrikaans het die Nederlandse Statenvertaling as beginpunt gebruik.  Beide die
-die 1953 Ou Vertaling en die KJV is beter as die nuwe vertalings wat op hulle
-gevolg het, omdat nuwe vertalings gebruik maak van 'n minderwaardige kunsmatige
-moderne Griekse teks, en valse ideës oor vertaling.
+Afrikaans het die Hollandse Statenvertaling as beginpunt gebruik.  Beide die Ou
+Vertaling van 1953 en die KJV is beter as die nuwe vertalings wat op hulle
+gevolg het, omdat nuwe vertalings 'n minderwaardige kunsmatige moderne Griekse
+teks vertaal, en foutiewe ideës oor vertaling gebruik.
 \end{afrikaans}
 }
 
@@ -607,7 +612,7 @@ moderne Griekse teks, en valse ideës oor vertaling.
     \begin{rightcolumn}\ppPrefaceAF\end{rightcolumn}%
 \end{paracol}
 % skip
-\spaceskip=0.33em\relax
+% \spaceskip=0.33em\relax
 \null\vfill
 \InputIfFileExists{\jobname.pages}{}{}
 \thispagestyle{noheadings}%
@@ -640,7 +645,6 @@ Source code: https://github.com/derde/kjvpar, ``\jobname.tex''
 Text area {\uselengthunit{mm}\rndprintlength{\textwidth}}$\times${\uselengthunit{mm}\rndprintlength{\textheight}} 
  (\arabic{mylines}$\times${\uselengthunit{pt}\rndprintlength{\mybestlinespace}})
 \par
-No headings; verses share lines; ragged; psalm titles; no epistle postscripts;\par
 Words of Christ in black.\par
 %\par\bookheadingstrut{3\baselineskip}%
 \par
@@ -649,6 +653,27 @@ Words of Christ in black.\par
 \newpage
 }
 
+
+\gdef\ppGospelEN{%
+    \input{ppenaf-gospel-outline.tex}
+}
+\gdef\ppGospelAF{%
+    \begin{afrikaans}%
+    \input{ppenaf-gospel-outline.af.tex}%
+    \end{afrikaans}
+}
+\gdef\ppgospeloutlinepage{%
+    \newpage
+    %\thispagestyle{noheadings}%
+    {% preface
+        \baselineskip=7.4pt%
+        \mygospelfont%
+        \begin{paracol}{2}%
+            \begin{leftcolumn}\ppGospelEN\end{leftcolumn}%
+            \begin{rightcolumn}\ppGospelAF\end{rightcolumn}%
+        \end{paracol}%
+    }%
+}
 
 %%% PAGE 3: TITLE PAGE %%%%%%%%%%%%%%%
 % Kerning adjustment: big deal page-count affecter
@@ -668,11 +693,11 @@ Words of Christ in black.\par
         \begin{english}%
         {\centering
             {\noindent\bookheadingstrut{3\baselineskip}{\mybooktitlefont\mybooktitlesettingsz\mybooktitletextbf{HOLY BIBLE}}}\par% King James Bible
-            {\noindent\sc Authorised Version, 1611, KJV}\par
-            {\noindent\sc New Testament}\par% kjvtex compactt
+            {\noindent Authorised Version, 1611}\par
+            {\noindent New Testament}\par% kjvtex compactt
         }%
         \null\par
-        \PPtocEN\par
+        \ifdefined\PPtocEN{\PPtocEN}\fi\par
         \bookheadingstrut{3\baselineskip}\null\par
         {\centering
             {\noindent \em How beautiful are the feet of them that preach the gospel of peace, and bring glad tidings of good things!}\par
@@ -683,11 +708,11 @@ Words of Christ in black.\par
         \begin{afrikaans}%
         {\centering
             {\noindent\bookheadingstrut{3\baselineskip}{\mybooktitlefont\mybooktitlesettingsz\mybooktitletextbf{DIE BYBEL}}}\par% King James Bible
-            {\noindent\sc Ou Vertaling, 1953}\par
-            {\noindent\sc Nuwe Testament}\par% kjvtex compactt
+            {\noindent Ou Vertaling, 1953}\par
+            {\noindent Nuwe Testament}\par% kjvtex compactt
         }%
         \null\par
-        \PPtocAF\par
+        \ifdefined\PPtocAF{\PPtocAF}\fi\par
         \bookheadingstrut{3\baselineskip}\null\par
         {\centering
             {\noindent \em Hoe lieflik is die voete van die wat die evangelie van vrede verkondig, van die wat die evangelie van die goeie verkondig!}\par
@@ -722,6 +747,7 @@ Words of Christ in black.\par
 \newwrite\mytoc\immediate\openout\mytoc=\jobname.section%
 \pagestyle{fancy}
 \mydocumentsettings % Take II: apply document settings again, in case we changed things
+%%% BODY CONTENT %%%
 \include{parallel.tex}% Load main content, from parallel.tex
 %% Write out stats and stuff for laters
 \newwrite\mypages
