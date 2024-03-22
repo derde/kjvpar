@@ -1,8 +1,4 @@
 
-Paragraph vs continuous: 16% difference, font size difference: 8%:
-    639 pages paragraph per verse
-    551 pages continuous
-
 Checklist: DONE :
     🗸 Margins
     🗸 Extra paragraph break at Matthew 1:2
@@ -25,37 +21,37 @@ Checklist: DONE :
     🗸 Chapter verse 2 next to DropCaps should NOT indent, but after lettrine, it SHOULD indent (work-around would be to stretchy verse 1 too)
     🗸 Drop Psalms and Proverbs
     🗸 Page print checker - right margin dot that draws a cross in the margin
-Checklist: REVIEW :
-    Check English and Afrikaans hyphenation
-    Check font for all Afrikaans accents for spacing, kerning, etc:  !-—’”„ ok: ËÉáäéêëíïóòôúüý OT only: ēōÓÚŌ; high, but no collisions: ÁÍ; high, can lowercase: Ê -- review kerning of accented letters
-    Intra-word space to make things better (l i k e   t h i s ...) ... try using other font .. did luatex+microtype, not  https://unifraktur.sourceforge.net/letterspacing.html#letterspacing_support-note_xelatex says \usepackage{fontspec,xspace} and then define a custom \em command like \renewcommand\emshape{\xspace\addfontfeature{LetterSpace=20.0,WordSpace=1.5,Ligatures={NoCommon}}} ..
-    Check for chapters and booknames orphaned at the end of the page (needspace adjustment for book and chapter)
-Checklist: TODO :
-    🗸 Page headings - paracol breaks this, so log the references and page numbers to aux file, and make a csv with the heading for each page from that
-    𐄂 Page headings - if justified, then right justify the margin too - no space like for ragged right
+    🗸 Intra-word space to make things better (l i k e   t h i s ...) ... try using other font .. did luatex+microtype, not  https://unifraktur.sourceforge.net/letterspacing.html#letterspacing_support-note_xelatex says \usepackage{fontspec,xspace} and then define a custom \em command like \renewcommand\emshape{\xspace\addfontfeature{LetterSpace=20.0,WordSpace=1.5,Ligatures={NoCommon}}} ..
     🗸 Page headings should be CAPITALISED
     🗸 Page headings should be BOLD
     🗸 Book thumbnails - left margin shows book position (might be wrong too!)
-    Title: KJV 1953 Afrikaans Parallel Bible New Testament 2024; Publisher: Calvary Hope Baptist Church
-    ISBN number (sent 2024-03-16)
-    Cover page
+    🗸 Page headings - paracol breaks this, so log the references and page numbers to aux file, and make a csv with the heading for each page from that
+    𐄂 Page headings - if justified, then right justify the margin too - no space like for ragged right
+    🗸 Title: KJV 1953 Afrikaans Parallel Bible New Testament 2024; Publisher: Calvary Hope Baptist Church
+    🗸 ISBN number (sent 2024-03-16) 978-0-7961-6044-7
+    🗸 Cover page
+Checklist: REVIEW :
+    Check English and Afrikaans hyphenation
+    Check font for all Afrikaans accents for spacing, kerning, etc:  !-—’”„ ok: ËÉáäéêëíïóòôúüý OT only: ēōÓÚŌ; high, but no collisions: ÁÍ; high, can lowercase: Ê -- review kerning of accented letters
+    Check for chapters and booknames orphaned at the end of the page (needspace adjustment for book and chapter)
+Checklist: TODO :
+    Star the highlighted verses
     Read-it-yourself gospel instructions through highlighted verses: circle-number the verses, and provide page references in the outline
-    Special text page: Cover page
+    🗸Special text page: Cover page
     Special text page: Preface to KJV (extract)
     Special text page: Preface to 1953 (extract)
     Manual Paragraph breaks: John to Revelation (copy from paragraph bible)
     Somehow align stair-stepped parallel columns - but first do paragraph breaks
     Chapter position and size ... and wrapping
-    Titles for books (The Gospel According to St Matthew)
-    Chapter subscripts (? what did I mean by this)
+    🗸 Titles for books (The Gospel According to St Matthew)
     Inter-book spacing - at the begin of a new page, just the title, intra page, a separator line - uspecially book at the beginning of a new page, (formatting? line?)
-    Book titles that don't fit - 2 Thessalonians (fixed by centering properly) now II Thessalonicense heading doesn't fit: make a plan (SᴍᴀʟʟCᴀᴘꜱ?)
+    🗸 Book titles that don't fit - 2 Thessalonians (fixed by centering properly) now II Thessalonicense heading doesn't fit: make a plan (SᴍᴀʟʟCᴀᴘꜱ?) (made it a bit smaller -> 2->1.75)
     🗸 Cover design
     Font kerning (especially "PAULUS")
     Check font for all Afrikaans italics accents for spacing, kerning, etc (are there italics though?)
     Afrikaans: LEADING CAPS resolution (e.g. leave it, sMALLcAPS, ?) - Check for presentation of CAPITALISED PHRASES: consider smallcaps
     Print a physical proof
-    Table of contents (!)
+    🗸 Table of contents (!)
 Checklist: WONTFIX:
     Not done: Psalms: italics for Afrikaans titles (Psalms cut from book)
 
@@ -77,4 +73,8 @@ reledmac/examples/4-reledpar_columns_titles_in_line_numbering_with_notes.tex
 
 
 
+
+Calculation of paragraph vs continuous: 16% difference, font size difference: 8%:
+    639 pages paragraph per verse
+    551 pages continuous
 

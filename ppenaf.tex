@@ -79,7 +79,7 @@
 \def\myletterspace{}
 \def\myextradisplay{}
 \def\mytoccolumns{3}
-\def\mychapterscale{1.00}
+\def\mychapterscale{0.95}
 \def\myversescale{0.80}
 \def\myverseraise{1pt}% =~ (\baselineskip+\fontsize)/2 - \fontsize*\myversescale)
 % Improvements post-publishing 2023
@@ -120,18 +120,8 @@ Layout \copyright Calvary Hope Baptist Church 2024, with this licence:\par
 You may copy freely and republish in whole, or in part.\par}
 % Job end of book doesn't play nice - it's just the same length as the page
 %\def\PPendchapterjobxli{\null\par\null\par}% End of Job 41 - two blank lines
-\def\preNTintro{
-The\par
-New Testament\par
-of our Lord and Saviour\par
-JESUS CHRIST\par
-Translated out of the original Greek:\par
-and with the former translations\par
-diligently compared and revised,\par
-by his Majesty's special command
-}
 % Load default page counts, which is used for the print checker and thumbnail
-\gdef \mypagecount {500}
+\gdef \mypagecount {600}
 \InputIfFileExists{\jobname.section}{}{}
 
 %%%%%%%%%%%%%%%%%pplayout%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -252,7 +242,6 @@ wit-ness-eth work-eth wor-ship-peth yield-eth Tro-phi-mus}
 %\usepackage[left=5mm,top=10mm,right=5mm,bottom=5mm,bindingoffset=5mm,headheight=5mm]{geometry}%
 %\geometry{papersize={148mm,221mm}}% Waterproof
 \mypageadjustments% Any other page adjustments - crop package goes here
-%\usepackage[absolute,overlay]{textpos}% Put things in absolute positions (for thumb marker)
 \usepackage[absolute]{textpos}% Put things in absolute positions (for thumb marker)
 %FIXME: Use \mypagecount+n from aux file:
 \TPGrid[0mm,10mm]{30}{\mypagecount}% defines tiny boxes down right hand margin for book name - see "textblock" below.  For 66 books, we have 61 markers
@@ -392,7 +381,7 @@ wit-ness-eth work-eth wor-ship-peth yield-eth Tro-phi-mus}
 \def\hebrewleader{}%
 %\newwrite\coords\immediate\openout\coords=\jobname.coords%
 \newcommand{\ppsaveposition}[2]{% Save the print position, given a #1 label, and #2 reference
-  \zlabel{#1}%
+  \zlabel{z#1}%
   \zsavepos{#1}%
   %\edef\temp{#1,#2,x=\the\dimexpr\zposx{#1}sp\relax, y=\the\dimexpr\zposy{#1}sp,\zpageref{#1}}%
   %\immediate\write\coords{\temp,\thepage}%
@@ -447,6 +436,7 @@ wit-ness-eth work-eth wor-ship-peth yield-eth Tro-phi-mus}
 \newcommand{\PPpostscript}[1]{} % omit postscripts - ignore parameter, which is the text of the postscript
 \newcommand{\PPpar}{\PPsyntheticparii}
 %\newcommand{\PPpsalmauthor}[1]{{\ppspacing\pplang{\em #1}}\PPsyntheticparii}
+\newcommand{\PPhighlight}[1]{\marginpar{†}\textbf{#1}}%
 \newcommand{\PPpsalmauthor}[1]{}% Omit
 \newcommand{\PPendlang}{}
 \newcommand{\PPendlangEN}{\end{leftcolumn}}
@@ -465,8 +455,8 @@ wit-ness-eth work-eth wor-ship-peth yield-eth Tro-phi-mus}
 }
 %\newcommand{\PPbookmarker}[1]{\PPthumbmark{29}{#1}{0.5mm}{lightgray}{1.5em}}%
 %\newcommand{\PPpagemarker}[1]{\PPthumbmark{0}{#1}{-4mm}{lightgray}{0.5em}}%
-\newcommand{\PPbookmarker}[1]{\PPthumbmark{0}{#1}{-4mm}{lightgray}{1.5em}}%
-\newcommand{\PPpagemarker}[1]{\PPthumbmark{29}{#1}{0.5mm}{lightgray}{0.5em}}%
+\newcommand{\PPbookmarker}[1]{\PPthumbmark{0}{#1}{-5mm}{lightgray}{2mm}}%
+\newcommand{\PPpagemarker}[1]{\PPthumbmark{29}{#1}{0.5mm}{lightgray}{7mm}}%
 \newlength{\rightmarkspace}%
 \newlength{\rightmarksep}
 \setlength{\rightmarkspace}{\paperwidth-5em}% 
@@ -479,7 +469,7 @@ wit-ness-eth work-eth wor-ship-peth yield-eth Tro-phi-mus}
 % * 0pt makes it invisible
 % * 4\baselineskip means it covers 4 lines
 \newcommand{\bookheadingstrut}[1]{% %\vskip\baselineskip% disappearing space when at the top of the page? don't work :(
-\rule[1.0\baselineskip]{0pt}{#1}% Number of lines for title - 1 down, two up
+\rule[1.0\baselineskip-0.7pt]{0pt}{#1}% Number of lines for title - 1 down, two up ... the -0.7pt is because extra space is creeping in
 }%
 % New chapter number 
 % Move the thumb index (just make sure it doesn't disappear)
@@ -567,18 +557,19 @@ Town) for the furtherance of the Gospel of Jesus Christ in South Africa.  A
 number of verses that are useful in teaching the Gospel of Christ with
 simplicity have been highlighted in bold text.
 
+The English and Afrikaans translations were translated from the Greek
+Received Text: the English was informed by prior translations in English and
+other languages, and the Afrikaans was based on the Dutch Statenvertaling.
+Both the KJV and the 1953 Afrikaans are superior to the wholesale revisions
+that followed them, because the revisions translate an inferior synthetic
+modern revision of the text, and use faulty theories of translation.
+
 The English text is the Bible of 1611 authorised by King James of England, with
-the spelling and capitalisation revisions of 1769 (KJV).  The Afrikaans text is the
+the spelling and capitalisation revisions of 1769.  The Afrikaans text is the
 Bible of 1933, published by the decision of hte join commission representing
 the three Dutch Churches in South Africa, as revised in 1953 by the Bible
 Society of South Africa.
 
-Both translations were translated from the Greek Received Text: the English
-was informed by prior translations in English and other languages, and the
-Afrikaans was based on the Dutch Statenvertaling.  Both the KJV and the
-1953 Afrikaans are superior to the wholesale revisions that followed them,
-because the revisions translate an inferior synthetic modern revision of the
-text, and use faulty theories of translation.
 }
 
 \def\ppPrefaceAF{\begin{afrikaans}
@@ -590,18 +581,19 @@ bevordering van die Evangelie van Jesus Christus in Suid Afrika.  Enkele verse
 wat dikwels gebruik word om die Evangelie van Chrisus met eenvoudigheid te leer
 is in die teks beklemtoon.
 
+Die Engelse en Afrikaanse vertalings is vertaal van die Griekse {\em Textus
+Receptus}: die Engels was ingelig deur die vorige vertalings in Engels en ander
+tale, en die Afrikaans het die Hollandse Statenvertaling as beginpunt gebruik.
+Beide die Ou Vertaling van 1953 en die KJV is beter as die nuwe vertalings wat
+op hulle gevolg het, omdat nuwe vertalings 'n minderwaardige kunsmatige moderne
+Griekse teks vertaal, en foutiewe ideës oor vertaling gebruik.
+
 Die Engelse teks is die Bybel van 1611 gemagtig deur Koning James van Engeland,
 met die spelling en leesteken hersienings van 1769 (KJV).  Die Afrikaanse teks
 is die Bybel van 1933 uitgesit in opdrag van die Gesamentlike Komissie
 Vertenwoordigende die Drie Hollandse Kerke in Suid-Afrika, soos hersien in 1953
 deur die Bybelgenootskap van Suid-Afrika. 
 
-Albei vertalings is vertaal van die Griekse {\em Textus Receptus}: die Engels
-was ingelig deur die vorige vertalings in Engels en ander tale, en die
-Afrikaans het die Hollandse Statenvertaling as beginpunt gebruik.  Beide die Ou
-Vertaling van 1953 en die KJV is beter as die nuwe vertalings wat op hulle
-gevolg het, omdat nuwe vertalings 'n minderwaardige kunsmatige moderne Griekse
-teks vertaal, en foutiewe ideës oor vertaling gebruik.
 \end{afrikaans}
 }
 

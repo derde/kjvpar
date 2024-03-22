@@ -6,19 +6,16 @@
 }
 \newcommand\mybooktitlename[1]{%
     \noindent
-    \null
-    \hfill\tiny #1\hfill\null
-    \break\noindent\normalsize
+    \null\hfill\tiny #1\normalsize\hfill\null
+    \normalsize\par
 }
 \newcommand\mybooktitlebox[1]{%
     \noindent
-    \null% needed?
-    \hfill%center it
-    \raisebox{0.6\baselineskip}[0.5\baselineskip][0pt]{%
-        \mybooktitletextbf{\mybooktitlefont\mybooktitlesettings #1}}%
-    \bookheadingstrut{2\baselineskip}% assume that the paragraph above did the trick ...
-    \hfill%center it
-    \null
+    \null\hfill%center it
+        \bookheadingstrut{2\baselineskip}% assume that the paragraph above did the trick ...
+        \raisebox{0.9\baselineskip}[0.5\baselineskip][0pt]{%
+            \mybooktitletextbf{\mybooktitlefont\mybooktitlesettings #1}}%
+    \hfill\null
 }
 
 \def\mybooktitlesettings{%
@@ -49,7 +46,7 @@
 \def\mybookspace{6.0\baselineskip}% needspace for chapter title (should be 2\baselineskip - but in multicolumn, it doesn't work)
 \def\mychapterraise{1pt}% push the chapter number up this much
 \def\myverseraise{2pt}% verse number superscript scaling
-\def\myversehspace{0.8pt}% space after verse number
+\def\myversehspace{1pt plus 1pt}% space after verse number
 \def\myverseahspace{\myversehspace}% space after verse number before A
 \def\myboldness{FakeBold=1.01,}\def\myboldness{}%FakeBold is binary on/off, it seems
 %\def\myletterspace{LetterSpace=0 plus 4 minus 0}

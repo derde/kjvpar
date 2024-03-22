@@ -149,7 +149,7 @@ class Verse:
         newhighlight=''
         endhighlight=''
         if self.ref in self.bibleparser.highlights:
-            newhighlight=r'\textbf{'
+            newhighlight=r'\PPhighlight{'
             endhighlight='}'
         reference=self.getreferencename()
         booktitle,booktitlename=self.bibleparser.getbooktitle(self.ref[0]).strip('{}').split('{',1)

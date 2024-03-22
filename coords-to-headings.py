@@ -43,7 +43,7 @@ def iteraterefs(coords):
         posy_m=posy_re.search(line)
         if page_m:
             ppref,page = page_m.groups()
-            pages[ppref]=page
+            pages[ppref.strip('z')]=page
         if posy_m:
             ppref,x,y = posy_m.groups()
             page=pages[ppref]
