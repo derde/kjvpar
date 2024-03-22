@@ -655,11 +655,15 @@ Words of Christ in black.\par
 
 
 \gdef\ppGospelEN{%
+    \begin{english}%
+    \mygospelfont%
     \input{ppenaf-gospel-outline.tex}
+    \end{english}%
 }
 \gdef\ppGospelAF{%
     \begin{afrikaans}%
-    \input{ppenaf-gospel-outline.af.tex}%
+        \mygospelfont%
+        \input{ppenaf-gospel-outline.af.tex}%
     \end{afrikaans}
 }
 \gdef\ppgospeloutlinepage{%
@@ -667,7 +671,6 @@ Words of Christ in black.\par
     %\thispagestyle{noheadings}%
     {% preface
         \baselineskip=7.4pt%
-        \mygospelfont%
         \begin{paracol}{2}%
             \begin{leftcolumn}\ppGospelEN\end{leftcolumn}%
             \begin{rightcolumn}\ppGospelAF\end{rightcolumn}%
