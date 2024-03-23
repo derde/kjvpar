@@ -476,7 +476,7 @@ def setup():
     zu = BibleParser(zusettings)
     af = BibleParser(afsettings)
     gr = BibleParser(grsettings)
-    allversions=[en,af]
+    allversions=[af,en]
     paragraphs=readverselistfile('paragraphs.txt',en)
     highlights=readverselistfile('highlights.txt',en)
     en.highlights=highlights

@@ -78,7 +78,6 @@
 %\def\myfontstretch{0.875}
 \def\myletterspace{}
 \def\myextradisplay{}
-\def\mytoccolumns{3}
 \def\mychapterscale{0.95}
 \def\myversescale{0.80}
 \def\myverseraise{1pt}% =~ (\baselineskip+\fontsize)/2 - \fontsize*\myversescale)
@@ -311,10 +310,10 @@ wit-ness-eth work-eth wor-ship-peth yield-eth Tro-phi-mus}
     \setcounter{ppmarker}{\mypagecount}%
     \addtocounter{ppmarker}{-\thepage}%
 }
-\fancyhead[ER]{\pphcentre{\myheadingfont \textbf{\ppget{AFrange}{\thepage}}}\calcppmarker\PPbookmarker{\theppmarker}}% Top right header
-\fancyhead[OR]{\pphcentre{\myheadingfont \textbf{\ppget{AFrange}{\thepage}}}\PPpagemarker{\theppbookno}}% Top right header
-\fancyhead[EL]{\pphcentre{\myheadingfont \textbf{\ppget{ENrange}{\thepage}}}}% Top left header - leading dash is to discourage accidental reading of the heading
-\fancyhead[OL]{\pphcentre{\myheadingfont \textbf{\ppget{ENrange}{\thepage}}}}% Top left header - leading dash is to discourage accidental reading of the heading
+\fancyhead[ER]{\pphcentre{\myheadingfont \textbf{\ppget{ENrange}{\thepage}}}\calcppmarker\PPbookmarker{\theppmarker}}% Top right header
+\fancyhead[OR]{\pphcentre{\myheadingfont \textbf{\ppget{ENrange}{\thepage}}}\PPpagemarker{\theppbookno}}% Top right header
+\fancyhead[EL]{\pphcentre{\myheadingfont \textbf{\ppget{AFrange}{\thepage}}}}% Top left header - leading dash is to discourage accidental reading of the heading
+\fancyhead[OL]{\pphcentre{\myheadingfont \textbf{\ppget{AFrange}{\thepage}}}}% Top left header - leading dash is to discourage accidental reading of the heading
 \fancyhead[C]{\myheadingfont {\thepage}}% Center footer - bold is less readable
 \renewcommand{\headrulewidth}{0.0pt}% lines just amplify the skewness of skewly printed pages 
 \renewcommand{\footrulewidth}{0.0pt}%
@@ -413,8 +412,10 @@ wit-ness-eth work-eth wor-ship-peth yield-eth Tro-phi-mus}
 \newcommand{\PPswlang}{}% Done with this language: fill up the column vertically
 \newcommand{\PPnewlang}{}
 \newcommand{\pplang}[1]{}
-\newcommand{\PPnewlangEN}{\begin{paracol}{2}\begin{leftcolumn}\renewcommand\pplang[1]{\begin{english}##1\end{english}}\gdef\somelanguage{en}}
-\newcommand{\PPnewlangAF}{\begin{rightcolumn}\renewcommand\pplang[1]{\begin{afrikaans}\myfontAF##1\end{afrikaans}}\gdef\somelanguage{af}}
+%\newcommand{\PPnewlangEN}{\begin{paracol}{2}\begin{leftcolumn}\renewcommand\pplang[1]{\begin{english}##1\end{english}}\gdef\somelanguage{en}}
+%\newcommand{\PPnewlangAF}{\begin{rightcolumn}\renewcommand\pplang[1]{\begin{afrikaans}\myfontAF##1\end{afrikaans}}\gdef\somelanguage{af}}
+\newcommand{\PPnewlangAF}{\begin{paracol}{2}\begin{leftcolumn}\renewcommand\pplang[1]{\begin{afrikaans}\myfontAF##1\end{afrikaans}}}
+\newcommand{\PPnewlangEN}{\begin{rightcolumn}\renewcommand\pplang[1]{\begin{english}##1\end{english}}}
 \newcounter{ppbookno}
 \newcommand{\PPnewbook}{\mybooktitlepreamble\addtocounter{ppbookno}{18}}
 %\newcommand{\PPbook}[1]{\mybooktitlebox{#1}}
@@ -439,8 +440,8 @@ wit-ness-eth work-eth wor-ship-peth yield-eth Tro-phi-mus}
 \newcommand{\PPhighlight}[1]{\marginpar{†}\textbf{#1}}%
 \newcommand{\PPpsalmauthor}[1]{}% Omit
 \newcommand{\PPendlang}{}
-\newcommand{\PPendlangEN}{\end{leftcolumn}}
-\newcommand{\PPendlangAF}{\end{rightcolumn}\end{paracol}}
+\newcommand{\PPendlangAF}{\end{leftcolumn}}
+\newcommand{\PPendlangEN}{\end{rightcolumn}\end{paracol}}
 \newcommand{\PPendchapter}{}%
 \newcommand{\PPendbook}{}
 \newcommand{\PPend}{\par}
@@ -600,8 +601,8 @@ deur die Bybelgenootskap van Suid-Afrika.
 \gdef\ppinfopage{
 % preface
 \begin{paracol}{2}%
-    \begin{leftcolumn}\ppPrefaceEN\end{leftcolumn}%
-    \begin{rightcolumn}\ppPrefaceAF\end{rightcolumn}%
+    \begin{leftcolumn}\ppPrefaceAF\end{leftcolumn}%
+    \begin{rightcolumn}\ppPrefaceEN\end{rightcolumn}%
 \end{paracol}
 % skip
 % \spaceskip=0.33em\relax
@@ -664,8 +665,8 @@ Words of Christ in black.\par
     {% preface
         \baselineskip=7.4pt%
         \begin{paracol}{2}%
-            \begin{leftcolumn}\ppGospelEN\end{leftcolumn}%
-            \begin{rightcolumn}\ppGospelAF\end{rightcolumn}%
+            \begin{leftcolumn}\ppGospelAF\end{leftcolumn}%
+            \begin{rightcolumn}\ppGospelEN\end{rightcolumn}%
         \end{paracol}%
     }%
 }
@@ -685,21 +686,6 @@ Words of Christ in black.\par
 \null
 \begin{paracol}{2}%
     \begin{leftcolumn}%
-        \begin{english}%
-        {\centering
-            {\noindent\bookheadingstrut{3\baselineskip}{\mybooktitlefont\mybooktitlesettingsz\mybooktitletextbf{HOLY BIBLE}}}\par% King James Bible
-            {\noindent Authorised Version, 1611}\par
-            {\noindent New Testament}\par% kjvtex compactt
-        }%
-        \null\par
-        \ifdefined\PPtocEN{\PPtocEN}\fi\par
-        \bookheadingstrut{3\baselineskip}\null\par
-        {\centering
-            {\noindent \em How beautiful are the feet of them that preach the gospel of peace, and bring glad tidings of good things!}\par
-        }%
-        \end{english}%
-    \end{leftcolumn}%
-    \begin{rightcolumn}%
         \begin{afrikaans}%
         {\centering
             {\noindent\bookheadingstrut{3\baselineskip}{\mybooktitlefont\mybooktitlesettingsz\mybooktitletextbf{DIE BYBEL}}}\par% King James Bible
@@ -714,6 +700,21 @@ Words of Christ in black.\par
         }%
         \bookheadingstrut{3\baselineskip}\null\par
         \end{afrikaans}%
+    \end{leftcolumn}%
+    \begin{rightcolumn}%
+        \begin{english}%
+        {\centering
+            {\noindent\bookheadingstrut{3\baselineskip}{\mybooktitlefont\mybooktitlesettingsz\mybooktitletextbf{HOLY BIBLE}}}\par% King James Bible
+            {\noindent Authorised Version, 1611}\par
+            {\noindent New Testament}\par% kjvtex compactt
+        }%
+        \null\par
+        \ifdefined\PPtocEN{\PPtocEN}\fi\par
+        \bookheadingstrut{3\baselineskip}\null\par
+        {\centering
+            {\noindent \em How beautiful are the feet of them that preach the gospel of peace, and bring glad tidings of good things!}\par
+        }%
+        \end{english}%
     \end{rightcolumn}%
 \end{paracol}%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
