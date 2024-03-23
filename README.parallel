@@ -30,21 +30,21 @@ Checklist: DONE :
     🗸 Title: KJV 1953 Afrikaans Parallel Bible New Testament 2024; Publisher: Calvary Hope Baptist Church
     🗸 ISBN number (sent 2024-03-16) 978-0-7961-6044-7
     🗸 Cover page
+    🗸 Star the highlighted verses (\marginpar does an okay job)
+    🗸 Chapter position and size ... and wrapping (made chapter size so that "2 Thessalonicense" fits), adjusted strut vertical by -0.7pt to keep register-true
+    🗸 Inter-book spacing - at the begin of a new page, just the title, intra page, a separator line - uspecially book at the beginning of a new page, (formatting? line?) (looks better now)
 Checklist: REVIEW :
     Check English and Afrikaans hyphenation
     Check font for all Afrikaans accents for spacing, kerning, etc:  !-—’”„ ok: ËÉáäéêëíïóòôúüý OT only: ēōÓÚŌ; high, but no collisions: ÁÍ; high, can lowercase: Ê -- review kerning of accented letters
     Check for chapters and booknames orphaned at the end of the page (needspace adjustment for book and chapter)
-Checklist: TODO :
-    Star the highlighted verses
+    Register-true: check back-front spacing remains on-grid
+    Number of pages must match design/quote: adjust margins, and recheck all (stairstep, badness, chapters all on pages)
+Checklist: TODO:
     Read-it-yourself gospel instructions through highlighted verses: circle-number the verses, and provide page references in the outline
     🗸Special text page: Cover page
-    Special text page: Preface to KJV (extract)
-    Special text page: Preface to 1953 (extract)
     Manual Paragraph breaks: John to Revelation (copy from paragraph bible)
     Somehow align stair-stepped parallel columns - but first do paragraph breaks
-    Chapter position and size ... and wrapping
     🗸 Titles for books (The Gospel According to St Matthew)
-    Inter-book spacing - at the begin of a new page, just the title, intra page, a separator line - uspecially book at the beginning of a new page, (formatting? line?)
     🗸 Book titles that don't fit - 2 Thessalonians (fixed by centering properly) now II Thessalonicense heading doesn't fit: make a plan (SᴍᴀʟʟCᴀᴘꜱ?) (made it a bit smaller -> 2->1.75)
     🗸 Cover design
     Font kerning (especially "PAULUS")
@@ -54,6 +54,8 @@ Checklist: TODO :
     🗸 Table of contents (!)
 Checklist: WONTFIX:
     Not done: Psalms: italics for Afrikaans titles (Psalms cut from book)
+    Not done: Special text page: Preface to KJV (extract)
+    Not done: Special text page: Preface to 1953 (extract)
 
 TODO: Future::
     KJV/Zulu
