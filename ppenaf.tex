@@ -55,8 +55,8 @@
 \def\mysansfontiiname{Liberation Sans}
 \def\mysansfontname{Liberation Sans}
 %\def\mysansfontname{[GrazeShorter.otf]}
-\def\myfontsize{9.50pt}
-\def\mybaseline{9.50pt}
+\def\myfontsize{9.20pt}
+\def\mybaseline{9.20pt}
 \def\myfontopts{
     BoldFont=[GrazeShorter-Bold.otf],
     ItalicFont=[GrazeShorter-Italic.otf],
@@ -67,8 +67,9 @@
 %8.57*59/56 = 9.02910714285714285714
 %0.968/59*56 = .91877966101694915240
 % This works, but it seems neater to squash the font, rather than reduce the inter-character spacing:
-\def\myfontstretch{0.925}
+\def\myfontstretch{0.935}
 \def\usepackages{%
+    \usepackage{anyfontsize}% suppress annoying warning ...
     \usepackage[tracking=alltext]{microtype}
     \usepackage{fp}% floating point arithmetic to calculate the actual stretch for Afrikaans
     \FPdiv{\myfontstretchAF}{\myfontstretch}{1.007109}%meh
@@ -382,12 +383,12 @@ wit-ness-eth work-eth wor-ship-peth yield-eth Tro-phi-mus}
 %\newwrite\coords\immediate\openout\coords=\jobname.coords%
 \newcommand{\ppsaveposition}[1]{% Save the print position, given a #1 label, and #2 reference
   \zlabel{z#1}%
-  \zsavepos{#1}%
+  \zsavepos{j#1}%
   %\edef\temp{#1,#2,x=\the\dimexpr\zposx{#1}sp\relax, y=\the\dimexpr\zposy{#1}sp,\zpageref{#1}}%
   %\immediate\write\coords{\temp,\thepage}%
 }
-\newcommand{\ppsavepositionj}[1]{% Save the print position, given a #1 label, and #2 reference
-  \zsavepos{j#1}%
+\newcommand{\ppsavepositionk}[1]{% Save the print position, given a #1 label, and #2 reference
+  \zsavepos{k#1}%
   %\edef\temp{#1,#2,x=\the\dimexpr\zposx{#1}sp\relax, y=\the\dimexpr\zposy{#1}sp,\zpageref{#1}}%
   %\immediate\write\coords{\temp,\thepage}%
 }
@@ -427,19 +428,21 @@ wit-ness-eth work-eth wor-ship-peth yield-eth Tro-phi-mus}
 %\newcommand{\PPbook}[1]{\mybooktitlebox{#1}}
 \newcommand{\PPbook}[1]{}
 \newcommand{\PPbooktitle}[2]{\mybooktitlename{#1}\mybooktitlebox{#2}}
-\newcommand{\PPchapter}[1]{\PPdropcapschapter{#1}}
+\newcommand{\PPchapterEN}[1]{\PPdropcapschapterNS{#1}}
+\newcommand{\PPchapterAF}[1]{\PPdropcapschapter{#1}}
+\newcommand{\PPchapter}[1]{}% Not this one
 % Heading for each book of the PPe: big text
 \newcommand{\PPverseref}[1]{\gdef\someverse{#1}\markboth{#1}{#1}}%
 %\newcommand{\PPendreference}[2]{\markboth{#1}{#1}\def\mythumbindex{#2}}%
-\newcommand{\PPversei}[4]{\PPmeasuretext{\PPverseref{#2}\ppsaveposition{#3}\versehskip\ppspacing\pplang{#4}\ppsavepositionj{#3}}}% the space after the verse is a thing
+\newcommand{\PPversei}[4]{\PPmeasuretext{\PPverseref{#2}\ppsaveposition{#3}\versehskip\ppspacing\pplang{#4}\ppsavepositionk{#3}}}% the space after the verse is a thing
 \newcommand{\PPverseii}[4]{%
   %\ifdim\PPparaheight<1.1\baselineskip%
   %  \PPsyntheticpar% KQ% continue on same line
   %\else
     \PPsyntheticparii% QK%
   %\fi
-\PPmeasuretext{\raisebox{\myverseraise}[0pt]{\myversefont\textbf{#1}}\ppsaveposition{#3}{\versehskip\PPverseref{#2}\ppspacing\pplang{#4}\ppsavepositionj{#3}}}}% the space after the verse is a thing
-\newcommand{\PPverse}[4]{\par\PPmeasuretext{\raisebox{\myverseraise}[0pt]{\myversefont\textbf{#1}}\ppsaveposition{#3}{\versehskip\PPverseref{#2}\ppspacing\pplang{#4}\ppsavepositionj{#3}}}}% the space after the verse is a thing
+\PPmeasuretext{\raisebox{\myverseraise}[0pt]{\myversefont\textbf{#1}}\ppsaveposition{#3}{\versehskip\PPverseref{#2}\ppspacing\pplang{#4}\ppsavepositionk{#3}}}}% the space after the verse is a thing
+\newcommand{\PPverse}[4]{\par\PPmeasuretext{\raisebox{\myverseraise}[0pt]{\myversefont\textbf{#1}}\ppsaveposition{#3}{\versehskip\PPverseref{#2}\ppspacing\pplang{#4}\ppsavepositionk{#3}}}}% the space after the verse is a thing
 \newcommand{\PPpostscript}[1]{} % omit postscripts - ignore parameter, which is the text of the postscript
 \newcommand{\PPpar}{\PPsyntheticparii}
 %\newcommand{\PPpsalmauthor}[1]{{\ppspacing\pplang{\em #1}}\PPsyntheticparii}
@@ -492,8 +495,8 @@ wit-ness-eth work-eth wor-ship-peth yield-eth Tro-phi-mus}
 %% \end{paracol}\nopagebreak}%
 %% \setlength{\abnormalparskip{1pt}}
 %%%%%%%%%%%%%%%%%%%%%%%%%
-%\newcommand{\PPdropcapschapter}[1]{\null\needspace{0.5\baselineskip}%
-\newcommand{\PPdropcapschapter}[1]{\needspace{\mychapterspace}% big mystery here ... for needspace within 2 column environment, this is the number of lines /2 /2 (ie div 4)
+\newcommand{\PPdropcapschapterNS}[1]{\needspace{\mychapterspace}\PPdropcapschapter{#1}}% big mystery here ... for needspace within 2 column environment, this is the number of lines /2 /2 (ie div 4)
+\newcommand{\PPdropcapschapter}[1]{% 
 %\lettrine[lines=2, lraise=0.05, lhang=0.00, findent=3pt, nindent=0pt, loversize=0.0]{\hspace{2pt}\textbf{\mychapterfont \smash{#1}}}{}}% bug: if you raise by 0.05, it breaks grid alignment for register-true 
   \lettrine[lines=2, lraise=0.00, lhang=0.00, findent=\mylettrinefindent, nindent=0pt, loversize=0.0]{\raisebox{\mychapterraise}[0pt]{\textbf{\mychapterfont\mychapterfontextra\color{mygray} #1}}}{}%
 }%
@@ -623,7 +626,10 @@ You may copy freely and republish in whole, or in part.\par
 \ifdefined\ENmottoii{\ENmottoii\par}\fi
 \null\par
 {\PPtocpre
-Typesetting by {\mylatexfont \LaTeX{}}, %
+Typesetting by %{\mylatexfont
+\LaTeX{}
+%}
+, %
 \myformattinginfoi
 \par
 Font

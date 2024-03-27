@@ -38,27 +38,30 @@ parallelfd.close()
 
 def iteraterefs(coords):
     # Find first and last reference on each page
-    # \zref@newlabel{zPPsq25917}{\default{}\page{3}\abspage{3}}
-    # \zref@newlabel{PPsq25917}{\posx{4159018}\posy{32177230}}
-    # \zref@newlabel{jPPsq25917}{\posx{8691775}\posy{30932046}}
-    page_re=re.compile(r'newlabel\{(z*)(PPsq.*?)\}.*\\page\{(\d+)\}')
-    posy_re=re.compile(r'newlabel\{(j*)(PPsq.*?)\}.*\\posx\{(\d+)\}\\posy\{(\d+)\}')
+    # \zref@newlabel{zPPEN25917}{\default{}\page{3}\abspage{3}}
+    # \zref@newlabel{jPPEN25917}{\posx{4159018}\posy{32177230}} % -> y0
+    # \zref@newlabel{kPPEN25917}{\posx{8691775}\posy{30932046}} % -> y1
+    page_re=re.compile(r'newlabel\{([z])(PP...*?)\}.*\\page\{(\d+)\}')
+    posy_re=re.compile(r'newlabel\{([jk])(PP...*?)\}.*\\posx\{(\d+)\}\\posy\{(\d+)\}')
     refinfo = {}
     for line in coords:
         page_m=page_re.search(line)
         posy_m=posy_re.search(line)
         if page_m:
-            z,ppref,page = page_m.groups()
+            j,ppref,page = page_m.groups()
             refinfo[ppref]={'page': page}
         if posy_m:
             try:
                 j,ppref,x,y = posy_m.groups()
-                if not j:
+                if j=='j':
                     refinfo[ppref]['x0']=int(x)
                     refinfo[ppref]['y0']=int(y)
-                else:
+                elif j=='k':
                     refinfo[ppref]['x1']=int(x)
                     refinfo[ppref]['y1']=int(y)
+                else:
+                    sys.stderr.write("bad ref "+ppref+'\n')
+                refinfo['zz']=ppref[5:7]
                 if 'y1' in refinfo[ppref] and 'y0' in refinfo[ppref]:
                     yield (ppref,refinfo[ppref])
             except KeyError:
@@ -66,9 +69,11 @@ def iteraterefs(coords):
 
 data={}        
 toc={'EN': [], 'AF': [] }
+lasty={'EN': 0, 'AF': 0 }
 fp=open('ppenaf.pararaphs.csv','w')
 fp.write('bcv,ref,dy,meh\n')
 for ppref,ref in iteraterefs(coords):
+    zz=ppref[5:7]
     y=ref['y0']
     page=ref['page']
     bcv=ref2bcv[ppref] # book,chapter,verse
@@ -80,8 +85,12 @@ for ppref,ref in iteraterefs(coords):
     if leftname not in p: p[leftname]=bcv
     p[rightname]=bcv
     
+    # Calculate space before this paragraph
+    space = lasty[zz] - ref['y0']
+    lasty[zz]=ref['y1']
+
     dy = ref['y0']-ref['y1']
-    fp.write(bcv+','+ppref+','+str(dy)+',meh\n')
+    fp.write(bcv+','+ppref+','+str(dy)+','+str(space)+'\n')
 
     if bcv.endswith(' 1:1'):
         book=bcv[:-4]

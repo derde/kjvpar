@@ -1,12 +1,12 @@
 ppenaf.pdf: pplayout.tex ppenaf.tex ppdefault.tex parallel.tex hyph-en.tex booktitles.ini md5sum.tex
-	-mv ppenaf.pdf ppenaf.last.pdf
+	-mv ppenaf.pdf ppenaf.last.pdf 
 	lualatex ppenaf.tex # for microtype
 	./coords-to-headings.py # parallel.aux -> ppenaf.headings.csv
 
 md5sum.tex: parallel.tex
 	grep '\\def' < parallel.tex > md5sum.tex
 
-parallel.tex: parallel.py paragraphs.txt ppenafnt.csv highlights.txt
+parallel.tex: parallel.py paragraphs.txt ppenafnt.csv highlights.txt paragraphs.csv
 	./parallel.py
 
 ppenaf.headings.csv: parallel.tex ppenaf.coords

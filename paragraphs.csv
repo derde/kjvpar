@@ -1335,10 +1335,10 @@ MATT 3:13	The Baptism of Jesus
 MATT 4:1	The Temptation of Jesus	
 MATT 4:12	Jesus Begins to Preach	
 MATT 4:18	The Calling of the First Disciples	
-MATT 4:23	Jesus Heals the Sick	
+#MATT 4:23	Jesus Heals the Sick	
 MATT 5:1	The Beatitudes	
 MATT 5:13	Salt and Light	
-MATT 5:17	The Fulfillment of the Law	
+# MATT 5:17	The Fulfillment of the Law	
 MATT 5:21	Murder	
 MATT 5:27	Adultery	
 MATT 5:31	Divorce	
@@ -1752,6 +1752,7 @@ ACTS 21:1	On to Jerusalem
 ACTS 21:17	Paul's Arrival at Jerusalem	
 ACTS 21:27	Paul Arrested	
 ACTS 21:37	Paul Speaks to the Crowd	
+ACTS 22:3	Paul's speech
 ACTS 22:22	Paul the Roman Citizen	
 ACTS 23:12	The Plot to Kill Paul	
 ACTS 23:23	Paul Transferred to Caesarea	

@@ -27,10 +27,10 @@ verseslookaheadextra=3  # look ahead this far, and don't orphan things
 debug=False
 
 seqnumber=10000
-def get_sequence():
+def get_sequence(tag):
     global seqnumber
     seqnumber+=1
-    o='PPsq'+str(seqnumber)
+    o='PPtag'+tag+str(seqnumber)
     return o
 
 alltemplates={
@@ -67,7 +67,7 @@ alltemplates={
         'newlang':    '\\PPnewlang\\PPnewlang%(zz)s',   # column
         'book':       '\\PPbook{%(bookname)s}\n',
         'booktitle':  '\\PPbooktitle{%(booktitle)s}{%(booktitlename)s}\n',
-        'chapter':    '\\PPchapter{%(chapter)s}',
+        'chapter':    '\\PPchapter{%(chapter)s}\\PPchapter%(zz)s{%(chapter)s}',
         'versei':     '\\PPversei{%(verse)s}{%(reference)s}{%(seq)s}{%(newhighlight)s%(itext)s%(endhighlight)s}\n',
         'verseii':    '\\PPverseii{%(verse)s}{%(reference)s}{%(seq)s}{%(newhighlight)s%(itext)s%(endhighlight)s}\n',
         'verse':      '\\PPverse{%(verse)s}{%(reference)s}{%(seq)s}{%(newhighlight)s%(itext)s%(endhighlight)s}\n',
@@ -180,7 +180,7 @@ class Verse:
             'endhighlight': endhighlight,
             'reference': reference,
             'REFERENCE': reference.upper(),
-            'seq': get_sequence(),
+            'seq': get_sequence(self.bibleparser.zz),
         }
     def __str__(self):
         return f'{self.bookname} {self.ref[1]}:{self.ref[2]}'
@@ -550,6 +550,7 @@ if __name__=="__main__":
                         fd.write(templates['booktitle'] % pairs)
                         fd.write(templates['book'] % pairs)
                     if verse.newchapter:
+                        pairs.update(vv.settings)
                         fd.write(templates['chapter'] % pairs)
                     # Epistle postscripts
                     text=verse.text
@@ -566,6 +567,7 @@ if __name__=="__main__":
                     if v==1: versetmpl ='versei'
                     elif v==2: versetmpl ='verseii'
                     else : versetmpl ='verse'
+                    if v==2 and verse.ref==(65,13,2): versetmpl='verse'   # Revelation 13:2: don't use breaky verse
                     fd.write(templates[versetmpl] % pairs)
                     if verse.endchapter:
                         fd.write(templates['endchapter'] % vv.settings)
