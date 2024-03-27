@@ -9,10 +9,21 @@ def index(dicty,i):
     keys=list(dicty.keys())
     return dicty[keys[i]]
 
+shortbooknames = [
+    'GEN', 'EXOD', 'LEV', 'NUM', 'DEUT', 'JOSH', 'JUDG', 'RUTH', '1SAM',
+    '2SAM', '1KGS', '2KGS', '1CHRON', '2CHRON', 'EZRA', 'NEH', 'ESTH', 'JOB',
+    'PS', 'PROV', 'ECC', 'SONG', 'ISA', 'JER', 'LAM', 'EZEK', 'DAN', 'HOSEA',
+    'JOEL', 'AMOS', 'OBAD', 'JONAH', 'MICAH', 'NAHUM', 'HAB', 'ZEPH', "HAGG",
+    'ZECH', 'MAL', 'MATT', 'MARK', 'LUKE', 'JOHN', 'ACTS', 'ROM', '1COR',
+    '2COR', 'GAL', 'EPH', 'PHIL', 'COL', '1THES', '2THES', '1TIM', '2TIM',
+    'TITUS', 'PHILEM', 'HEB', 'JAS', '1PET', '2PET', '1JOHN', '2JOHN', '3JOHN',
+    'JUDE', 'REV',
+]
+
 booktitlesini='booktitles.ini'
 rightmargin=21400
-maxchunk=10
-minchunk=5  # look ahead this far
+maxverseswithoutbreak=10
+verseslookaheadextra=3  # look ahead this far, and don't orphan things
 debug=False
 
 seqnumber=10000
@@ -27,7 +38,8 @@ alltemplates={
         'sourcefile':     '<b>%(zz)s</b>: md5sum <b>%(md5sum)s</b><p>',
         'new':        '<!-- Begin -->',
         'newbook':    '<table>',
-        'newchapter': '<tr>',
+        'newchapter': '',
+        'newpair':    '<tr bgcolor="#EEE">',
         'swlang':     '',
         'newlang':    '<td>',
         'book':       '<H1>%(book)s</H1>\n',
@@ -37,7 +49,8 @@ alltemplates={
         'verseii':    '<p><sup>%(verse)s</sup> %(itext)s</p>\n',
         'verse':      '<p><sup>%(verse)s</sup> %(itext)s</p>\n',
         'endlang':    '</td>',
-        'endchapter': '</tr>',
+        'endpair':    '</tr>',
+        'endchapter': '',
         'endbook':    '</table>',
         'end':        '<!-- End -->',
         'italics':    '<i>%(italics)s</i>',
@@ -50,6 +63,7 @@ alltemplates={
         'newbook':    '\\PPnewbook',
         'newchapter': '\\PPnewchapter\\PPnewchapter%(zz)s', #  synchronise left/right
         'swlang':     '\\PPswlang',   # switch between languages
+        'newpair':    '',
         'newlang':    '\\PPnewlang\\PPnewlang%(zz)s',   # column
         'book':       '\\PPbook{%(bookname)s}\n',
         'booktitle':  '\\PPbooktitle{%(booktitle)s}{%(booktitlename)s}\n',
@@ -59,6 +73,7 @@ alltemplates={
         'verse':      '\\PPverse{%(verse)s}{%(reference)s}{%(seq)s}{%(newhighlight)s%(itext)s%(endhighlight)s}\n',
         'endlang':    '\\PPendlang%(zz)s\\PPendlang',   # /column
         'endchapter': '\\PPendchapter\\PPendchapter%(zz)s',
+        'endpair':    '',
         'endbook':    '\\PPendbook\n',
         'end':        '\\PPend',
         'italics':    '{\\em %(italics)s}',
@@ -275,7 +290,7 @@ class BibleParser:
             else:
                 print(self.zz+': cannot find ref '+str(ref)+': '+self.reftostr(ref))
 
-    def moreparagraphbreaks(self,other,margin):
+    def moreversesynchpoints(self,other,margin):
         # Have paragraph syncs every few verses
         runlength=0
         leftlines=0
@@ -294,22 +309,26 @@ class BibleParser:
             if verse.newparagraph:
                 runlength=0
                 shouldbreaksoon=0
+                leftlines=0
+                rightlines=0
             runlength+=1
-            if runlength>maxchunk or (shouldbreaksoon and runlength > 1):
+            if runlength>maxverseswithoutbreak or (shouldbreaksoon and runlength > 1):
                 # Don't break if we are about to do a paragraph break soon anyway:
                 breakingsoon=False
-                for j in range(1+i,1+i+minchunk):
+                for j in range(1+i,1+i+verseslookaheadextra): # look ahead
                     if j>=len(self.snippets):
                         break
                     if self.snippets[j].newparagraph:
                         breakingsoon=True
                 if not breakingsoon:
+                    # Count stats for reason
                     if shouldbreaksoon:
                         linematchbreak+=1
                         if debug: verse.text='*'+verse.text # Mangle output for debug
                     else:
                         runlengthcount+=1
                         if debug: verse.text='"'+verse.text # Mangle output for debug
+                    # MARK THIS AS A NEW PARAGRAPH VERSE::
                     verse.newparagraph=True
                     runlength=0
                     leftlines=0
@@ -366,14 +385,17 @@ def attribution(m):
     return templates['attribution'] % r
 
 
-def readverselist(filename,language):
+def readverselist(filename,language,shortbooknames=None):
     "Iterate the verses in the file, returning a list of ref's"
     fd=open(filename,'r')
     for line in fd:
+        line=re.sub('#.*','',line)
+        if not line.strip(): continue
         m=re.search(' \d+:',line) 
         i,ii=m.span(0)
         bookname=line[:i]
         chapter=0
+        line=re.sub("\s[' \tA-Za-z,.]*$|\t.*",'',line)
         for bit in line[i:].strip().split():
             m=re.search('^(\d+):(\d+)|(\d+)$',bit)
             mchapter,mverse,mmverse = m.groups()
@@ -383,15 +405,18 @@ def readverselist(filename,language):
                 verse=int(mverse)
             else:
                 verse=int(mmverse)
-            bookindex=language.bookindex(bookname)
+            if shortbooknames and bookname in shortbooknames:
+                bookindex=shortbooknames.index(bookname)
+            else:
+                bookindex=language.bookindex(bookname)
             ref=(bookindex,chapter,verse)
             yield ref
     fd.close()
 
-def readverselistfile(filename,language):
+def readverselistfile(filename,language,shortbooknames=None):
     "language: look up paragraph book names in this language"
     paragraphs={}
-    for ref in readverselist(filename,language):
+    for ref in readverselist(filename,language,shortbooknames=shortbooknames):
         paragraphs[ref]=True
     return paragraphs
 
@@ -399,14 +424,21 @@ def readverselistfile(filename,language):
 # Read from a parallel spec file
 def iterateparallel(csvfeed,en,af):
     concurrent=None
+    keepwithnextcount=0
     for line in csvfeed:
         if len(line)==0: continue
         if len(line)<3: line.extend(['','',''])
         cmd,lineEN,lineAF=line[:3]
-        if lineEN and lineAF:
+        if (lineEN and lineAF) and keepwithnextcount==0:
             if concurrent:
                 yield concurrent
             concurrent={en.zz:[],af.zz:[]}
+        if keepwithnextcount:
+            keepwithnextcount -= 1
+        keepwithnextAF = ( cmd.find('/af:keepwithnext')>=0 )
+        keepwithnextEN = ( cmd.find('/en:keepwithnext')>=0 )
+        if keepwithnextAF or keepwithnextEN:
+            keepwithnextcount += 1
         refEN=en.linetoref(lineEN)
         refAF=af.linetoref(lineAF)
         if refEN: concurrent[en.zz].append(refEN)
@@ -477,7 +509,7 @@ def setup():
     af = BibleParser(afsettings)
     gr = BibleParser(grsettings)
     allversions=[af,en]
-    paragraphs=readverselistfile('paragraphs.txt',en)
+    paragraphs=readverselistfile('paragraphs.csv',en,shortbooknames)
     highlights=readverselistfile('highlights.txt',en)
     en.highlights=highlights
     af.highlights=highlights
@@ -487,7 +519,7 @@ def setup():
     zu.registerparagraphbreaks(paragraphs)
     # gr.registerparagraphbreaks(paragraphs)
     buildparallelsequence('ppenafnt.csv',en,af)
-    en.moreparagraphbreaks(af,22000)
+    en.moreversesynchpoints(af,22000)
     
 setup()
 
@@ -506,6 +538,7 @@ if __name__=="__main__":
             if peek[0].newbook:
                 fd.write(templates['newbook'])
             endbook=False
+            fd.write(templates['newpair'])
             for vv in allversions:
                 if vv!=allversions[0]:
                     fd.write(templates['swlang'] % vv.settings)
@@ -538,6 +571,7 @@ if __name__=="__main__":
                         fd.write(templates['endchapter'] % vv.settings)
                     endbook = endbook or verse.endbook
                 fd.write(templates['endlang'] % vv.settings)
+            fd.write(templates['endpair'])
             if endbook:
                 fd.write(templates['endbook'] % vv.settings)
             pass

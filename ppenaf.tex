@@ -174,7 +174,8 @@ You may copy freely and republish in whole, or in part.\par}
 \hyphenation{
 % older forms missing from modern dictionary: *est
 cove-nant-ed
-cove-nant-break-ers Je-ru-sa-lem Oli-vet De-me-trius breth-ren Ti-mo-theus
+cove-nant-break-ers Je-ru-sa-lem Oli-vet De-me-trius breth-ren Ti-mo-theus Ste-pha-nas
+Na-than-ael
 ab-hor-rest ac-cep-test ap-prov-est ask-est bap-tiz-est bar-est bear-est be-hold-est
 be-liev-est be-tray-est blas-phem-est bring-est build-est call-est cam-est
 car-est chief-est com-est com-mand-est com-pel-lest con-demn-est con-si-der-est
@@ -229,7 +230,7 @@ un-der-stand-eth up-braid-eth vanish-eth vaunt-eth wait-eth walk-eth warr-eth
 watch-eth wa-ter-eth wa-ver-eth wax-eth wear-eth will-eth wi-ther-eth with-hold-eth
 wit-ness-eth work-eth wor-ship-peth yield-eth Tro-phi-mus}
 %%
-\def\mymargins{left=10.0mm,top=10mm,right=7.0mm,bottom=7mm,bindingoffset=1mm,headheight=7mm}
+\def\mymargins{left=10.0mm,top=10mm,right=10.0mm,bottom=7mm,bindingoffset=1mm,headheight=7mm}
 \def\mypapersize{135mm,195mm}% A5, less 6.5mm right facing/reverse, and 7.5mm top and bottom
 %%
 \usepackage[fontsize=\myfontsize,baseline=\mybaseline]{grid}% Register-true printing (back and front of page match)
@@ -379,9 +380,14 @@ wit-ness-eth work-eth wor-ship-peth yield-eth Tro-phi-mus}
 %%  \setsecheadstyle{\marginhead}
 \def\hebrewleader{}%
 %\newwrite\coords\immediate\openout\coords=\jobname.coords%
-\newcommand{\ppsaveposition}[2]{% Save the print position, given a #1 label, and #2 reference
+\newcommand{\ppsaveposition}[1]{% Save the print position, given a #1 label, and #2 reference
   \zlabel{z#1}%
   \zsavepos{#1}%
+  %\edef\temp{#1,#2,x=\the\dimexpr\zposx{#1}sp\relax, y=\the\dimexpr\zposy{#1}sp,\zpageref{#1}}%
+  %\immediate\write\coords{\temp,\thepage}%
+}
+\newcommand{\ppsavepositionj}[1]{% Save the print position, given a #1 label, and #2 reference
+  \zsavepos{j#1}%
   %\edef\temp{#1,#2,x=\the\dimexpr\zposx{#1}sp\relax, y=\the\dimexpr\zposy{#1}sp,\zpageref{#1}}%
   %\immediate\write\coords{\temp,\thepage}%
 }
@@ -417,7 +423,7 @@ wit-ness-eth work-eth wor-ship-peth yield-eth Tro-phi-mus}
 \newcommand{\PPnewlangAF}{\begin{paracol}{2}\begin{leftcolumn}\renewcommand\pplang[1]{\begin{afrikaans}\myfontAF##1\end{afrikaans}}}
 \newcommand{\PPnewlangEN}{\begin{rightcolumn}\renewcommand\pplang[1]{\begin{english}##1\end{english}}}
 \newcounter{ppbookno}
-\newcommand{\PPnewbook}{\mybooktitlepreamble\addtocounter{ppbookno}{18}}
+\newcommand{\PPnewbook}{\mybooktitlepreamble\addtocounter{ppbookno}{18}}%ppbookno sets the thumbnail marker position
 %\newcommand{\PPbook}[1]{\mybooktitlebox{#1}}
 \newcommand{\PPbook}[1]{}
 \newcommand{\PPbooktitle}[2]{\mybooktitlename{#1}\mybooktitlebox{#2}}
@@ -425,15 +431,15 @@ wit-ness-eth work-eth wor-ship-peth yield-eth Tro-phi-mus}
 % Heading for each book of the PPe: big text
 \newcommand{\PPverseref}[1]{\gdef\someverse{#1}\markboth{#1}{#1}}%
 %\newcommand{\PPendreference}[2]{\markboth{#1}{#1}\def\mythumbindex{#2}}%
-\newcommand{\PPversei}[4]{\PPmeasuretext{\PPverseref{#2}\ppsaveposition{#3}{#2}\versehskip\ppspacing\pplang{#4}}}% the space after the verse is a thing
+\newcommand{\PPversei}[4]{\PPmeasuretext{\PPverseref{#2}\ppsaveposition{#3}\versehskip\ppspacing\pplang{#4}\ppsavepositionj{#3}}}% the space after the verse is a thing
 \newcommand{\PPverseii}[4]{%
   %\ifdim\PPparaheight<1.1\baselineskip%
   %  \PPsyntheticpar% KQ% continue on same line
   %\else
     \PPsyntheticparii% QK%
   %\fi
-\PPmeasuretext{\raisebox{\myverseraise}[0pt]{\myversefont\textbf{#1}}\ppsaveposition{#3}{#2}{\versehskip\PPverseref{#2}\ppspacing\pplang{#4}}}}% the space after the verse is a thing
-\newcommand{\PPverse}[4]{\par\PPmeasuretext{\raisebox{\myverseraise}[0pt]{\myversefont\textbf{#1}}\ppsaveposition{#3}{#2}{\versehskip\PPverseref{#2}\ppspacing\pplang{#4}}}}% the space after the verse is a thing
+\PPmeasuretext{\raisebox{\myverseraise}[0pt]{\myversefont\textbf{#1}}\ppsaveposition{#3}{\versehskip\PPverseref{#2}\ppspacing\pplang{#4}\ppsavepositionj{#3}}}}% the space after the verse is a thing
+\newcommand{\PPverse}[4]{\par\PPmeasuretext{\raisebox{\myverseraise}[0pt]{\myversefont\textbf{#1}}\ppsaveposition{#3}{\versehskip\PPverseref{#2}\ppspacing\pplang{#4}\ppsavepositionj{#3}}}}% the space after the verse is a thing
 \newcommand{\PPpostscript}[1]{} % omit postscripts - ignore parameter, which is the text of the postscript
 \newcommand{\PPpar}{\PPsyntheticparii}
 %\newcommand{\PPpsalmauthor}[1]{{\ppspacing\pplang{\em #1}}\PPsyntheticparii}
@@ -567,10 +573,9 @@ modern revision of the text, and use faulty theories of translation.
 
 The English text is the Bible of 1611 authorised by King James of England, with
 the spelling and capitalisation revisions of 1769.  The Afrikaans text is the
-Bible of 1933, published by the decision of hte join commission representing
+Bible of 1933, published by the decision of the joint commission representing
 the three Dutch Churches in South Africa, as revised in 1953 by the Bible
 Society of South Africa.
-
 }
 
 \def\ppPrefaceAF{\begin{afrikaans}
@@ -578,7 +583,7 @@ Society of South Africa.
 {\noindent\null\hfill \color{mygray}\textbf{Calvary Hope Baptist Church}\hfill\null}
 
 \noindent Dié Bybel is deur Calvary Hope Baptist Church (Kaapstad) gedruk vir die
-bevordering van die Evangelie van Jesus Christus in Suid Afrika.  Enkele verse
+bevordering van die Evangelie van Jesus Christus in Suid-Afrika.  Enkele verse
 wat dikwels gebruik word om die Evangelie van Chrisus met eenvoudigheid te leer
 is in die teks beklemtoon.
 
@@ -735,7 +740,9 @@ Words of Christ in black.\par
 %%%%
 \setlength{\columnsep}{24pt}
 \setlength{\columnseprule}{0.1pt}%
-\ppFrontMatter
+%\ppFrontMatter
+    \pptitlepage%  title page
+    \ppinfopage%   print info page
 \setlength{\columnsep}{12pt}
 \setlength{\columnseprule}{0.4pt}%
 %\ppblankagain%blank again

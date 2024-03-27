@@ -50,8 +50,9 @@ Checklist: TODO:
     Font kerning (especially "PAULUS")
     Check font for all Afrikaans italics accents for spacing, kerning, etc (are there italics though?)
     Afrikaans: LEADING CAPS resolution (e.g. leave it, sMALLcAPS, ?) - Check for presentation of CAPITALISED PHRASES: consider smallcaps
-    Print a physical proof
+    🗸 Print a physical proof
     🗸 Table of contents (!)
+    Derive lines-per-paragraph from differences between y0 and y1 for each paragraph in coords-to-headings.py and figure out where to put discretionary blank lines
 Checklist: WONTFIX:
     Not done: Psalms: italics for Afrikaans titles (Psalms cut from book)
     Not done: Special text page: Preface to KJV (extract)

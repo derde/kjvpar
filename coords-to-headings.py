@@ -1,5 +1,8 @@
 #! /usr/bin/python3
+
 import re
+import sys
+
 # Fri Mar 08 16:43:15 ~/src/kjvpar $ grep PPsq25928 parallel.tex ppenaf.coords
 
 # oparallel.tex:\PPendlangEN\PPendlang\PPswlang\PPnewlang\PPnewlangAF\PPverse{4}{Matthéüs
@@ -35,35 +38,55 @@ parallelfd.close()
 
 def iteraterefs(coords):
     # Find first and last reference on each page
-    page_re=re.compile(r'newlabel\{(.*?)\}.*\\page\{(\d+)\}')
-    posy_re=re.compile(r'newlabel\{(.*?)\}.*\\posx\{(\d+)\}\\posy\{(\d+)\}')
-    pages = {}
+    # \zref@newlabel{zPPsq25917}{\default{}\page{3}\abspage{3}}
+    # \zref@newlabel{PPsq25917}{\posx{4159018}\posy{32177230}}
+    # \zref@newlabel{jPPsq25917}{\posx{8691775}\posy{30932046}}
+    page_re=re.compile(r'newlabel\{(z*)(PPsq.*?)\}.*\\page\{(\d+)\}')
+    posy_re=re.compile(r'newlabel\{(j*)(PPsq.*?)\}.*\\posx\{(\d+)\}\\posy\{(\d+)\}')
+    refinfo = {}
     for line in coords:
         page_m=page_re.search(line)
         posy_m=posy_re.search(line)
         if page_m:
-            ppref,page = page_m.groups()
-            pages[ppref.strip('z')]=page
+            z,ppref,page = page_m.groups()
+            refinfo[ppref]={'page': page}
         if posy_m:
-            ppref,x,y = posy_m.groups()
-            page=pages[ppref]
-            yield (ppref,x,y,page)
+            try:
+                j,ppref,x,y = posy_m.groups()
+                if not j:
+                    refinfo[ppref]['x0']=int(x)
+                    refinfo[ppref]['y0']=int(y)
+                else:
+                    refinfo[ppref]['x1']=int(x)
+                    refinfo[ppref]['y1']=int(y)
+                if 'y1' in refinfo[ppref] and 'y0' in refinfo[ppref]:
+                    yield (ppref,refinfo[ppref])
+            except KeyError:
+                sys.stderr.write(f'Missing ref on page {page}\n')
 
 data={}        
 toc={'EN': [], 'AF': [] }
-for ppref,x,y,page in iteraterefs(coords):
+fp=open('ppenaf.pararaphs.csv','w')
+fp.write('bcv,ref,dy,meh\n')
+for ppref,ref in iteraterefs(coords):
+    y=ref['y0']
+    page=ref['page']
     bcv=ref2bcv[ppref] # book,chapter,verse
-    p=data.setdefault(page,{})
+    p=data.setdefault(page,ref)
     p['page']=int(page)
     lang=ref2lang[ppref]
     rightname = lang+'right'
     leftname = lang+'left'
     if leftname not in p: p[leftname]=bcv
     p[rightname]=bcv
+    
+    dy = ref['y0']-ref['y1']
+    fp.write(bcv+','+ppref+','+str(dy)+',meh\n')
 
     if bcv.endswith(' 1:1'):
         book=bcv[:-4]
-        toc[lang].append('\\PPtoc{'+book+'}{'+page+'}\n')
+        toc[lang].append('\\PPtoc{'+book+'}{'+str(ref['page'])+'}\n')
+fp.close()
 
 def decoderef(ref):
     m=re.search(r'^(.*) (\d+):(\d+)',ref)
@@ -99,7 +122,9 @@ ft.write(r'''% Store by value
 
 fo.write('page,enleft,enright,afleft,afright,entitle,aftitle\n')
 for p in data.values():
-    for lang in 'EN','AF':
+    for lang in 'EN','AF': # Order matters ... as displayed
+        if lang+'left' not in p: continue
+        if lang+'right' not in p: continue
         bookleft,chapterleft,verseleft=decoderef(p[lang+'left'])
         bookright,chapterright,verseright=decoderef(p[lang+'right'])
         BOOKLEFT=bookleft.upper()
@@ -121,12 +146,18 @@ for p in data.values():
                     rangeleftleft='1 - '
                 p[rangekey]=f'{BOOKRIGHT} {rangeleftleft}{chapterright}'.strip() # strip because 1-chapter book is blank chapter
 
-    fo.write('%(page)s,%(ENleft)s,%(AFleft)s,%(ENright)s,%(AFright)s,%(ENrange)s,%(AFrange)s\n' % p)
+    try:
+        fo.write('%(page)s,%(ENleft)s,%(AFleft)s,%(ENright)s,%(AFright)s,%(ENrange)s,%(AFrange)s\n' % p)
+    except KeyError:
+        sys.stderr.write('Headings error on page %(page)s\n' % p)
     
     for lang in 'EN','AF':
         # for k in 'left','right','range':
         for k in ( 'range', ):
-            ft.write('\\ppsave{%s}{%s}{%s}\n' % (lang+k, p['page'], p[lang+k]) )
+            try:
+                ft.write('\\ppsave{%s}{%s}{%s}\n' % (lang+k, p['page'], p[lang+k]) )
+            except KeyError:
+                sys.stderr.write('Page range error on page %(page)s\n' % p)
 
 for lang in 'EN','AF':
     tocs=''.join(toc[lang])
