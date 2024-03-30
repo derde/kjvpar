@@ -23,7 +23,7 @@ shortbooknames = [
 booktitlesini='booktitles.ini'
 rightmargin=21400
 maxverseswithoutbreak=10
-verseslookaheadextra=3  # look ahead this far, and don't orphan things
+verseslookaheadextra=4  # look ahead this far, and don't orphan things
 debug=False
 
 seqnumber=10000
@@ -297,7 +297,7 @@ class BibleParser:
         rightlines=0
         linematchbreak=0
         runlengthcount=0
-        shouldbreaksoon=0
+        shouldbreaksoon=0 # the number of mismatched lines
         for i in range(len(self.snippets)):
             verse=self.snippets[i]
             # Compare line counts between translations:
@@ -306,13 +306,13 @@ class BibleParser:
             #if i<len(self.snippets)-1:
             #    leftnext=self.snippets[i+1].linecount()
             #    rightnext=other.snippets[i+1].linecount()
-            if verse.newparagraph:
+            if verse.newparagraph or verse.ref[2]==1:
                 runlength=0
                 shouldbreaksoon=0
                 leftlines=0
                 rightlines=0
             runlength+=1
-            if runlength>maxverseswithoutbreak or (shouldbreaksoon and runlength > 1):
+            if runlength>maxverseswithoutbreak or (abs(shouldbreaksoon)>3 and runlength > 3):
                 # Don't break if we are about to do a paragraph break soon anyway:
                 breakingsoon=False
                 for j in range(1+i,1+i+verseslookaheadextra): # look ahead
@@ -335,9 +335,7 @@ class BibleParser:
                     rightlines=0
                     shouldbreaksoon=0
             else:
-                mismatchlr = (runlength>1 and abs((rightlines)-(leftlines))>0)
-                if mismatchlr:
-                    shouldbreaksoon+=1
+                shouldbreaksoon+= (rightlines)-(leftlines)
         sys.stderr.write(f'paragraph breaks: linematchbreak={linematchbreak}, runlengthcount={runlengthcount}\n')
 
     def getparagraphranges(self):

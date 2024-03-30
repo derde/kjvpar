@@ -102,7 +102,7 @@ EXOD 18:1	Jethro Visits Moses
 EXOD 19:1	At Mount Sinai	
 EXOD 20:1	The Ten Commandments	
 EXOD 20:22	Idols and Altars	
-EXOD 21:2	Hebrew Servants	
+#EXOD 21:2	Hebrew Servants	
 EXOD 21:12	Personal Injuries	
 EXOD 22:1	Protection of Property	
 EXOD 22:16	Social Responsibility	
@@ -149,7 +149,7 @@ EXOD 38:8	Basin for Washing
 EXOD 38:9	The Courtyard	
 EXOD 38:21	The Materials Used	
 EXOD 39:1	The Priestly Garments	
-EXOD 39:2	The Ephod	
+#EXOD 39:2	The Ephod	
 EXOD 39:8	The Breastpiece	
 EXOD 39:22	Other Priestly Garments	
 EXOD 39:32	Moses Inspects the Tabernacle	
@@ -408,11 +408,11 @@ RUTH 4:13	The Genealogy of David
 1SAM 2:12	Eli's Wicked Sons	
 1SAM 2:27	Prophecy Against the House of Eli	
 1SAM 3:1	The LORD Calls Samuel	
-1SAM 4:2	The Philistines Capture the Ark	
+#1SAM 4:2	The Philistines Capture the Ark	
 1SAM 4:12	Death of Eli	
 1SAM 5:1	The Ark in Ashdod and Ekron	
 1SAM 6:1	The Ark Returned to Israel	
-1SAM 7:2	Samuel Subdues the Philistines at Mizpah	
+#1SAM 7:2	Samuel Subdues the Philistines at Mizpah	
 1SAM 8:1	Israel Asks for a King	
 1SAM 9:1	Samuel Anoints Saul	
 1SAM 10:9	Saul Made King	
@@ -612,7 +612,7 @@ RUTH 4:13	The Genealogy of David
 1CHRON 7:20	Ephraim	
 1CHRON 7:30	Asher	
 1CHRON 8:1	The Genealogy of Saul the Benjamite	
-1CHRON 9:2	The People in Jerusalem	
+#1CHRON 9:2	The People in Jerusalem	
 1CHRON 9:35	The Genealogy of Saul	
 1CHRON 10:1	Saul Takes His Life	
 1CHRON 11:1	David Becomes King Over Israel	
@@ -633,7 +633,7 @@ RUTH 4:13	The Genealogy of David
 1CHRON 20:1	The Capture of Rabbah	
 1CHRON 20:4	War With the Philistines	
 1CHRON 21:1	David Numbers the Fighting Men	
-1CHRON 22:2	Preparations for the Temple	
+#1CHRON 22:2	Preparations for the Temple	
 1CHRON 23:1	The Levites	
 1CHRON 23:7	Gershonites	
 1CHRON 23:12	Kohathites	
@@ -655,7 +655,7 @@ RUTH 4:13	The Genealogy of David
 2CHRON 2:1	Preparations for Building the Temple	
 2CHRON 3:1	Solomon Builds the Temple	
 2CHRON 4:1	The Temple's Furnishings	
-2CHRON 5:2	The Ark Brought to the Temple	
+#2CHRON 5:2	The Ark Brought to the Temple	
 2CHRON 6:12	Solomon's Prayer of Dedication	
 2CHRON 7:1	The Dedication of the Temple	
 2CHRON 7:11	The LORD Appears to Solomon	
@@ -668,7 +668,7 @@ RUTH 4:13	The Genealogy of David
 2CHRON 11:18	Rehoboam's Family	
 2CHRON 12:1	Shishak Attacks Jerusalem	
 2CHRON 13:1	Abijah King of Judah	
-2CHRON 14:2	Asa King of Judah	
+#2CHRON 14:2	Asa King of Judah	
 2CHRON 15:1	Asa's Reform	
 2CHRON 16:1	Asa's Last Years	
 2CHRON 17:1	Jehoshaphat King of Judah	
@@ -688,7 +688,7 @@ RUTH 4:13	The Genealogy of David
 2CHRON 28:1	Ahaz King of Judah	
 2CHRON 29:1	Hezekiah Purifies the Temple	
 2CHRON 30:1	Hezekiah Celebrates the Passover	
-2CHRON 31:2	Contributions for Worship	
+#2CHRON 31:2	Contributions for Worship	
 2CHRON 32:1	Sennacherib Threatens Jerusalem	
 2CHRON 32:24	Hezekiah's Pride, Success and Death	
 2CHRON 33:1	Manasseh King of Judah	
@@ -697,7 +697,7 @@ RUTH 4:13	The Genealogy of David
 2CHRON 34:14	The Book of the Law Found	
 2CHRON 35:1	Josiah Celebrates the Passover	
 2CHRON 35:20	The Death of Josiah	
-2CHRON 36:2	Jehoahaz King of Judah	
+#2CHRON 36:2	Jehoahaz King of Judah	
 2CHRON 36:5	Jehoiakim King of Judah	
 2CHRON 36:9	Jehoiachin King of Judah	
 2CHRON 36:11	Zedekiah King of Judah	
@@ -948,7 +948,7 @@ ECC 4:13	Advancement Is Meaningless
 ECC 5:1	Stand in Awe of God	
 ECC 5:8	Riches Are Meaningless	
 ECC 7:1	Wisdom	
-ECC 8:2	Obey the King	
+#ECC 8:2	Obey the King	
 ECC 9:1	A Common Destiny for All	
 ECC 9:13	Wisdom Better Than Folly	
 ECC 11:1	Bread Upon the Waters	
@@ -962,17 +962,17 @@ SONG 1:12	Beloved
 SONG 1:15	Lover	
 SONG 1:16	Beloved	
 SONG 2:1	Beloved	
-SONG 2:2	Lover	
+#SONG 2:2	Lover	
 SONG 2:3	Beloved	
 SONG 2:14	Lover	
 SONG 2:16	Beloved	
 SONG 4:1	Lover	
 SONG 5:1	Lover	
-SONG 5:2	Friends	
+#SONG 5:2	Friends	
 SONG 5:9	Friends	
 SONG 5:10	Beloved	
 SONG 6:1	Friends	
-SONG 6:2	Beloved	
+#SONG 6:2	Beloved	
 SONG 6:4	Lover	
 SONG 6:10	Friends	
 SONG 6:11	Lover	
@@ -985,7 +985,7 @@ ISA 1:1	A Rebellious Nation
 ISA 2:1	The Mountain of the Lord	
 ISA 2:7	The Day of the Lord	
 ISA 3:1	Judgment on Jerusalem and Judah	
-ISA 4:2	The Branch of the Lord	
+#ISA 4:2	The Branch of the Lord	
 ISA 5:1	The Song of the Vineyard	
 ISA 5:8	Woes and Judgments	
 ISA 6:1	Isaiah's Commission	
@@ -1219,11 +1219,11 @@ DAN 8:15	The Interpretation of the Vision
 DAN 9:1	Daniel's Prayer	
 DAN 9:20	The Seventy ôSevensö	
 DAN 10:1	Daniel's Vision of a Man	
-DAN 11:2	The Kings of the South and the North	
+#DAN 11:2	The Kings of the South and the North	
 DAN 11:36	The King Who Exalts Himself	
 DAN 12:1	The End Times	
 HOSEA 1:1	Hosea's Wife and Children	
-HOSEA 2:2	Israel Punished and Restored	
+#HOSEA 2:2	Israel Punished and Restored	
 HOSEA 3:1	Hosea's Reconciliation With His Wife	
 HOSEA 4:1	The Charge Against Israel	
 HOSEA 5:1	Judgment Against Israel	
@@ -1281,7 +1281,7 @@ HAB 3:1	Woe to Nineveh
 HAB 1:1	Habakkuk's Complaint	
 HAB 1:5	The Lord's Answer	
 HAB 1:12	Habakkuk's Second Complaint	
-HAB 2:2	The LORD's Answer	
+#HAB 2:2	The LORD's Answer	
 HAB 3:1	Habakkuk's Prayer	
 ZEPH 1:1	Warning of Coming Destruction	
 ZEPH 1:4	Against Judah	
@@ -1307,13 +1307,13 @@ ZECH 6:9	A Crown for Joshua
 ZECH 7:1	Justice and Mercy, Not Fasting	
 ZECH 8:1	The LORD Promises to Bless Jerusalem	
 ZECH 9:1	Judgment on Israel's Enemies	
-ZECH 9:2	An Oracle	
+#ZECH 9:2	An Oracle	
 ZECH 9:9	The Coming of Zion's King	
 ZECH 9:14	The LORD Will Appear	
 ZECH 10:1	The LORD Will Care for Judah	
 ZECH 11:4	Two Shepherds	
 ZECH 12:1	Jerusalem's Enemies to Be Destroyed	
-ZECH 12:2	An Oracle	
+#ZECH 12:2	An Oracle	
 ZECH 12:10	Mourning for the One They Pierced	
 ZECH 13:1	Cleansing From Sin	
 ZECH 13:7	The Shepherd Struck, the Sheep Scattered	
@@ -1478,7 +1478,7 @@ MARK 8:14	The Yeast of the Pharisees and Herod
 MARK 8:22	The Healing of a Blind Man at Bethsaida	
 MARK 8:27	Peter's Confession of Christ	
 MARK 8:31	Jesus Predicts His Death	
-MARK 9:2	The Transfiguration	
+#MARK 9:2	The Transfiguration	
 MARK 9:14	The Healing of a Boy with an Evil Spirit	
 MARK 9:33	Who is Greatest?	
 MARK 9:38	Whoever Is Not Against Us Is for Us	
@@ -1711,7 +1711,7 @@ ACTS 6:1	The Choosing of the Seven
 ACTS 6:8	Stephen Seized	
 ACTS 7:1	Stephen's Speech to the Sanhedrin	
 ACTS 7:54	The Stoning of Stephen	
-ACTS 8:2	The Church Persecuted and Scattered	
+#ACTS 8:2	The Church Persecuted and Scattered	
 ACTS 8:4	Philip in Samaria	
 ACTS 8:9	Simon the Sorcerer	
 ACTS 8:26	Philip and the Ethiopian	
@@ -1812,7 +1812,7 @@ ROM 16:1	Personal Greetings
 1COR 10:1	Warnings From Israel's History	
 1COR 10:14	Idol Feasts and the Lord's Supper	
 1COR 10:23	The Believer's Freedom	
-1COR 11:2	Propriety in Worship	
+#1COR 11:2	Propriety in Worship	
 1COR 11:17	The Lord's Supper	
 1COR 12:1	Spiritual Gifts	
 1COR 13:1	Charity	
@@ -1834,7 +1834,7 @@ ROM 16:1	Personal Greetings
 2COR 5:11	The Ministry of Reconciliation	
 2COR 6:3	Paul's Hardships	
 2COR 6:14	Do Not Be Yoked With Unbelievers	
-2COR 7:2	Paul's Joy	
+#2COR 7:2	Paul's Joy	
 2COR 8:1	Generosity Encouraged	
 2COR 8:16	Titus Sent to Corinth	
 2COR 9:6	Sowing Generously	
@@ -1878,7 +1878,7 @@ PHIL 2:12	Shining as Stars
 PHIL 2:19	Timothy and Epaphroditus	
 PHIL 3:1	No Confidence in the Flesh	
 PHIL 3:12	Pressing on Toward the Goal	
-PHIL 4:2	Exhortations	
+#PHIL 4:2	Exhortations	
 PHIL 4:10	Thanks for Their Gifts	
 PHIL 4:21	Final Greetings	
 COL 1:1	Thanksgiving and Prayer	
@@ -1887,7 +1887,7 @@ COL 1:21	Paul's Labor for the Church
 COL 2:6	Freedom From Human Regulations Through Life With Christ	
 COL 3:1	Rules for Holy Living	
 COL 3:18	Rules for Christian Households	
-COL 4:2	Further Instructions	
+#COL 4:2	Further Instructions	
 COL 4:7	Final Greetings	
 1THES 1:1	Thanksgiving for the Thessalonians' Faith	
 1THES 2:1	Paul's Ministry in Thesalonica	
@@ -2002,7 +2002,7 @@ REV 10:1	The Angel and the Little Scroll
 REV 11:1	The Two Witnesses	
 REV 11:15	The Seventh Trumpet	
 REV 12:1	The Woman and the Dragon	
-REV 13:2	The Beast out of the Sea	
+#REV 13:2	The Beast out of the Sea	
 REV 13:11	The Beast out of the Earth	
 REV 14:1	The Lamb and the 144,000	
 REV 14:6	The Three Angels	

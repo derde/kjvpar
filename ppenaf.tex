@@ -1,4 +1,4 @@
-% A5 Bible in 640 pages: 8 point
+% Parallel A5 Bible in 512 pages: 8.5 point
 % ppdefault.tex
 % ppenaf.tex
 % pplayout.tex
@@ -55,8 +55,8 @@
 \def\mysansfontiiname{Liberation Sans}
 \def\mysansfontname{Liberation Sans}
 %\def\mysansfontname{[GrazeShorter.otf]}
-\def\myfontsize{9.20pt}
-\def\mybaseline{9.20pt}
+\def\myfontsize{8.54pt}
+\def\mybaseline{8.58pt}
 \def\myfontopts{
     BoldFont=[GrazeShorter-Bold.otf],
     ItalicFont=[GrazeShorter-Italic.otf],
@@ -67,7 +67,7 @@
 %8.57*59/56 = 9.02910714285714285714
 %0.968/59*56 = .91877966101694915240
 % This works, but it seems neater to squash the font, rather than reduce the inter-character spacing:
-\def\myfontstretch{0.935}
+\def\myfontstretch{0.941}
 \def\usepackages{%
     \usepackage{anyfontsize}% suppress annoying warning ...
     \usepackage[tracking=alltext]{microtype}
@@ -103,6 +103,7 @@
 \def\myrearmatter{
 %    \ppblankpage% blank
     \ppgospeloutlinepage%
+    \def\mycurrentsection{EWIGE LEWE / ETERNAL LIFE}
 %    \ppinfopage%   print info page
 %    \kjvwordlist
 %    \kjvtopics
@@ -114,10 +115,6 @@
 %\renewcommand{\evenbindingmarks}{}
 
     
-\def\biblISBN{Printed in South Africa by CTP Printers Cape Town\par
-ISBN: 978-0-7961-6044-7\par
-Layout \copyright Calvary Hope Baptist Church 2024, with this licence:\par
-You may copy freely and republish in whole, or in part.\par}
 % Job end of book doesn't play nice - it's just the same length as the page
 %\def\PPendchapterjobxli{\null\par\null\par}% End of Job 41 - two blank lines
 % Load default page counts, which is used for the print checker and thumbnail
@@ -428,8 +425,8 @@ wit-ness-eth work-eth wor-ship-peth yield-eth Tro-phi-mus}
 %\newcommand{\PPbook}[1]{\mybooktitlebox{#1}}
 \newcommand{\PPbook}[1]{}
 \newcommand{\PPbooktitle}[2]{\mybooktitlename{#1}\mybooktitlebox{#2}}
-\newcommand{\PPchapterEN}[1]{\PPdropcapschapterNS{#1}}
-\newcommand{\PPchapterAF}[1]{\PPdropcapschapter{#1}}
+\newcommand{\PPchapterEN}[1]{\needspace{\mychapterspaceEN}\PPdropcapschapter{#1}}
+\newcommand{\PPchapterAF}[1]{\needspace{\mychapterspaceAF}\PPdropcapschapter{#1}}
 \newcommand{\PPchapter}[1]{}% Not this one
 % Heading for each book of the PPe: big text
 \newcommand{\PPverseref}[1]{\gdef\someverse{#1}\markboth{#1}{#1}}%
@@ -465,7 +462,7 @@ wit-ness-eth work-eth wor-ship-peth yield-eth Tro-phi-mus}
 }
 %\newcommand{\PPbookmarker}[1]{\PPthumbmark{29}{#1}{0.5mm}{lightgray}{1.5em}}%
 %\newcommand{\PPpagemarker}[1]{\PPthumbmark{0}{#1}{-4mm}{lightgray}{0.5em}}%
-\newcommand{\PPbookmarker}[1]{\PPthumbmark{0}{#1}{-5mm}{lightgray}{2mm}}%
+\newcommand{\PPbookmarker}[1]{\PPthumbmark{0}{#1}{-5mm}{lightgray}{2pt}}%
 \newcommand{\PPpagemarker}[1]{\PPthumbmark{29}{#1}{0.5mm}{lightgray}{7mm}}%
 \newlength{\rightmarkspace}%
 \newlength{\rightmarksep}
@@ -495,7 +492,8 @@ wit-ness-eth work-eth wor-ship-peth yield-eth Tro-phi-mus}
 %% \end{paracol}\nopagebreak}%
 %% \setlength{\abnormalparskip{1pt}}
 %%%%%%%%%%%%%%%%%%%%%%%%%
-\newcommand{\PPdropcapschapterNS}[1]{\needspace{\mychapterspace}\PPdropcapschapter{#1}}% big mystery here ... for needspace within 2 column environment, this is the number of lines /2 /2 (ie div 4)
+\def\mychapterspaceAF{0.55\baselineskip}% needspace for chapter title (should be 2\baselineskip - but in multicolumn, it doesn't work)
+\def\mychapterspaceEN{0.55\baselineskip}% needspace for chapter title (should be 2\baselineskip - but in multicolumn, it doesn't work)
 \newcommand{\PPdropcapschapter}[1]{% 
 %\lettrine[lines=2, lraise=0.05, lhang=0.00, findent=3pt, nindent=0pt, loversize=0.0]{\hspace{2pt}\textbf{\mychapterfont \smash{#1}}}{}}% bug: if you raise by 0.05, it breaks grid alignment for register-true 
   \lettrine[lines=2, lraise=0.00, lhang=0.00, findent=\mylettrinefindent, nindent=0pt, loversize=0.0]{\raisebox{\mychapterraise}[0pt]{\textbf{\mychapterfont\mychapterfontextra\color{mygray} #1}}}{}%
@@ -552,7 +550,7 @@ wit-ness-eth work-eth wor-ship-peth yield-eth Tro-phi-mus}
     \else%
         \makeatletter\ifdefined\f@family\f@family\fi \makeatother\ \the\fontdimen6\font\the\font, %
     \fi
-    aspect\ \myfontstretch:1, (af) \myfontstretchAF:1,
+    aspect\ (en) \myfontstretch:1, (af) \myfontstretchAF:1,
     line spacing\ \the\baselineskip
 }
 \def\myformattinginfoiii{%
@@ -612,6 +610,13 @@ deur die Bybelgenootskap van Suid-Afrika.
     \begin{leftcolumn}\ppPrefaceAF\end{leftcolumn}%
     \begin{rightcolumn}\ppPrefaceEN\end{rightcolumn}%
 \end{paracol}
+\vfill
+\par
+\begin{centering}
+Calvary Hope Baptist Church\par
++27\,64\,432\,9857~--~Pastor Oscar Peter Bougardt\par
+\end{centering}
+\par
 % skip
 % \spaceskip=0.33em\relax
 \null\vfill
@@ -619,11 +624,11 @@ deur die Bybelgenootskap van Suid-Afrika.
 \thispagestyle{noheadings}%
 DIE BYBEL: Nuwe Testament\par
 HOLY BIBLE: New Testament\par
-{\sc KJV 1953 Afrikaans Parallel Bible New Testament 2024}
-\par
-\ifdefined\PPISBN{\PPISBN\par}\fi
+{\sc KJV 1953 Afrikaans Parallel Bible New Testament 2024}\par
+ISBN: 978-0-7961-6044-7\par
+Printed in South Africa by CTP Printers Cape Town\par
+Layout \copyright 2024 Calvary Hope Baptist Church, with this licence:\par
 You may copy freely and republish in whole, or in part.\par
-\ifdefined\ENmottoii{\ENmottoii\par}\fi
 \null\par
 {\PPtocpre
 Typesetting by %{\mylatexfont
@@ -651,6 +656,8 @@ Text area {\uselengthunit{mm}\rndprintlength{\textwidth}}$\times${\uselengthunit
 \par
 Words of Christ in black.\par
 %\par\bookheadingstrut{3\baselineskip}%
+\null\par
+http://soulwinning.africa/af\par
 \par
 \PPtocpost
 }
@@ -672,7 +679,8 @@ Words of Christ in black.\par
 }
 \gdef\ppgospeloutlinepage{%
     \newpage
-    %\thispagestyle{noheadings}%
+    \def\mycurrentsection{EWIGE LEWE / ETERNAL LIFE}%
+    \thispagestyle{sectionheadings}%
     {% preface
         \baselineskip=7.4pt%
         \begin{paracol}{2}%
@@ -732,7 +740,6 @@ Words of Christ in black.\par
 \null
 \vfill
 \begin{center}
-    \small http://soulwinning.africa/af
 \end{center}
 %%%%%%%%%%%%%%%%%%%%%
 % Commands that write the table of content later
@@ -756,6 +763,8 @@ Words of Christ in black.\par
 \newwrite\mytoc\immediate\openout\mytoc=\jobname.section%
 \pagestyle{fancy}
 \mydocumentsettings % Take II: apply document settings again, in case we changed things
+\def\mycurrentsection{DIE NUWE TESTAMENT / THE NEW TESTAMENT}
+\thispagestyle{sectionheadings}%
 %%% BODY CONTENT %%%
 \include{parallel.tex}% Load main content, from parallel.tex
 %% Write out stats and stuff for laters
