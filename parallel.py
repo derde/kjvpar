@@ -44,6 +44,7 @@ alltemplates={
         'newlang':    '<td>',
         'book':       '<H1>%(book)s</H1>\n',
         'booktitle':  '<H3>%(booktitle)s</H3>\n<H1>%(booktitlename)s</H1>\n',
+        'chapterone': '<h2>%(chapter)s</h2> ',
         'chapter':    '<h2>%(chapter)s</h2> ',
         'versei':     '<p><sup>%(verse)s</sup> %(itext)s</p>\n',
         'verseii':    '<p><sup>%(verse)s</sup> %(itext)s</p>\n',
@@ -68,6 +69,7 @@ alltemplates={
         'book':       '\\PPbook{%(bookname)s}\n',
         'booktitle':  '\\PPbooktitle{%(booktitle)s}{%(booktitlename)s}\n',
         'chapter':    '\\PPchapter{%(chapter)s}\\PPchapter%(zz)s{%(chapter)s}',
+        'chapterone': '\\PPchapter{%(chapter)s}\\par\\noindent ',
         'versei':     '\\PPversei{%(verse)s}{%(reference)s}{%(seq)s}{%(newhighlight)s%(itext)s%(endhighlight)s}\n',
         'verseii':    '\\PPverseii{%(verse)s}{%(reference)s}{%(seq)s}{%(newhighlight)s%(itext)s%(endhighlight)s}\n',
         'verse':      '\\PPverse{%(verse)s}{%(reference)s}{%(seq)s}{%(newhighlight)s%(itext)s%(endhighlight)s}\n',
@@ -157,6 +159,13 @@ class Verse:
         if chapters==1:
             return bookname+' '+str(self.ref[2])
         return bookname+' '+str(self.ref[1])+':'+str(self.ref[2])
+
+    def ischapteroneofone(self):
+        # Return True for Obadiah, Philemon, 2 John, 3 John
+        if self.ref[2]!=1 or self.ref[1]!=1: return False
+        nextchapterref=(self.ref[0],self.ref[1]+1,self.ref[2])
+        chaptertwoexists = nextchapterref in self.bibleparser.allverses
+        return not chaptertwoexists
 
     def pairs(self):
         'Printable template stuff for the verse'
@@ -547,9 +556,13 @@ if __name__=="__main__":
                     if verse.newbook:
                         fd.write(templates['booktitle'] % pairs)
                         fd.write(templates['book'] % pairs)
+                    ischapteroneofone = verse.ischapteroneofone()
                     if verse.newchapter:
                         pairs.update(vv.settings)
-                        fd.write(templates['chapter'] % pairs)
+                        if ischapteroneofone:
+                            fd.write(templates['chapterone'] % pairs)
+                        else:
+                            fd.write(templates['chapter'] % pairs)
                     # Epistle postscripts
                     text=verse.text
                     if text.find('<<[')>=0:

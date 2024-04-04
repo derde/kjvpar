@@ -401,14 +401,14 @@ wit-ness-eth work-eth wor-ship-peth yield-eth Tro-phi-mus}
     #1%
 }
 %\newcommand\PPmeasuretext[1]{\PPmeasuretextEX{#1}{\somelanguage}{\someverse}}%
-\newcommand\PPmeasuretext[1]{#1}% Non-measuring version
 \newcommand{\sharedverse}[2]{\raisebox{\myverseraise}[0pt]{\myversefont\textbf{#1}}\def\mythumbindex{#2}}%3 points up, count height as 0 points, kern at end
 \newcommand{\versehskip}{\hspace{\myversehspace}}
 \newcommand{\versehskipa}{\hspace{\myverseahspace}}% Kern verses starting with capital A
 \newcommand{\versei}[2]{\noindent\mypreversei \hebrewleader\def\hebrewleader{}}%3 points up, count height as 0 points, kern at end
 \newcommand{\verseii}[2]{\mypreverseii\hebrewleader\def\hebrewleader{}\sharedverse{#1}{#2}}%3 points up, count height as 0 points, kern at end
 \renewcommand{\verse}[2]{\mypreverse\hebrewleader\def\hebrewleader{}\sharedverse{#1}{#2}}%3 points up, count height as 0 points, kern at end
-\newcommand{\ppspacing}{\addfontfeature{\myletterspace}}
+%\newcommand{\ppfontadjust}{\addfontfeature{\myletterspace}% Tell fontspec to do letter spaces ... doesn't work
+\newcommand{\ppfontadjust}{}
 \newcommand{\PPnew}{}
 \newcommand{\PPnewchapter}{}
 \newcommand{\PPendchapterAF}{}
@@ -431,18 +431,18 @@ wit-ness-eth work-eth wor-ship-peth yield-eth Tro-phi-mus}
 % Heading for each book of the PPe: big text
 \newcommand{\PPverseref}[1]{\gdef\someverse{#1}\markboth{#1}{#1}}%
 %\newcommand{\PPendreference}[2]{\markboth{#1}{#1}\def\mythumbindex{#2}}%
-\newcommand{\PPversei}[4]{\PPmeasuretext{\PPverseref{#2}\ppsaveposition{#3}\versehskip\ppspacing\pplang{#4}\ppsavepositionk{#3}}}% the space after the verse is a thing
+\newcommand{\PPversei}[4]{\PPverseref{#2}\ppsaveposition{#3}\ppfontadjust\pplang{#4}\ppsavepositionk{#3}}% the space after the verse is a thing
 \newcommand{\PPverseii}[4]{%
   %\ifdim\PPparaheight<1.1\baselineskip%
   %  \PPsyntheticpar% KQ% continue on same line
   %\else
     \PPsyntheticparii% QK%
   %\fi
-\PPmeasuretext{\raisebox{\myverseraise}[0pt]{\myversefont\textbf{#1}}\ppsaveposition{#3}{\versehskip\PPverseref{#2}\ppspacing\pplang{#4}\ppsavepositionk{#3}}}}% the space after the verse is a thing
-\newcommand{\PPverse}[4]{\par\PPmeasuretext{\raisebox{\myverseraise}[0pt]{\myversefont\textbf{#1}}\ppsaveposition{#3}{\versehskip\PPverseref{#2}\ppspacing\pplang{#4}\ppsavepositionk{#3}}}}% the space after the verse is a thing
+\raisebox{\myverseraise}[0pt]{\myversefont\textbf{#1}}\ppsaveposition{#3}{\versehskip\PPverseref{#2}\ppfontadjust\pplang{#4}\ppsavepositionk{#3}}}% the space after the verse is a thing
+\newcommand{\PPverse}[4]{\par\raisebox{\myverseraise}[0pt]{\myversefont\textbf{#1}}\ppsaveposition{#3}{\versehskip\PPverseref{#2}\ppfontadjust\pplang{#4}\ppsavepositionk{#3}}}% the space after the verse is a thing
 \newcommand{\PPpostscript}[1]{} % omit postscripts - ignore parameter, which is the text of the postscript
 \newcommand{\PPpar}{\PPsyntheticparii}
-%\newcommand{\PPpsalmauthor}[1]{{\ppspacing\pplang{\em #1}}\PPsyntheticparii}
+%\newcommand{\PPpsalmauthor}[1]{{\ppfontadjust\pplang{\em #1}}\PPsyntheticparii}
 \newcommand{\PPhighlight}[1]{\marginpar{†}\textbf{#1}}%
 \newcommand{\PPpsalmauthor}[1]{}% Omit
 \newcommand{\PPendlang}{}

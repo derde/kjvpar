@@ -23,8 +23,6 @@ build:
 %-book.pdf: %.pdf
 	# pdfbook2 --no-crop --paper=a4paper --outer-margin=28 --inner-margin=0 --top-margin=0 --bottom-margin=0 --signature=40 $<
 	# pdfbook2 --no-crop --paper=a4paper --outer-margin=18 --inner-margin=0 --top-margin=15 --bottom-margin=14 --signature=4 $<
-	pdfbook2 --no-crop --paper=a4paper --outer-margin=0 --inner-margin=0 --top-margin=0 --bottom-margin=0 --signature=4 --short-edge $<
+	set -x ;pdfbook2 --no-crop --paper=a4paper --outer-margin=0 --inner-margin=0 --top-margin=0 --bottom-margin=0 --signature=`sed '/mypagecount/ { s/[^0-9]*//g ; q;} ; d ' < ppenaf.pages | perl -p -e 's{(\d+)}{int(($$1+1)/2)*2}e'` --short-edge $<
 	# pdfbook2 --paper=a4paper --outer-margin=18 --inner-margin=0 --top-margin=15 --bottom-margin=14 --signature=4 $<
-
-
 
