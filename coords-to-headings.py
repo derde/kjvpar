@@ -146,13 +146,13 @@ for p in data.values():
                 if chapterleft==chapterright:
                     p[rangekey]=f'{BOOKLEFT} {chapterleft}'.strip()
                 else:
-                    p[rangekey]=f'{BOOKLEFT} {chapterleft} - {chapterright}'
+                    p[rangekey]=f'{BOOKLEFT} {chapterleft}\\,–\\,{chapterright}'
             else:
                 # If we have multiple books, ignore all but the last in the title
                 if chapterright in ('','1'):
                     rangeleftleft=''
                 else:
-                    rangeleftleft='1 - '
+                    rangeleftleft='1\\,–\\,'
                 p[rangekey]=f'{BOOKRIGHT} {rangeleftleft}{chapterright}'.strip() # strip because 1-chapter book is blank chapter
 
     try:
