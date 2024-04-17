@@ -1388,6 +1388,7 @@ MATT 14:13	Jesus Feeds the Five Thousand
 MATT 14:22	Jesus Walks on the Water	
 MATT 15:1	Clean and Unclean	
 MATT 15:29	Jesus Feeds the Four Thousand	
+MATT 15:32	layout
 MATT 16:1	The Demand for a Sign	
 MATT 16:5	The Yeast of the Pharisees and Sadducees	
 MATT 16:13	Peter's Confession of Christ	
@@ -1517,7 +1518,8 @@ MARK 16:1	The Resurrection
 MARK 16:9	Preach the gospel to every creature	
 LUKE 1:1	Introduction	
 LUKE 1:5	The Birth of John the Baptist Foretold	
-LUKE 1:26	The Birth of Jesus Foretold	
+LUKE 1:13	#layout
+#LUKE 1:26	The Birth of Jesus Foretold	
 LUKE 1:39	Mary Visits Elizabeth	
 LUKE 1:46	Mary's Song	
 LUKE 1:57	The Birth of John the Baptist	
@@ -1654,7 +1656,9 @@ JOHN 8:42	The Children of the Devil
 JOHN 8:48	The Claims of Jesus About Himself	
 JOHN 9:1	Jesus Heals a Man Born Blind	
 JOHN 9:13	The Pharisees Investigate the Healing	
-JOHN 9:35	Spiritual Blindness	
+JOHN 9:15,18	layout
+JOHN 9:24,36	layout?
+#JOHN 9:35	Spiritual Blindness	
 JOHN 10:1	The Shepherd and His Flock	
 JOHN 10:22	The Unbelief of the Jews	
 JOHN 11:1	The Death of Lazarus	
@@ -1666,6 +1670,7 @@ JOHN 12:12	The Triumphal Entry
 JOHN 12:20	Jesus Predicts His Death	
 JOHN 12:37	The Jews Continue in Their Unbelief	
 JOHN 13:1	Jesus Washes His Disciples' Feet	
+JOHN 13:16	layout
 JOHN 13:18	Jesus Predicts His Betrayal	
 JOHN 13:31	Jesus Predicts Peter's Denial	
 JOHN 14:1	Jesus Comforts His Disciples	
@@ -1779,7 +1784,8 @@ ROM 5:12	Death Through Adam, Life Through Christ
 ROM 6:1	Dead to Sin, Alive in Christ	
 ROM 6:15	Slaves to Righteousness	
 ROM 7:1	An Illustration From Marriage	
-ROM 7:7	Struggling With Sin	
+ROM 7:6	layout
+ROM 7:8	layout
 ROM 8:1	Life Through the Spirit	
 ROM 8:18	Future Glory	
 ROM 8:28	More Than Conquerors	
@@ -1797,11 +1803,13 @@ ROM 14:1	The Weak and the Strong
 ROM 15:14	Paul the Minister to the Gentiles	
 ROM 15:23	Paul's Plan to Visit Rome	
 ROM 16:1	Personal Greetings	
+ROM 16:17 21 25
 1COR 1:1	Thanksgiving	
 1COR 1:10	Divisions in the Church	
 1COR 1:18	Christ the Wisdom and Power of God	
 1COR 2:6	Wisdom From the Spirit	
 1COR 3:1	On Divisions in the Church	
+1COR 3:21	layout tweak
 1COR 4:1	Apostles of Christ	
 1COR 5:1	Expel the wicked person	
 1COR 6:1	Lawsuits Among Believers	
@@ -1903,7 +1911,7 @@ COL 4:7	Final Greetings
 2THES 3:6	Warning Against Idleness	
 2THES 3:16	Special Greetings	
 1TIM 1:1	Warning Against False Teachers of the Law	
-1TIM 1:12	The Lord's Grace to Paul	
+#1TIM 1:12	The Lord's Grace to Paul	
 1TIM 2:1	Instructions on Worship	
 1TIM 3:1	Overseers and Deacons	
 1TIM 4:1	Instructions to Timothy	
@@ -1924,9 +1932,9 @@ PHILEM 1:1	Thanksgiving and Prayer
 PHILEM 1:8	Paul's Plea for Onesimus	
 HEB 1:1	The Son Superior to Angels	
 HEB 2:1	Warning to Pay Attention	
-HEB 2:5	Jesus Made Like His Brothers	
+#HEB 2:5	Jesus Made Like His Brothers	
 HEB 3:1	Jesus Greater Than Moses	
-HEB 3:7	Warning Against Unbelief	
+#HEB 3:7	Warning Against Unbelief	
 HEB 4:1	A Sabbath	
 HEB 4:14	Jesus the Great High Priest	
 HEB 5:11	Warning Against Falling Away	
@@ -1940,6 +1948,7 @@ HEB 10:1	Christ's Sacrifice Once for All
 HEB 11:1	By Faith	
 HEB 12:1	God Disciplines His Sons	
 HEB 12:14	Warning Against Refusing God	
+HEB 12:22	Mount Sion
 HEB 13:1	Concluding Exhortations	
 JAS 1:1	Trials and Temptations	
 JAS 1:19	Listening and Doing	
@@ -1994,6 +2003,7 @@ REV 3:14	To the Church in Laodicea
 REV 4:1	The Throne in Heaven	
 REV 5:1	The Scroll and the Lamb	
 REV 6:1	The Seals	
+REV 6:10	layout
 REV 7:1	144,000 Sealed	
 REV 7:9	The Great Multitude in White Robes	
 REV 8:1	The Seventh Seal and the Golden Censer	
@@ -2161,7 +2171,6 @@ PS 148:7
 PS 149:5
 PS 150:3 6
 NUM 7:12 18 24 30 36 42 48 54 60 66 72 78
-ROM 16:17 21 25
 MATT 15:21
 PROV 23:12 29
 John 19:8 19:13 19:19 19:25 19:28 19:31 19:38

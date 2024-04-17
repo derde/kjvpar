@@ -587,6 +587,7 @@ if __name__=="__main__":
                     fd.write(templates['swlang'] % vv.settings)
                 fd.write(templates['newlang'] % vv.settings)
                 verses=vv.getsnippetverses(sniprange)
+                index=0
                 for verse in verses:
                     pairs=verse.pairs()
                     if verse.newbook:
@@ -615,7 +616,7 @@ if __name__=="__main__":
                     elif v==2: versetmpl ='verseii'
                     else : versetmpl ='verse'
                     if v==2 and verse.ref==(65,13,2): versetmpl='verse'   # Revelation 13:2: don't use breaky verse
-                    if verse.ref in verse.bibleparser.spacebefore and not verse.newparagraph:
+                    if verse.ref in verse.bibleparser.spacebefore and (index>0):
                         fd.write(templates['spaceafter'] % pairs)
                     fd.write(templates[versetmpl] % pairs)
                     if verse.breakafter or verse.ref in verse.bibleparser.spaceafter:
@@ -623,6 +624,7 @@ if __name__=="__main__":
                     if verse.endchapter:
                         fd.write(templates['endchapter'] % vv.settings)
                     endbook = endbook or verse.endbook
+                    index+=1
                 fd.write(templates['endlang'] % vv.settings)
             fd.write(templates['endpair'])
             if endbook:
