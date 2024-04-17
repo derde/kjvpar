@@ -40,7 +40,6 @@
 \def\mydocumentsettings{%
   \rightskip=0pt plus 0.5em  % slightly ragged right - really improves readability, at the cost of 1.5% pages (12 pages over 800)
 }
-\def\myhypenpenalty{10}% We are really quite willing to hyphenate
 %\def\myheadsep{0.0em}
 \def\myverseboldness{\myboldness}% verse number font scaling
 \def\myversefontstretch{\myfontstretch}% verse number font scaling
@@ -150,9 +149,9 @@
   %\rightskip=0pt plus 1ex\relax% space on right hand margin: keep it small
   \rightskip=0pt\relax% space on right hand margin: keep it small
   \parfillskip=0pt plus \linewidth\relax%   last line of paragraph space: use up all of the spare space here.
-  \emergencystretch=4em
+  \emergencystretch=2em
 }
-\def\myhypenpenalty{10}%   Lower penalty means more hypenation and fewer pages
+\def\myhypenpenalty{130}%   Lower penalty means more hypenation and fewer pages
 \def\showredgrid{%
     \usepackage{tikz}
     \usepackage{eso-pic}
@@ -220,7 +219,7 @@
 % Improvements post-publishing 2023
 \def\mypredocument{%
     %\pretolerance=50
-    \pretolerance=20
+    \pretolerance=20 %
     \tolerance=800\relax  % tolerance for variation in spacing
     %\renewcommand{\headruleskip}{-2pt}
     \frenchspacing% Oh wow ... this saves two pages!
@@ -362,6 +361,9 @@ touch-eth trans-gres-seth tra-vail-eth tread-eth tri-eth troubl-eth trust-eth
 un-der-stand-eth up-braid-eth vanish-eth vaunt-eth wait-eth walk-eth warr-eth
 watch-eth wa-ter-eth wa-ver-eth wax-eth wear-eth will-eth wi-ther-eth with-hold-eth
 wit-ness-eth work-eth wor-ship-peth yield-eth Tro-phi-mus}
+\begin{afrikaans}%
+\hyphenation{teë-beeld Jesus Christus}%
+\end{afrikaans}%
 %%
 \def\mymargins{left=10.0mm,top=10mm,right=10.0mm,bottom=7mm,bindingoffset=1mm,headheight=7mm}
 \def\mypapersize{135mm,195mm}% A5, less 6.5mm right facing/reverse, and 7.5mm top and bottom
@@ -542,8 +544,6 @@ wit-ness-eth work-eth wor-ship-peth yield-eth Tro-phi-mus}
 \newcommand{\versei}[2]{\noindent\mypreversei \hebrewleader\def\hebrewleader{}}%3 points up, count height as 0 points, kern at end
 \newcommand{\verseii}[2]{\mypreverseii\hebrewleader\def\hebrewleader{}\sharedverse{#1}{#2}}%3 points up, count height as 0 points, kern at end
 \renewcommand{\verse}[2]{\mypreverse\hebrewleader\def\hebrewleader{}\sharedverse{#1}{#2}}%3 points up, count height as 0 points, kern at end
-%\newcommand{\ppfontadjust}{\addfontfeature{\myletterspace}% Tell fontspec to do letter spaces ... doesn't work
-\newcommand{\ppfontadjust}{}
 \newcommand{\PPnew}{}
 \newcommand{\PPnewchapter}{}
 \newcommand{\PPendchapterAF}{}
@@ -566,15 +566,16 @@ wit-ness-eth work-eth wor-ship-peth yield-eth Tro-phi-mus}
 % Heading for each book of the PPe: big text
 \newcommand{\PPverseref}[1]{\gdef\someverse{#1}\markboth{#1}{#1}}%
 %\newcommand{\PPendreference}[2]{\markboth{#1}{#1}\def\mythumbindex{#2}}%
-\newcommand{\PPversei}[4]{\PPverseref{#2}\ppsaveposition{#3}\ppfontadjust\pplang{#4}\ppsavepositionk{#3}}% the space after the verse is a thing
+\newcommand{\PPversei}[4]{\PPverseref{#2}\ppsaveposition{#3}\pplang{#4}\ppsavepositionk{#3}}% the space after the verse is a thing
 \newcommand{\PPverseii}[4]{%
   %\ifdim\PPparaheight<1.1\baselineskip%
   %  \PPsyntheticpar% KQ% continue on same line
   %\else
     \PPsyntheticparii% QK%
   %\fi
-\raisebox{\myverseraise}[0pt]{\myversefont\textbf{#1}}\ppsaveposition{#3}{\versehskip\PPverseref{#2}\ppfontadjust\pplang{#4}\ppsavepositionk{#3}}}% the space after the verse is a thing
-\newcommand{\PPverse}[4]{\par\raisebox{\myverseraise}[0pt]{\myversefont\textbf{#1}}\ppsaveposition{#3}{\versehskip\PPverseref{#2}\ppfontadjust\pplang{#4}\ppsavepositionk{#3}}}% the space after the verse is a thing
+\raisebox{\myverseraise}[0pt]{\myversefont\textbf{#1}}\ppsaveposition{#3}{\versehskip\PPverseref{#2}\pplang{#4}\ppsavepositionk{#3}}}% the space after the verse is a thing
+\newcommand{\PPverse}[4]{\par\raisebox{\myverseraise}[0pt]{\myversefont\textbf{#1}}\ppsaveposition{#3}{\versehskip\PPverseref{#2}\pplang{#4}\ppsavepositionk{#3}}}% the space after the verse is a thing
+\newcommand{\PPspace}{\par\null}% the space after the verse is a thing
 \newcommand{\PPpostscript}[1]{} % omit postscripts - ignore parameter, which is the text of the postscript
 \newcommand{\PPpar}{\PPsyntheticparii}
 %\newcommand{\PPpsalmauthor}[1]{{\ppfontadjust\pplang{\em #1}}\PPsyntheticparii}

@@ -3,6 +3,9 @@ ppenaf.pdf: pplayout.tex ppenaf.tex ppdefault.tex parallel.tex hyph-en.tex bookt
 	nice lualatex ppenaf.tex # for microtype
 	./coords-to-headings.py # parallel.aux -> ppenaf.headings.csv
 
+%.txt: %.pdf
+	pdftotext -layout $<
+
 md5sum.tex: parallel.tex
 	grep '\\def' < parallel.tex > md5sum.tex
 

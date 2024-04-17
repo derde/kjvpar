@@ -22,7 +22,7 @@ shortbooknames = [
 
 booktitlesini='booktitles.ini'
 rightmargin=21400
-maxverseswithoutbreak=10
+maxverseswithoutbreak=12
 verseslookaheadextra=4  # look ahead this far, and don't orphan things
 debug=False
 
@@ -49,6 +49,7 @@ alltemplates={
         'versei':     '<p><sup>%(verse)s</sup> %(itext)s</p>\n',
         'verseii':    '<p><sup>%(verse)s</sup> %(itext)s</p>\n',
         'verse':      '<p><sup>%(verse)s</sup> %(itext)s</p>\n',
+        'spaceafter': '<br>--spaceafter--<br>',
         'endlang':    '</td>',
         'endpair':    '</tr>',
         'endchapter': '',
@@ -73,6 +74,7 @@ alltemplates={
         'versei':     '\\PPversei{%(verse)s}{%(reference)s}{%(seq)s}{%(newhighlight)s%(itext)s%(endhighlight)s}\n',
         'verseii':    '\\PPverseii{%(verse)s}{%(reference)s}{%(seq)s}{%(newhighlight)s%(itext)s%(endhighlight)s}\n',
         'verse':      '\\PPverse{%(verse)s}{%(reference)s}{%(seq)s}{%(newhighlight)s%(itext)s%(endhighlight)s}\n',
+        'spaceafter': '\\PPspace\n',
         'endlang':    '\\PPendlang%(zz)s\\PPendlang',   # /column
         'endchapter': '\\PPendchapter\\PPendchapter%(zz)s',
         'endpair':    '',
@@ -117,6 +119,7 @@ class TextWidth:
 
     
 class Verse:
+    # verse
     def __init__(self,line,bibleparser):
         self.textwidth=TextWidth()
         bookname,ref,text =bibleparser.decodeline(line)
@@ -130,7 +133,11 @@ class Verse:
         self.newparagraph=self.newchapter  # this might fail for Job 34 or so
         self.next=None # chained sequence of verses in a snippet
         self.bibleparser=bibleparser
+        self.previousverse = bibleparser.mostrecentverse
+        self.breakafter = False
+        bibleparser.mostrecentverse = self
 
+    # verse
     # Get the linecount for this snippet and its friends
     def linecount0(self,linewidth=43):
         ntext=re.sub(r'[<>\[\]]','',self.text)
@@ -147,6 +154,7 @@ class Verse:
         return lines
 
     # Get the linecount for this snippet and its friends
+    # verse
     def linecount(self,margin=rightmargin):
         ntext=re.sub(r'[<>\[\]]','',self.text)
         lines=self.textwidth.wrap(ntext,margin,margin//20)
@@ -154,12 +162,14 @@ class Verse:
             lines+=self.next.linecount(margin)
         return lines
 
+    # verse
     def getreferencename(self):
         bookname,chapters=self.bibleparser.getbookname(self.ref[0])
         if chapters==1:
             return bookname+' '+str(self.ref[2])
         return bookname+' '+str(self.ref[1])+':'+str(self.ref[2])
 
+    # verse
     def ischapteroneofone(self):
         # Return True for Obadiah, Philemon, 2 John, 3 John
         if self.ref[2]!=1 or self.ref[1]!=1: return False
@@ -167,6 +177,22 @@ class Verse:
         chaptertwoexists = nextchapterref in self.bibleparser.allverses
         return not chaptertwoexists
 
+    # verse
+    # Find a relatively close previous verse and add a break to it
+    def adjustbyaddingblanklinebefore(self):
+        if self.newparagraph: return 0
+        i=0
+        while i<4: # look back 4 verses, and don't redo already break'd
+            i+=1
+            seek=self.previousverse
+            if not seek: return 0
+            if not seek.breakafter: 
+                seek.breakafter=True
+                return 1
+            if seek.newparagraph: return 0
+        return 0
+
+    # verse
     def pairs(self):
         'Printable template stuff for the verse'
         bookname,chapters=self.bibleparser.getbookname(self.ref[0])
@@ -191,11 +217,13 @@ class Verse:
             'REFERENCE': reference.upper(),
             'seq': get_sequence(self.bibleparser.zz),
         }
+    # verse
     def __str__(self):
         return f'{self.bookname} {self.ref[1]}:{self.ref[2]}'
 
 class BibleParser:
     def __init__(self,settings):
+        self.mostrecentverse=None
         self.settings=settings
         self.zz=settings['zz']
         self.booknames=[]
@@ -205,6 +233,8 @@ class BibleParser:
         self.allverses={}
         self.checkrefs={}
         self.snippets=[]
+        self.spaceafter={}
+        self.spacebefore={}
         self.setup()
     def getbooktitle(self,booknumber):
         booktitles=self.settings.get('booktitles',self.booknames)
@@ -316,6 +346,8 @@ class BibleParser:
             #    leftnext=self.snippets[i+1].linecount()
             #    rightnext=other.snippets[i+1].linecount()
             if verse.newparagraph or verse.ref[2]==1:
+                #if leftlines<rightlines-1:
+                #    adjustments=verse.adjustbyaddingblanklinebefore(1)
                 runlength=0
                 shouldbreaksoon=0
                 leftlines=0
@@ -442,12 +474,16 @@ def iterateparallel(csvfeed,en,af):
             concurrent={en.zz:[],af.zz:[]}
         if keepwithnextcount:
             keepwithnextcount -= 1
-        keepwithnextAF = ( cmd.find('/af:keepwithnext')>=0 )
-        keepwithnextEN = ( cmd.find('/en:keepwithnext')>=0 )
+        keepwithnextAF = ( cmd.find('af:keepwithnext')>=0 )
+        keepwithnextEN = ( cmd.find('en:keepwithnext')>=0 )
         if keepwithnextAF or keepwithnextEN:
             keepwithnextcount += 1
         refEN=en.linetoref(lineEN)
         refAF=af.linetoref(lineAF)
+        if cmd.find('en:sp')>=0: en.spaceafter[refEN]=True
+        if cmd.find('af:sp')>=0: af.spaceafter[refAF]=True
+        if cmd.find('en:p')>=0: en.spacebefore[refEN]=True
+        if cmd.find('af:p')>=0: af.spacebefore[refAF]=True
         if refEN: concurrent[en.zz].append(refEN)
         if refAF: concurrent[af.zz].append(refAF)
     yield concurrent
@@ -579,7 +615,11 @@ if __name__=="__main__":
                     elif v==2: versetmpl ='verseii'
                     else : versetmpl ='verse'
                     if v==2 and verse.ref==(65,13,2): versetmpl='verse'   # Revelation 13:2: don't use breaky verse
+                    if verse.ref in verse.bibleparser.spacebefore and not verse.newparagraph:
+                        fd.write(templates['spaceafter'] % pairs)
                     fd.write(templates[versetmpl] % pairs)
+                    if verse.breakafter or verse.ref in verse.bibleparser.spaceafter:
+                        fd.write(templates['spaceafter'] % pairs)
                     if verse.endchapter:
                         fd.write(templates['endchapter'] % vv.settings)
                     endbook = endbook or verse.endbook
