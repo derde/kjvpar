@@ -913,9 +913,9 @@ http://soulwinning.africa/af\par
 %% Oh wait, we might write out something more here
 \myrearmatter% print the rear matter pages (not counted above!)
 %%% PAGE n: RECORD PAGE COUNT AND QUIT %%%%
-\addtocounter{page}{-1}% adjust for presentatoin
+%\addtocounter{page}{-1}% adjust for presentatoin
 \immediate\write\mypages{\unexpanded{\gdef\mypagecount}{\thepage}}% FIXME: adds one to the page .. weird
-\addtocounter{page}{1}% un-adjust for presentation
+%\addtocounter{page}{1}% un-adjust for presentation
 \immediate\closeout\mytoc%
 \immediate\closeout\mypages%
 \PPenddocument
