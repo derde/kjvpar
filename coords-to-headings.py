@@ -92,8 +92,8 @@ for ppref,ref in iteraterefs(coords):
     dy = ref['y0']-ref['y1']
     fp.write(bcv+','+ppref+','+str(dy)+','+str(space)+'\n')
 
-    if bcv.endswith(' 1:1'):
-        book=bcv[:-4]
+    if bcv.endswith(' 1:1') or bcv.endswith(' 1'):
+        book=bcv.rsplit(' ',1)[0] # [:-4]
         toc[lang].append('\\PPtoc{'+book+'}{'+str(ref['page'])+'}\n')
 fp.close()
 
