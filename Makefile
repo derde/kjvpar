@@ -15,6 +15,9 @@ parallel.tex: parallel.py paragraphs.txt ppenafnt.csv highlights.txt paragraphs.
 ppenaf.headings.csv: parallel.tex ppenaf.coords
 	./coords-to-headings.py
 
+check: ppenaf.txt
+	grep '' ppenaf.txt -B1  | egrep -v '|--' | GREP_COLORS=34 egrep '[-]( |$$)' --color
+
 build:
 	make ppenaf.pdf
 	# ./coords-to-headings.py # parallel.aux -> ppenaf.headings.csv

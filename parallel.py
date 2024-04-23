@@ -71,9 +71,9 @@ alltemplates={
         'booktitle':  '\\PPbooktitle{%(booktitle)s}{%(booktitlename)s}\n',
         'chapter':    '\\PPchapter{%(chapter)s}\\PPchapter%(zz)s{%(chapter)s}',
         'chapterone': '\\PPchapter{%(chapter)s}\\par\\noindent ',
-        'versei':     '\\PPversei{%(verse)s}{%(reference)s}{%(seq)s}{%(newhighlight)s%(itext)s%(endhighlight)s}\n',
-        'verseii':    '\\PPverseii{%(verse)s}{%(reference)s}{%(seq)s}{%(newhighlight)s%(itext)s%(endhighlight)s}\n',
-        'verse':      '\\PPverse{%(verse)s}{%(reference)s}{%(seq)s}{%(newhighlight)s%(itext)s%(endhighlight)s}\n',
+        'versei':     '\\PPversei{%(verse)s}{%(reference)s}{%(seq)s}{%(extratex)s%(newhighlight)s%(itext)s%(endhighlight)s}\n',
+        'verseii':    '\\PPverseii{%(verse)s}{%(reference)s}{%(seq)s}{%(extratex)s%(newhighlight)s%(itext)s%(endhighlight)s}\n',
+        'verse':      '\\PPverse{%(verse)s}{%(reference)s}{%(seq)s}{%(extratex)s%(newhighlight)s%(itext)s%(endhighlight)s}\n',
         'spaceafter': '\\PPspace\n',
         'endlang':    '\\PPendlang%(zz)s\\PPendlang',   # /column
         'endchapter': '\\PPendchapter\\PPendchapter%(zz)s',
@@ -234,6 +234,7 @@ class BibleParser:
         self.checkrefs={}
         self.snippets=[]
         self.spaceafter={}
+        self.extratex={}
         self.spacebefore={}
         self.setup()
     def getbooktitle(self,booknumber):
@@ -484,6 +485,10 @@ def iterateparallel(csvfeed,en,af):
         if cmd.find('af:sp')>=0: af.spaceafter[refAF]=True
         if cmd.find('en:p')>=0: en.spacebefore[refEN]=True
         if cmd.find('af:p')>=0: af.spacebefore[refAF]=True
+        m=re.search(r'af:(\\.*)?( \w\w:|$)',cmd)
+        if m: af.extratex[refAF]=m.group(1)+' '
+        m=re.search(r'en:(\\.*)?( \w\w:|$)',cmd)
+        if m: en.extratex[refEN]=m.group(1)+' '
         if refEN: concurrent[en.zz].append(refEN)
         if refAF: concurrent[af.zz].append(refAF)
     yield concurrent
@@ -618,6 +623,9 @@ if __name__=="__main__":
                     if v==2 and verse.ref==(65,13,2): versetmpl='verse'   # Revelation 13:2: don't use breaky verse
                     if verse.ref in verse.bibleparser.spacebefore and (index>0):
                         fd.write(templates['spaceafter'] % pairs)
+                    pairs['extratex']=''
+                    if verse.ref in verse.bibleparser.extratex:
+                        pairs['extratex'] = verse.bibleparser.extratex[verse.ref]
                     fd.write(templates[versetmpl] % pairs)
                     if verse.breakafter or verse.ref in verse.bibleparser.spaceafter:
                         fd.write(templates['spaceafter'] % pairs)
