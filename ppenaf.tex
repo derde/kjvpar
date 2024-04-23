@@ -907,9 +907,9 @@ http://soulwinning.africa/af\par
 %% Write out stats and stuff for laters
 \newwrite\mypages
 \immediate\openout\mypages=\jobname.pages%
-\addtocounter{page}{-1}% adjust for presentation
+%\addtocounter{page}{-1}% adjust for presentation
 \immediate\write\mypages{\unexpanded{\gdef\myshowpageinfo}{\thepage\ pages }}% FIXME: adds one to the page .. weird
-\addtocounter{page}{1}% un-adjust for presentation
+%\addtocounter{page}{1}% un-adjust for presentation
 % FIXME: this is dumb:
 % I think we're done here ...
 %% Oh wait, we might write out something more here
