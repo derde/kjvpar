@@ -313,7 +313,7 @@ class BibleParser:
         return f'{mbookname} {ref[1]}:{ref[2]}'
 
     def decodeline(self,line):
-        m=re.search('(.*) (\d+):(\d+)\s*(.*)',line)
+        m=re.search(r'(.*) (\d+):(\d+)\s*(.*)',line)
         if not m: return
         bookname,mchapter,mverse,mtext = m.groups()
         bookindex=self.bookindex(bookname)
@@ -431,13 +431,13 @@ def readverselist(filename,language,shortbooknames=None):
     for line in fd:
         line=re.sub('#.*','',line)
         if not line.strip(): continue
-        m=re.search(' \d+:',line) 
+        m=re.search(r' \d+:',line) 
         i,ii=m.span(0)
         bookname=line[:i]
         chapter=0
-        line=re.sub("\s[' \tA-Za-z,.]*$|\t.*",'',line)
+        line=re.sub("\\s[' \tA-Za-z,.]*$|\t.*",'',line)
         for bit in line[i:].strip().split():
-            m=re.search('^(\d+):(\d+)|(\d+)$',bit)
+            m=re.search(r'^(\d+):(\d+)|(\d+)$',bit)
             mchapter,mverse,mmverse = m.groups()
             if mchapter:
                 n=int(mchapter)
@@ -608,7 +608,7 @@ if __name__=="__main__":
                     # Epistle postscripts
                     text=verse.text
                     if text.find('<<[')>=0:
-                        text = re.sub('<<\[(.*?)\]>>',attribution,text,0)
+                        text = re.sub(r'<<\[(.*?)\]>>',attribution,text,0)
                     # Psalm titles
                     if text.find('<<')>=0:
                         text = re.sub('<<(.*?)>>',authorship,text,0)
